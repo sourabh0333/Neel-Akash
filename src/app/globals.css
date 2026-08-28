@@ -1,0 +1,261 @@
+@import "tailwindcss";
+
+/* ═══════════════════════════════════════════════════════════
+   NEEL AKASH — design tokens
+   Cinematic dark: deep night-sea indigo, luminous sunset amber.
+   ═══════════════════════════════════════════════════════════ */
+
+@theme {
+  /* Ground — the night sea */
+  --color-ink: #05070d;
+  --color-ink-2: #080c16;
+  --color-ink-3: #0d1424;
+  --color-abyss: #030509;
+
+  /* Blue — the "neel" of Neel Akash */
+  --color-neel-900: #0a1730;
+  --color-neel-700: #14315e;
+  --color-neel-500: #2d63ad;
+  --color-neel-300: #6fa3e0;
+  --color-neel-100: #c3dcf7;
+
+  /* Luminous accent — sun going down over the Bay */
+  --color-ember-600: #b7541f;
+  --color-ember-500: #e2762b;
+  --color-ember-400: #f39c4a;
+  --color-ember-300: #ffc27a;
+
+  /* Sand / bone — type and surfaces */
+  --color-bone: #f4efe6;
+  --color-sand: #d8cdbb;
+  --color-sand-dim: #8d8577;
+
+  --font-display: var(--font-instrument), "Times New Roman", serif;
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-bn: var(--font-bengali), var(--font-instrument), serif;
+
+  --ease-cinema: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-drama: cubic-bezier(0.7, 0, 0.2, 1);
+}
+
+/* ── Base ──────────────────────────────────────────────────── */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  /* Lenis drives scrolling; native smooth would fight it. */
+  scroll-behavior: auto;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--color-abyss);
+  color: var(--color-bone);
+  font-family: var(--font-sans);
+  font-synthesis-weight: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: clip;
+}
+
+/* Lenis */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+::selection {
+  background: var(--color-ember-500);
+  color: var(--color-abyss);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-ember-400);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+/* Scrollbar — thin, unobtrusive, on-brand */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-abyss);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-neel-700);
+  border-radius: 99px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-neel-500);
+}
+
+/* ── Typography helpers ────────────────────────────────────── */
+
+.font-display {
+  font-family: var(--font-display);
+  font-weight: 400;
+  letter-spacing: -0.02em;
+}
+
+.font-bn {
+  font-family: var(--font-bn);
+}
+
+/* Fluid display scale — movie-title typography (trend: type as design element) */
+.t-mega {
+  font-size: clamp(3.4rem, 13vw, 13rem);
+  line-height: 0.86;
+}
+.t-huge {
+  font-size: clamp(2.6rem, 7.5vw, 6.5rem);
+  line-height: 0.94;
+}
+.t-big {
+  font-size: clamp(2rem, 4.4vw, 3.6rem);
+  line-height: 1.02;
+}
+.t-eyebrow {
+  font-size: clamp(0.62rem, 0.78vw, 0.75rem);
+  letter-spacing: 0.34em;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+/* ── Split-text reveal primitives (GSAP targets these) ─────── */
+
+.line-mask {
+  display: block;
+  overflow: hidden;
+}
+.line-inner {
+  display: block;
+  will-change: transform;
+}
+
+/* Pre-animation state. GSAP clears these once it takes over; the
+   .is-ready guard means no-JS / failed-hydration still shows content. */
+.js-reveal:not(.is-ready) .line-inner {
+  transform: translateY(105%);
+}
+.js-fade:not(.is-ready) {
+  opacity: 0;
+}
+
+/* ── Film grain (trend: intentional imperfection + cinema) ─── */
+
+.grain::after {
+  content: "";
+  position: fixed;
+  inset: -150%;
+  z-index: 90;
+  pointer-events: none;
+  opacity: 0.055;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23n)'/%3E%3C/svg%3E");
+  animation: grain-shift 0.7s steps(1) infinite;
+}
+
+@keyframes grain-shift {
+  0% { transform: translate(0, 0); }
+  20% { transform: translate(-4%, 3%); }
+  40% { transform: translate(3%, -5%); }
+  60% { transform: translate(-2%, 4%); }
+  80% { transform: translate(5%, 2%); }
+  100% { transform: translate(0, 0); }
+}
+
+/* ── Refined glassmorphism (trend #5 — with restraint) ─────── */
+
+.glass {
+  background: color-mix(in oklab, var(--color-ink-3) 55%, transparent);
+  backdrop-filter: blur(20px) saturate(140%);
+  -webkit-backdrop-filter: blur(20px) saturate(140%);
+  border: 1px solid color-mix(in oklab, var(--color-bone) 10%, transparent);
+}
+
+/* ── Hairlines ─────────────────────────────────────────────── */
+
+.rule {
+  height: 1px;
+  background: color-mix(in oklab, var(--color-bone) 14%, transparent);
+}
+
+/* ── Link underline that draws in ──────────────────────────── */
+
+.link-draw {
+  position: relative;
+}
+.link-draw::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  width: 100%;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.55s var(--ease-cinema);
+}
+.link-draw:hover::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+/* ── Marquee ───────────────────────────────────────────────── */
+
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee 42s linear infinite;
+}
+@keyframes marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* ── Custom cursor ─────────────────────────────────────────── */
+
+@media (hover: hover) and (pointer: fine) {
+  .cursor-host,
+  .cursor-host a,
+  .cursor-host button {
+    cursor: none;
+  }
+}
+
+/* ── Reduced motion: honour it properly ────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  .grain::after {
+    animation: none;
+  }
+  .marquee-track {
+    animation: none;
+  }
+  .js-reveal .line-inner {
+    transform: none !important;
+  }
+  .js-fade {
+    opacity: 1 !important;
+  }
+}

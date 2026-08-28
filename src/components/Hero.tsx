@@ -1,0 +1,200 @@
+"use client";
+
+import { useRef } from "react";
+import Image from "next/image";
+import { useGSAP } from "@gsap/react";
+import { gsap, prefersReducedMotion } from "@/lib/anim";
+import { onIntroDone } from "@/lib/intro";
+import { site } from "@/lib/site";
+import HeroCanvas from "./HeroCanvas";
+import Magnetic from "./ui/Magnetic";
+
+export default function Hero() {
+  const root = useRef<HTMLElement>(null);
+
+  useGSAP(
+    () => {
+      const el = root.current;
+      if (!el) return;
+
+      // Elements are resolved from the live root at play time rather than by
+      // selector string: the entrance runs *after* the GSAP context has closed,
+      // so scoped selector lookups would resolve against a stale scope.
+      const q = <T extends Element = HTMLElement>(sel: string) =>
+        Array.from(el.querySelectorAll<T>(sel));
+
+      const words = q(".hero-word");
+      const frame = q(".hero-frame");
+      const sub = q(".hero-sub");
+      const late = q(".hero-late");
+
+      if (prefersReducedMotion()) {
+        gsap.set([...frame, ...late], { opacity: 1, y: 0 });
+        gsap.set([...words, ...sub], { yPercent: 0 });
+        return;
+      }
+
+      /* ── Entrance: waits for the title card to finish ── */
+      const play = () => {
+        const tl = gsap.timeline({ defaults: { ease: "power4.out" } });
+
+        tl.fromTo(
+          words,
+          { yPercent: 118, rotate: 3 },
+          { yPercent: 0, rotate: 0, duration: 1.5, stagger: 0.1 }
+        )
+          .fromTo(
+            frame,
+            { scale: 1.35, opacity: 0, filter: "blur(14px)" },
+            { scale: 1, opacity: 1, filter: "blur(0px)", duration: 1.9 },
+            0.15
+          )
+          .fromTo(sub, { yPercent: 110 }, { yPercent: 0, duration: 1.2 }, 0.75)
+          .fromTo(
+            late,
+            { opacity: 0, y: 26 },
+            { opacity: 1, y: 0, duration: 1.1, stagger: 0.08 },
+            0.95
+          );
+      };
+
+      const offIntro = onIntroDone(play);
+
+      /* ── Exit: the whole frame sinks and dims as you leave ── */
+      gsap.to(".hero-parallax", {
+        yPercent: 22,
+        scale: 1.08,
+        ease: "none",
+        scrollTrigger: {
+          trigger: el,
+          start: "top top",
+          end: "bottom top",
+          scrub: true,
+        },
+      });
+
+      gsap.to(".hero-copy", {
+        yPercent: -55,
+        opacity: 0,
+        ease: "none",
+        scrollTrigger: {
+          trigger: el,
+          start: "top top",
+          end: "70% top",
+          scrub: true,
+        },
+      });
+
+      return () => offIntro();
+    },
+    { scope: root }
+  );
+
+  return (
+    <section
+      ref={root}
+      id="top"
+      className="relative h-[100svh] min-h-[38rem] w-full overflow-hidden"
+    >
+      {/* Layer 1 — animated WebGL sky/sea */}
+      <div className="hero-parallax absolute inset-0">
+        <div className="absolute inset-0 bg-linear-to-b from-neel-900 via-ink to-abyss" />
+        <HeroCanvas />
+
+        {/* Layer 2 — a graded photograph, blended into the field.
+            `overlay` keeps the field's own light and dark while lending the
+            frame real photographic texture; `soft-light` over this dark a
+            base just collapses to black. */}
+        <div className="hero-frame absolute inset-0 opacity-0">
+          <Image
+            src="/images/hero.jpg"
+            alt=""
+            fill
+            priority
+            sizes="100vw"
+            className="object-cover opacity-60 mix-blend-overlay"
+          />
+        </div>
+
+        {/* Grade: hold the sky, sink the foot of the frame so type stays legible */}
+        <div className="absolute inset-0 bg-linear-to-b from-abyss/45 via-abyss/5 to-abyss" />
+        <div className="absolute inset-0 bg-linear-to-r from-abyss/55 via-transparent to-transparent" />
+      </div>
+
+      {/* Layer 3 — type */}
+      <div className="hero-copy relative z-10 mx-auto flex h-full max-w-[100rem] flex-col justify-end px-6 pb-16 md:px-10 md:pb-20">
+        <div className="hero-late t-eyebrow mb-6 flex items-center gap-4 text-sand opacity-0">
+          <span className="h-px w-10 bg-ember-500" />
+          <span>
+            {site.location.island} · {site.location.state}
+          </span>
+        </div>
+
+        <h1 className="font-display t-mega text-bone">
+          <span className="line-mask">
+            <span className="hero-word block">Neel</span>
+          </span>
+          <span className="line-mask">
+            <span className="hero-word block italic text-ember-300">Akash</span>
+          </span>
+        </h1>
+
+        <div className="mt-8 flex flex-col gap-10 border-t border-bone/12 pt-8 lg:flex-row lg:items-end lg:justify-between">
+          <div className="line-mask max-w-[34ch]">
+            <p className="hero-sub text-lg leading-snug text-sand md:text-xl">
+              {site.tagline}.
+            </p>
+          </div>
+
+          {/* Stats row */}
+          <div className="hero-late grid grid-cols-2 gap-x-10 gap-y-6 opacity-0 sm:grid-cols-4 lg:gap-x-14">
+            {site.stats.map((s) => (
+              <div key={s.label}>
+                <p className="font-display text-3xl text-bone md:text-4xl">
+                  {s.value}
+                  <span className="text-lg text-ember-400">{s.unit}</span>
+                </p>
+                <p className="mt-1 text-[0.68rem] uppercase tracking-[0.16em] text-sand-dim">
+                  {s.label}
+                </p>
+              </div>
+            ))}
+          </div>
+
+          <Magnetic strength={0.3} className="hero-late opacity-0">
+            <a
+              href="#contact"
+              data-cursor="Book"
+              className="group/cta relative inline-flex items-center gap-4 overflow-hidden rounded-full bg-bone px-8 py-4 text-abyss"
+            >
+              <span className="absolute inset-0 origin-left scale-x-0 bg-ember-400 transition-transform duration-600 ease-[cubic-bezier(.16,1,.3,1)] group-hover/cta:scale-x-100" />
+              <span className="relative text-[0.76rem] font-semibold uppercase tracking-[0.18em]">
+                Reserve a night
+              </span>
+              <span className="relative transition-transform duration-500 group-hover/cta:translate-x-1">
+                &rarr;
+              </span>
+            </a>
+          </Magnetic>
+        </div>
+      </div>
+
+      {/* Scroll cue */}
+      <div className="hero-late absolute bottom-6 left-1/2 z-10 hidden -translate-x-1/2 flex-col items-center gap-2 opacity-0 md:flex">
+        <span className="text-[0.58rem] uppercase tracking-[0.3em] text-sand-dim">
+          Scroll
+        </span>
+        <span className="relative h-12 w-px overflow-hidden bg-bone/20">
+          <span className="absolute inset-x-0 top-0 h-1/3 animate-[scrollcue_2.2s_ease-in-out_infinite] bg-ember-400" />
+        </span>
+      </div>
+
+      <style>{`
+        @keyframes scrollcue {
+          0%   { transform: translateY(-100%); }
+          100% { transform: translateY(300%); }
+        }
+      `}</style>
+    </section>
+  );
+}
