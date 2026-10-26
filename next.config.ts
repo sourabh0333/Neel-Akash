@@ -6,6 +6,9 @@ const nextConfig: NextConfig = {
   // stray lockfile in the home directory.
   turbopack: { root: path.resolve(".") },
 
+  // Stop `next dev` writing AGENTS.md and CLAUDE.md into the repo root.
+  agentRules: false,
+
   images: {
     // All photography is served from /public/images. To use a CDN instead,
     // add a remotePatterns entry here and point src at the remote URL.
