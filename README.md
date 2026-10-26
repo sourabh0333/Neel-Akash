@@ -183,8 +183,8 @@ means no server, no payment integration and no PII stored anywhere.
 
 ## Motion & accessibility notes
 
-- **`prefers-reduced-motion` is honoured throughout.** The preloader is
-  skipped, Lenis is not mounted, pinning and parallax are disabled, and every
+- **`prefers-reduced-motion` is honoured throughout.** Lenis is not
+  mounted, pinning and parallax are disabled, and every
   section renders in its final state.
 - **Pinned sections are desktop-only** (`min-width: 900px` via
   `gsap.matchMedia`). On phones the horizontal island rail becomes a swipeable
@@ -194,11 +194,10 @@ means no server, no payment integration and no PII stored anywhere.
   WebGL is unavailable the CSS gradient underneath simply shows through.
 - **Overlays actually stop the page.** Lenis scrolls from its own handlers, so
   `overflow: hidden` alone is not enough; `src/lib/scroll.ts` holds a counted
-  lock that stops and restarts Lenis for the title card, the menu and the
-  photo viewer.
-- The intro → hero hand-off uses a **latched signal** (`src/lib/intro.ts`)
-  with a 6s safety net, so hero content can never be stranded invisible if an
-  animation fails.
+  lock that stops and restarts Lenis for the menu and the photo viewer.
+- **There is no opening sequence.** The hero is server-rendered in its final
+  state and visible on first paint; the only motion it carries is the
+  scroll-linked parallax as you leave it.
 
 ## Deploying
 

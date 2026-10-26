@@ -4,7 +4,6 @@ import { useRef } from "react";
 import Image from "next/image";
 import { useGSAP } from "@gsap/react";
 import { gsap, prefersReducedMotion } from "@/lib/anim";
-import { onIntroDone } from "@/lib/intro";
 import { site } from "@/lib/site";
 import HeroCanvas from "./HeroCanvas";
 import Magnetic from "./ui/Magnetic";
@@ -17,48 +16,7 @@ export default function Hero() {
       const el = root.current;
       if (!el) return;
 
-      // Elements are resolved from the live root at play time rather than by
-      // selector string: the entrance runs *after* the GSAP context has closed,
-      // so scoped selector lookups would resolve against a stale scope.
-      const q = <T extends Element = HTMLElement>(sel: string) =>
-        Array.from(el.querySelectorAll<T>(sel));
-
-      const words = q(".hero-word");
-      const frame = q(".hero-frame");
-      const sub = q(".hero-sub");
-      const late = q(".hero-late");
-
-      if (prefersReducedMotion()) {
-        gsap.set([...frame, ...late], { opacity: 1, y: 0 });
-        gsap.set([...words, ...sub], { yPercent: 0 });
-        return;
-      }
-
-      /* ── Entrance: waits for the title card to finish ── */
-      const play = () => {
-        const tl = gsap.timeline({ defaults: { ease: "power4.out" } });
-
-        tl.fromTo(
-          words,
-          { yPercent: 118, rotate: 3 },
-          { yPercent: 0, rotate: 0, duration: 1.5, stagger: 0.1 }
-        )
-          .fromTo(
-            frame,
-            { scale: 1.35, opacity: 0, filter: "blur(14px)" },
-            { scale: 1, opacity: 1, filter: "blur(0px)", duration: 1.9 },
-            0.15
-          )
-          .fromTo(sub, { yPercent: 110 }, { yPercent: 0, duration: 1.2 }, 0.75)
-          .fromTo(
-            late,
-            { opacity: 0, y: 26 },
-            { opacity: 1, y: 0, duration: 1.1, stagger: 0.08 },
-            0.95
-          );
-      };
-
-      const offIntro = onIntroDone(play);
+      if (prefersReducedMotion()) return;
 
       /* ── Exit: the whole frame sinks and dims as you leave ── */
       gsap.to(".hero-parallax", {
@@ -85,7 +43,6 @@ export default function Hero() {
         },
       });
 
-      return () => offIntro();
     },
     { scope: root }
   );
@@ -104,8 +61,11 @@ export default function Hero() {
         {/* Layer 2 — a graded photograph, blended into the field.
             `overlay` keeps the field's own light and dark while lending the
             frame real photographic texture; `soft-light` over this dark a
-            base just collapses to black. */}
-        <div className="hero-frame absolute inset-0 opacity-0">
+            base just collapses to black.
+            `isolate` matters: the old entrance left `filter: blur(0px)` on
+            this layer, which isolated the blend, and that is the look the
+            site shipped with. Without it the photo greys out into the field. */}
+        <div className="absolute inset-0 isolate">
           <Image
             src="/images/hero.jpg"
             alt=""
@@ -123,7 +83,7 @@ export default function Hero() {
 
       {/* Layer 3 — type */}
       <div className="hero-copy relative z-10 mx-auto flex h-full max-w-[100rem] flex-col justify-end px-6 pb-16 md:px-10 md:pb-20">
-        <div className="hero-late t-eyebrow mb-6 flex items-center gap-4 text-sand opacity-0">
+        <div className="t-eyebrow mb-6 flex items-center gap-4 text-sand">
           <span className="h-px w-10 bg-ember-500" />
           <span>
             {site.location.island} · {site.location.state}
@@ -132,22 +92,22 @@ export default function Hero() {
 
         <h1 className="font-display t-mega text-bone">
           <span className="line-mask">
-            <span className="hero-word block">Neel</span>
+            <span className="block">Neel</span>
           </span>
           <span className="line-mask">
-            <span className="hero-word block italic text-ember-300">Akash</span>
+            <span className="block italic text-ember-300">Akash</span>
           </span>
         </h1>
 
         <div className="mt-8 flex flex-col gap-10 border-t border-bone/12 pt-8 lg:flex-row lg:items-end lg:justify-between">
           <div className="line-mask max-w-[34ch]">
-            <p className="hero-sub text-lg leading-snug text-sand md:text-xl">
+            <p className="text-lg leading-snug text-sand md:text-xl">
               {site.tagline}.
             </p>
           </div>
 
           {/* Stats row */}
-          <div className="hero-late grid grid-cols-2 gap-x-10 gap-y-6 opacity-0 sm:grid-cols-4 lg:gap-x-14">
+          <div className="grid grid-cols-2 gap-x-10 gap-y-6 sm:grid-cols-4 lg:gap-x-14">
             {site.stats.map((s) => (
               <div key={s.label}>
                 <p className="font-display text-3xl text-bone md:text-4xl">
@@ -161,7 +121,7 @@ export default function Hero() {
             ))}
           </div>
 
-          <Magnetic strength={0.3} className="hero-late opacity-0">
+          <Magnetic strength={0.3}>
             <a
               href="#contact"
               data-cursor="Book"
@@ -180,7 +140,7 @@ export default function Hero() {
       </div>
 
       {/* Scroll cue */}
-      <div className="hero-late absolute bottom-6 left-1/2 z-10 hidden -translate-x-1/2 flex-col items-center gap-2 opacity-0 md:flex">
+      <div className="absolute bottom-6 left-1/2 z-10 hidden -translate-x-1/2 flex-col items-center gap-2 md:flex">
         <span className="text-[0.58rem] uppercase tracking-[0.3em] text-sand-dim">
           Scroll
         </span>

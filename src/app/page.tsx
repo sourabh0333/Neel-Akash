@@ -1,4 +1,3 @@
-import Preloader from "@/components/Preloader";
 import SmoothScroll from "@/components/SmoothScroll";
 import Cursor from "@/components/Cursor";
 import Nav from "@/components/Nav";
@@ -18,7 +17,6 @@ export default function Home() {
   return (
     <>
       <SmoothScroll />
-      <Preloader />
       <Cursor />
       <Nav />
 
