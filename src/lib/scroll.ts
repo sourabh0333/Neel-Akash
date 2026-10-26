@@ -8,7 +8,7 @@ import type Lenis from "lenis";
  * open overlay — Lenis has to be told to stop as well.
  *
  * Locks are counted, because more than one thing can want the page held
- * still at once (the title card and an open menu, say); the page only starts
+ * still at once (an open menu and the photo viewer, say); the page only starts
  * moving again when the last of them releases.
  */
 
@@ -29,13 +29,6 @@ export function lockScroll() {
 export function unlockScroll() {
   locks = Math.max(0, locks - 1);
   if (locks > 0) return;
-  lenis?.start();
-  document.body.style.removeProperty("overflow");
-}
-
-/** For unmount paths that cannot guarantee a matching unlock. */
-export function resetScrollLock() {
-  locks = 0;
   lenis?.start();
   document.body.style.removeProperty("overflow");
 }
