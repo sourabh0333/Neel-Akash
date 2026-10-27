@@ -118,11 +118,30 @@ before editing:
   that leg. Under reduced motion nothing loops and the route is drawn in
   full.
 
-  > Worth knowing if you edit this: each leg is revealed through an SVG mask
-  > drawn along its path, which is what lets the dashed and dotted legs draw
-  > on as cleanly as the solid ones. Station label positions are set by hand
-  > in `STATIONS` so none lands on a line or in the water — check them if
-  > you move a station. Times come from `journey[].minutes`.
+  The route map (`src/components/route/RouteMap.tsx`) plays the trip like a
+  navigation app on the **real delta**: coastline, estuary, islands and the
+  Hooghly from Natural Earth, with the railway drawn through its real
+  stations (Baruipur, Lakshmikantapur, Kakdwip). A camera follows the
+  traveller — wide on the train, close on the ferry — then pulls back to the
+  whole route; the vehicle is drawn from above and turns with the route
+  (carriages, a van, a boat trailing its wake, a toto), with an ETA counting
+  down. Pointing at a step frames that leg and holds. It only animates while
+  on screen; under reduced motion it shows the whole route, still.
+
+  > Worth knowing if you edit this: the map data in
+  > `src/components/route/geo.ts` is generated — edit
+  > `scripts/gen-route-map.py` and run it against Natural Earth's 1:10m
+  > `ne_10m_land` and `ne_10m_rivers_lake_centerlines` GeoJSON:
+  >
+  > ```bash
+  > python3 scripts/gen-route-map.py path/to/natural-earth-geojson
+  > ```
+  >
+  > At that scale Natural Earth joins Mousuni to the mainland, so the script
+  > cuts the Chinai across the southern tip by hand. Station positions are
+  > approximate (the map says so); once the camp's exact plot is known, set
+  > it in the script's `stations` list. Leg times come from
+  > `journey[].minutes`.
 
 ## The brand mark
 
