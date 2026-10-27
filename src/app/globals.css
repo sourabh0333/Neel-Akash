@@ -146,11 +146,14 @@ html.lenis body {
 }
 
 /* Pre-animation state. GSAP clears these once it takes over; the
-   .is-ready guard means no-JS / failed-hydration still shows content. */
+   .is-ready guard means a failed hydration still shows content, and the
+   html.js guard (set by an inline script in layout.tsx) means nothing is
+   ever hidden where JavaScript doesn't run at all — so readers and search
+   crawlers always get the text, animated or not. */
 .js-reveal:not(.is-ready) .line-inner {
   transform: translateY(105%);
 }
-.js-fade:not(.is-ready) {
+.js .js-fade:not(.is-ready) {
   opacity: 0;
 }
 

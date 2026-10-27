@@ -37,7 +37,7 @@ export default function Hero() {
             <div className="absolute inset-0 isolate">
               <Image
                 src="/images/hero.jpg"
-                alt=""
+                alt="A long beach and the sea, seen from above"
                 fill
                 priority
                 sizes="100vw"

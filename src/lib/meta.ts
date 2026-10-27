@@ -14,7 +14,19 @@ import { site } from "./site";
  * - The same title and description are given to Open Graph and Twitter, so
  *   a link shared on WhatsApp or Facebook previews this page, not the home
  *   page; the canonical makes the page's one address explicit.
+ * - The share card image is named explicitly. A page that sets its own
+ *   `openGraph` replaces the layout's whole object, so without this every
+ *   page but the home page would share with no picture at all.
  */
+
+/** The 1200×630 share card drawn by src/app/opengraph-image.tsx. */
+const SHARE_IMAGE = {
+  url: "/opengraph-image",
+  width: 1200,
+  height: 630,
+  alt: `${site.name} — ${site.tagline}`,
+};
+
 export function pageMeta({
   path,
   title,
@@ -35,8 +47,9 @@ export function pageMeta({
       url: path,
       title,
       description,
+      images: [SHARE_IMAGE],
     },
-    twitter: { card: "summary_large_image", title, description },
+    twitter: { card: "summary_large_image", title, description, images: [SHARE_IMAGE] },
   };
 }
 
