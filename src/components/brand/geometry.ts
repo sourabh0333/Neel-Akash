@@ -1,6 +1,6 @@
 /**
  * ─────────────────────────────────────────────────────────────
- *  NEEL AKASH — mark geometry, single source of truth
+ *  PENGUIN BEACH CAMP — mark geometry, single source of truth
  * ─────────────────────────────────────────────────────────────
  *
  * Every surface reads from here: the React component, the favicon, the print
@@ -18,10 +18,9 @@
  *    that runs along the top of every word and binds it together. It is the
  *    single most recognisable feature of the script.
  *
- *    This hotel is called নীল আকাশ, *blue sky*. So the mark is a matra with
- *    everything hanging beneath it, and the empty field above the stroke is
- *    the sky the place is named for. Not a picture of a sky — the
- *    typographic one, the line Bengali itself hangs from.
+ *    So the mark is a matra with everything hanging beneath it, and the
+ *    empty field above the stroke is the sky over the bay. Not a picture of
+ *    a sky — the typographic one, the line Bengali itself hangs from.
  *
  * 2. KANTHA (কাঁথা)
  *    The running-stitch quilting of rural Bengal, sewn by women from layered

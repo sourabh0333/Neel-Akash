@@ -1,7 +1,8 @@
-# Neel Akash — নীল আকাশ
+# Penguin Beach Camp — পেঙ্গুইন বিচ ক্যাম্প
 
-Cinematic marketing site for **Neel Akash**, a sea-facing beach retreat on
-**Mousuni Island**, Namkhana, South 24 Parganas, West Bengal.
+Cinematic marketing site for **Penguin Beach Camp** (formerly Neel Akash), a
+sea-facing beach retreat on **Mousuni Island**, Namkhana, South 24 Parganas,
+West Bengal.
 
 Proprietor: **Bijoy Jana** · +91 98325 15735
 
@@ -48,9 +49,9 @@ directions, testimonials and gallery captions all live there.
 
 ### ⚠️ Two things to confirm before going live
 
-1. **Exact village.** A JustDial listing places "Mousuni Island Neel Akash
-   Resort" in **Kusumtala**; most Mousuni camps are in **Baliara**. Set
-   `site.location.village` to whichever is correct.
+1. **Exact village.** A JustDial listing under the old name, "Mousuni Island
+   Neel Akash Resort", places it in **Kusumtala**; most Mousuni camps are in
+   **Baliara**. Set `site.location.village` to whichever is correct.
 2. **Coordinates.** `site.location.lat/lng` are the island centroid, not the
    plot. Drop a pin on Google Maps and paste the real values — they feed the
    `Resort` structured data used for local search results.
@@ -134,10 +135,10 @@ nowhere else.
 
 **The matra (মাত্রা).** Bengali is written hanging from a horizontal
 headstroke that runs along the top of every word and binds it together — the
-single most recognisable feature of the script. This hotel is called নীল আকাশ,
-*blue sky*. So the mark is a matra with everything hanging beneath it, and the
-empty field above the stroke is the sky the place is named for: not a picture
-of a sky, the typographic one that Bengali itself hangs from.
+single most recognisable feature of the script. So the mark is a matra with
+everything hanging beneath it, and the empty field above the stroke is the sky
+over the bay: not a picture of a sky, the typographic one that Bengali itself
+hangs from.
 
 **Kantha (কাঁথা).** The running-stitch quilting of rural Bengal, sewn by women
 from layered worn saris — the craft of this exact stretch of delta. Its

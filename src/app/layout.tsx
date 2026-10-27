@@ -18,7 +18,7 @@ const inter = Inter({
   display: "swap",
 });
 
-/* For the Bengali wordmark — নীল আকাশ */
+/* For the Bengali wordmark — পেঙ্গুইন বিচ ক্যাম্প */
 const bengali = Noto_Serif_Bengali({
   subsets: ["bengali"],
   weight: ["400"],
@@ -26,7 +26,7 @@ const bengali = Noto_Serif_Bengali({
   display: "swap",
 });
 
-const url = "https://neelakash.example";
+const url = "https://penguinbeachcamp.example";
 
 export const metadata: Metadata = {
   metadataBase: new URL(url),
@@ -39,7 +39,7 @@ export const metadata: Metadata = {
     "Mousuni Island resort",
     "Mousuni Island camp booking",
     "Baliara beach tent",
-    "Neel Akash Mousuni",
+    "Penguin Beach Camp Mousuni",
     "beach resort near Kolkata",
     "Namkhana Mousuni tent",
     "West Bengal beach camping",

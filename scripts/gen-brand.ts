@@ -22,10 +22,10 @@ const mark = markSvgString({ stroke: c.bone, accent: c.ember })
   .replace(/<\/svg>\s*$/, "")
   .trim();
 
-const lockup = `<svg xmlns="http://www.w3.org/2000/svg" width="1260" height="288" viewBox="0 0 420 96">
-  <title>Neel Akash — Mousuni Island</title>
+const lockup = `<svg xmlns="http://www.w3.org/2000/svg" width="1500" height="288" viewBox="0 0 500 96">
+  <title>Penguin Beach Camp — Mousuni Island</title>
   <g transform="translate(14 16)">${mark}</g>
-  <text x="100" y="52" fill="${c.bone}" font-family="Instrument Serif, Georgia, 'Times New Roman', serif" font-size="38" letter-spacing="-0.5">Neel Akash</text>
+  <text x="100" y="52" fill="${c.bone}" font-family="Instrument Serif, Georgia, 'Times New Roman', serif" font-size="38" letter-spacing="-0.5">Penguin Beach Camp</text>
   <text x="102" y="72" fill="${c.sandDim}" font-family="Inter, Helvetica, Arial, sans-serif" font-size="10" letter-spacing="3.4">MOUSUNI ISLAND · WEST BENGAL</text>
 </svg>`;
 writeFileSync("public/brand/lockup-on-dark.svg", lockup + "\n");

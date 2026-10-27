@@ -92,10 +92,10 @@ export default function Hero() {
 
         <h1 className="font-display t-mega text-bone">
           <span className="line-mask">
-            <span className="block">Neel</span>
+            <span className="block">Penguin</span>
           </span>
           <span className="line-mask">
-            <span className="block italic text-ember-300">Akash</span>
+            <span className="block italic text-ember-300">Beach Camp</span>
           </span>
         </h1>
 

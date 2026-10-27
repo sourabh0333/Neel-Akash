@@ -89,9 +89,9 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* Oversized wordmark, cropped by the viewport edge */}
+        {/* Oversized wordmark, sized so the full name spans the page */}
         <div className="overflow-hidden">
-          <p className="foot-mark whitespace-nowrap text-center font-display leading-[0.8] text-bone/12 [font-size:clamp(4rem,20vw,20rem)]">
+          <p className="foot-mark whitespace-nowrap text-center font-display leading-[0.8] text-bone/12 [font-size:clamp(2.5rem,12.5vw,13.5rem)]">
             {site.name}
           </p>
         </div>
