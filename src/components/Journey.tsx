@@ -1,25 +1,25 @@
 "use client";
 
-import { useId, useRef } from "react";
+import { useId, useRef, useState } from "react";
 import { useGSAP } from "@gsap/react";
 import { gsap, prefersReducedMotion } from "@/lib/anim";
-import { journey, site } from "@/lib/site";
+import { drivingRoute, journey, site } from "@/lib/site";
 import Reveal from "./ui/Reveal";
 
 /**
- * Getting here, as a live route tracker.
+ * Getting here, as a journey board.
  *
- * Desktop: the section pins and scrolling *is* the trip. A marker carrying
- * the current vehicle travels a route map of the delta — railway, road,
- * ferry across the Chinai, toto to the camp — each leg drawn in its own
- * line style as it is covered. Stations light up on arrival, the leg card
- * swaps, and a trip clock counts the travel time up as you go.
+ * Laid out the way transit planners present a trip, in four rows:
+ *   1. the headline numbers (total time, legs, the ferry, the pickup);
+ *   2. the whole trip as one bar, split by leg in proportion to its time;
+ *   3. a route map beside the step-by-step list;
+ *   4. the practical cards — by road, the tide, where to find us.
  *
- * Everything is driven from one progress value written straight to the DOM
- * (no React state on scroll), so the pin stays smooth.
- *
- * Phones, and anyone who prefers reduced motion, get the same route as a
- * stack of boarding-pass tickets instead.
+ * One "active leg" ties the board together. A marker loops along the map,
+ * and whichever leg it is on lights up in the map, the bar and the steps at
+ * once (that step opens to show its detail). Pointing at a step pauses the
+ * loop and shows that leg. Under reduced motion nothing loops: the route is
+ * drawn in full and the steps still respond to the pointer.
  */
 
 /* ── Route map geometry (viewBox 640 × 580) ─────────────────── */
@@ -44,19 +44,14 @@ const LEGS = [
   "M330 438C390 445 440 480 500 470",
 ];
 
-/** How each leg looks once covered: the line style says how you travel. */
+/** How each leg is drawn: the line style says how you travel. */
 const LEG_STYLE = [
-  // Rail: a rule with sleepers across it.
-  { stroke: 2.4, dash: undefined, ties: true },
-  // Road: one solid line.
-  { stroke: 2.4, dash: undefined, ties: false },
-  // Ferry: a dashed crossing over the water.
-  { stroke: 2.4, dash: "7 6", ties: false },
-  // Toto: a dotted lane.
-  { stroke: 3, dash: "0.1 7", ties: false },
+  { label: "Rail", dash: undefined, ties: true, width: 2.4 },
+  { label: "Road", dash: undefined, ties: false, width: 2.4 },
+  { label: "Ferry", dash: "7 6", ties: false, width: 2.4 },
+  { label: "Toto", dash: "0.1 7", ties: false, width: 3 },
 ];
 
-/** The Chinai, as a wavy band the ferry crosses. */
 const RIVER =
   "M0 386C60 376 110 392 170 384S280 372 340 384S470 396 530 386S610 376 640 382V418C600 424 560 410 500 418S380 432 320 420S200 408 140 418S40 430 0 420Z";
 const SEA = "M0 530C70 518 130 538 210 528S350 514 430 528S570 540 640 524V580H0Z";
@@ -66,6 +61,17 @@ const fmt = (min: number) => {
   const m = Math.round(min);
   return `${Math.floor(m / 60)}h ${String(m % 60).padStart(2, "0")}m`;
 };
+const modeName = (mode: string) => (mode === "Arrival" ? "Toto" : mode);
+
+/**
+ * Bar widths follow each leg's share of the time, with a floor so the short
+ * legs (10 and 15 minutes) still have room for their icon and label.
+ */
+const barWeights = (() => {
+  const raw = journey.map((j) => Math.max(j.minutes / totalMinutes, 0.13));
+  const sum = raw.reduce((a, b) => a + b, 0);
+  return raw.map((w) => w / sum);
+})();
 
 const icons: Record<string, React.ReactNode> = {
   Rail: (
@@ -125,138 +131,138 @@ export default function Journey({
   standalone?: boolean;
 }) {
   const root = useRef<HTMLElement>(null);
+  const markerRef = useRef<SVGGElement>(null);
+  const guideRefs = useRef<Array<SVGPathElement | null>>([]);
+  const loop = useRef<gsap.core.Timeline | null>(null);
+  const activeRef = useRef(0);
+  const [active, setActive] = useState(0);
   // Mask ids must be unique in the document and safe inside url(#…).
   const uid = useId().replace(/[^a-zA-Z0-9_-]/g, "");
+
+  const select = (i: number) => {
+    if (activeRef.current === i) return;
+    activeRef.current = i;
+    setActive(i);
+  };
+
+  /** Put the marker part-way along a leg (0 = its start, 1 = its end). */
+  const placeMarker = (leg: number, f: number) => {
+    const path = guideRefs.current[leg];
+    if (!path || !markerRef.current) return;
+    const pt = path.getPointAtLength(path.getTotalLength() * f);
+    markerRef.current.setAttribute("transform", `translate(${pt.x} ${pt.y})`);
+  };
+
+  /* Pointing at a step pauses the loop on that leg; leaving resumes it. */
+  const focusLeg = (i: number) => {
+    loop.current?.pause();
+    select(i);
+    placeMarker(i, 0.5);
+  };
+  const releaseLeg = () => loop.current?.resume();
 
   useGSAP(
     () => {
       const el = root.current;
       if (!el) return;
-      const mm = gsap.matchMedia();
+      const reveals = gsap.utils.toArray<SVGPathElement>(".leg-reveal", el);
+      const lens = reveals.map((p) => p.getTotalLength());
+      const clock = el.querySelector<HTMLElement>(".total-clock");
 
-      /* ── Desktop: the pinned tracker ─────────────────────────── */
-      mm.add("(min-width: 1024px) and (prefers-reduced-motion: no-preference)", () => {
-        const stage = el.querySelector<HTMLElement>(".route-stage");
-        if (!stage) return;
+      if (prefersReducedMotion()) {
+        // No loop: the route is drawn in full and the marker sits on the
+        // highlighted leg, moving only when a step is pointed at.
+        placeMarker(0, 0.5);
+        return;
+      }
 
-        const reveals = gsap.utils.toArray<SVGPathElement>(".leg-reveal", el);
-        const lens = reveals.map((p) => p.getTotalLength());
-        reveals.forEach((p, i) => gsap.set(p, { strokeDasharray: lens[i], strokeDashoffset: lens[i] }));
+      reveals.forEach((p, i) => gsap.set(p, { strokeDasharray: lens[i], strokeDashoffset: lens[i] }));
+      gsap.set(".bar-seg", { scaleX: 0 });
+      gsap.set(".board-in", { opacity: 0, y: 28 });
+      placeMarker(0, 0);
 
-        const guides = gsap.utils.toArray<SVGPathElement>(".leg-guide", el);
-        const marker = el.querySelector<SVGGElement>(".marker");
-        const markerIcons = gsap.utils.toArray<SVGGElement>(".marker-icon", el);
-        const stations = gsap.utils.toArray<SVGGElement>(".stn", el);
-        const cards = gsap.utils.toArray<HTMLElement>(".leg-card", el);
-        const bars = gsap.utils.toArray<HTMLElement>(".leg-bar", el);
-        const chips = gsap.utils.toArray<HTMLElement>(".leg-chip", el);
-        const clock = el.querySelector<HTMLElement>(".trip-clock");
-
-        gsap.set(cards, { autoAlpha: 0, y: 30 });
-        gsap.set(cards[0], { autoAlpha: 1, y: 0 });
-
-        let shown = 0;
-        const showCard = (i: number) => {
-          if (i === shown) return;
-          const down = i > shown;
-          gsap.to(cards[shown], { autoAlpha: 0, y: down ? -30 : 30, duration: 0.45, ease: "power2.in", overwrite: true });
-          gsap.fromTo(
-            cards[i],
-            { autoAlpha: 0, y: down ? 30 : -30 },
-            { autoAlpha: 1, y: 0, duration: 0.7, delay: 0.15, ease: "power3.out", overwrite: true }
-          );
-          markerIcons.forEach((g, n) => gsap.to(g, { opacity: n === i ? 1 : 0, duration: 0.3 }));
-          shown = i;
-        };
-
-        const n = journey.length;
-        const render = (p: number) => {
-          const at = Math.min(n - 1e-6, Math.max(0, p * n));
+      // The loop: the marker travels each leg in turn, then holds at the camp.
+      const state = { t: 0 };
+      const n = journey.length;
+      const tl = gsap.timeline({ paused: true, repeat: -1, repeatDelay: 1.2 });
+      tl.to(state, {
+        t: n,
+        duration: n * 2.6,
+        ease: "none",
+        onUpdate: () => {
+          const at = Math.min(n - 1e-6, state.t);
           const leg = Math.floor(at);
-          const local = at - leg;
+          placeMarker(leg, at - leg);
+          select(leg);
+        },
+      });
+      loop.current = tl;
 
-          let minutes = 0;
-          reveals.forEach((path, i) => {
-            const f = i < leg ? 1 : i === leg ? local : 0;
-            path.style.strokeDashoffset = String(lens[i] * (1 - f));
-            bars[i].style.transform = `scaleX(${f})`;
-            chips[i].dataset.on = String(f > 0);
-            minutes += journey[i].minutes * f;
-          });
-          // At the very end, the last leg is complete.
-          if (p >= 0.999) {
-            reveals[n - 1].style.strokeDashoffset = "0";
-            bars[n - 1].style.transform = "scaleX(1)";
-            minutes = totalMinutes;
-          }
-          if (clock) clock.textContent = fmt(minutes);
-
-          stations.forEach((s, k) => (s.dataset.on = String(k === 0 || at >= k || p >= 0.999)));
-
-          const guide = guides[leg];
-          const pt = guide.getPointAtLength(guide.getTotalLength() * (p >= 0.999 ? 1 : local));
-          marker?.setAttribute("transform", `translate(${pt.x} ${pt.y})`);
-
-          showCard(leg);
-        };
-
-        const state = { p: 0 };
-        render(0);
-        const tween = gsap.to(state, {
-          p: 1,
-          ease: "none",
-          onUpdate: () => render(state.p),
-          scrollTrigger: {
-            trigger: stage,
-            start: "top top",
-            end: () => `+=${window.innerHeight * 3.2}`,
-            pin: true,
-            scrub: 0.6,
-            invalidateOnRefresh: true,
+      // Arrival on screen: the board settles in, the bar grows leg by leg,
+      // the route draws on, the clock counts up — then the loop starts.
+      const intro = gsap.timeline({ paused: true, onComplete: () => tl.play(0) });
+      intro
+        .to(".board-in", { opacity: 1, y: 0, duration: 0.8, stagger: 0.08, ease: "power3.out" })
+        .to(".bar-seg", { scaleX: 1, duration: 0.7, stagger: 0.18, ease: "power3.inOut" }, 0.2);
+      reveals.forEach((p, i) => {
+        intro.to(p, { strokeDashoffset: 0, duration: 0.7, ease: "power1.inOut" }, 0.35 + i * 0.55);
+      });
+      const count = { m: 0 };
+      intro.to(
+        count,
+        {
+          m: totalMinutes,
+          duration: 2,
+          ease: "power2.out",
+          onUpdate: () => {
+            if (clock) clock.textContent = fmt(count.m);
           },
-        });
+        },
+        0.2
+      );
 
-        return () => tween.scrollTrigger?.kill();
+      const trigger = gsap.timeline({
+        scrollTrigger: {
+          trigger: el.querySelector(".journey-board"),
+          start: "top 75%",
+          once: true,
+          onEnter: () => intro.play(),
+        },
       });
 
-      /* ── Phones / reduced motion: tickets stamp in ──────────── */
-      mm.add("(max-width: 1023px), (prefers-reduced-motion: reduce)", () => {
-        if (prefersReducedMotion()) return;
-        gsap.utils.toArray<HTMLElement>(".ticket", el).forEach((t) => {
-          const tl = gsap.timeline({ scrollTrigger: { trigger: t, start: "top 85%" } });
-          tl.from(t, { y: 70, rotate: -2.5, opacity: 0, duration: 0.9, ease: "power3.out" }).from(
-            t.querySelector(".ticket-stamp"),
-            { scale: 1.8, rotate: -24, opacity: 0, duration: 0.5, ease: "back.out(2.2)" },
-            "-=0.35"
-          );
-        });
-      });
-
-      return () => mm.revert();
+      return () => {
+        tl.kill();
+        intro.kill();
+        trigger.kill();
+        loop.current = null;
+      };
     },
     { scope: root }
   );
+
+  const activeLeg = journey[active];
+  const from = STATIONS[active];
+  const to = STATIONS[active + 1];
 
   return (
     <section
       ref={root}
       id="journey"
-      className={`relative bg-abyss ${standalone ? "pb-28 md:pb-36" : "pt-28 pb-28 md:pt-36 md:pb-36"}`}
+      className={`relative bg-abyss ${standalone ? "pb-28 md:pb-36" : "py-28 md:py-36"}`}
     >
       <style>{`
         @keyframes route-flow { to { stroke-dashoffset: -60; } }
         @keyframes route-ping {
-          0% { transform: scale(1); opacity: .55; }
+          0% { transform: scale(1); opacity: .6; }
           100% { transform: scale(2.6); opacity: 0; }
         }
         .route-flow { animation: route-flow 6s linear infinite; }
-        .stn .stn-dot { transition: fill .5s, stroke .5s, r .5s; }
-        .stn .stn-label { transition: fill .5s, opacity .5s; }
+        .stn-ring { transform-box: fill-box; transform-origin: center; opacity: 0; }
+        .stn[data-on="true"] .stn-ring { animation: route-ping 2.2s ease-out infinite; }
+        .stn .stn-dot, .stn .stn-label { transition: fill .4s, stroke .4s; }
         .stn[data-on="true"] .stn-dot { fill: var(--color-ember-400); stroke: var(--color-ember-300); }
         .stn[data-on="true"] .stn-label { fill: var(--color-bone); }
-        .stn-ring { transform-box: fill-box; transform-origin: center; opacity: 0; }
-        .stn[data-on="true"] .stn-ring { animation: route-ping 2.4s ease-out infinite; }
-        .leg-chip[data-on="true"] { color: var(--color-bone); }
+        .leg-line { transition: opacity .45s; }
         @media (prefers-reduced-motion: reduce) {
           .route-flow, .stn[data-on="true"] .stn-ring { animation: none; }
         }
@@ -264,7 +270,7 @@ export default function Journey({
 
       <div className="mx-auto max-w-[100rem] px-6 md:px-10">
         {!standalone && (
-          <div className="grid gap-8 lg:grid-cols-12">
+          <div className="mb-14 grid gap-8 lg:grid-cols-12">
             <div className="lg:col-span-7">
               <Reveal as="p" mode="fade" className="t-eyebrow text-ember-500">
                 Getting here
@@ -287,311 +293,417 @@ export default function Journey({
             </Reveal>
           </div>
         )}
-      </div>
 
-      {/* ── Desktop: the pinned route tracker ── */}
-      <div className="route-stage hidden h-[100svh] lg:motion-safe:block">
-        <div className="mx-auto grid h-full max-w-[100rem] grid-cols-12 items-center gap-10 px-10 pt-20 pb-10">
-          {/* Left: clock, progress, the current leg */}
-          <div className="col-span-5">
-            <div className="flex items-end justify-between border-b border-bone/12 pb-5">
-              <div>
-                <p className="text-[0.6rem] uppercase tracking-[0.3em] text-sand-dim">Trip clock</p>
-                <p className="trip-clock mt-2 font-display text-6xl leading-none text-bone tabular-nums">
-                  {fmt(0)}
-                </p>
+        <div className="journey-board grid grid-cols-1 gap-4 md:gap-5">
+          {/* ── 1. The numbers ── */}
+          <dl className="board-in grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-bone/10 bg-bone/10 lg:grid-cols-4">
+            {[
+              {
+                k: "Travel time",
+                v: <span className="total-clock">{fmt(totalMinutes)}</span>,
+                s: `From ${journey[0].from}, approx.`,
+              },
+              { k: "Legs", v: String(journey.length), s: journey.map((j) => modeName(j.mode)).join(" · ") },
+              { k: "Ferry", v: "1", s: "Across the Chinai, with the tide" },
+              { k: "Pickup", v: "Ghat", s: "We meet you, if you let us know" },
+            ].map((t) => (
+              <div key={t.k} className="bg-abyss p-5 md:p-7">
+                <dt className="text-[0.6rem] uppercase tracking-[0.28em] text-sand-dim">{t.k}</dt>
+                <dd className="mt-3 font-display text-4xl leading-none text-bone tabular-nums md:text-5xl">
+                  {t.v}
+                </dd>
+                <dd className="mt-2 text-xs text-sand-dim">{t.s}</dd>
               </div>
-              <p className="pb-1 text-right text-[0.62rem] uppercase tracking-[0.2em] text-sand-dim">
-                of &asymp; {fmt(totalMinutes)}
-                <br />
-                from {journey[0].from}
+            ))}
+          </dl>
+
+          {/* ── 2. The whole trip as one bar ── */}
+          <div className="board-in rounded-2xl border border-bone/10 bg-ink p-5 md:p-7">
+            <div className="flex flex-wrap items-baseline justify-between gap-2">
+              <p className="text-[0.6rem] uppercase tracking-[0.28em] text-sand-dim">The whole trip</p>
+              <p className="text-xs text-sand-dim">Bar lengths follow time on the move</p>
+            </div>
+            <div className="mt-5 flex gap-1.5">
+              {journey.map((j, i) => (
+                <button
+                  key={j.step}
+                  type="button"
+                  onPointerEnter={() => focusLeg(i)}
+                  onPointerLeave={releaseLeg}
+                  onFocus={() => focusLeg(i)}
+                  onBlur={releaseLeg}
+                  aria-label={`Leg ${j.step}: ${j.from} to ${j.to}, ${j.duration}`}
+                  className="group min-w-0 text-left"
+                  style={{ flexBasis: `${barWeights[i] * 100}%` }}
+                >
+                  <span
+                    className={`bar-seg flex h-12 origin-left items-center gap-2 overflow-hidden rounded-lg px-3 transition-colors duration-500 md:h-14 ${
+                      i === active
+                        ? "bg-ember-400 text-abyss"
+                        : "bg-ember-500/12 text-ember-300 group-hover:bg-ember-500/25"
+                    }`}
+                  >
+                    <Icon mode={j.mode} className="h-4 w-4 shrink-0" />
+                    <span className="truncate text-[0.62rem] font-semibold uppercase tracking-[0.14em] tabular-nums">
+                      {j.duration.replace("≈ ", "")}
+                    </span>
+                  </span>
+                  <span
+                    className={`mt-2 hidden truncate text-[0.6rem] uppercase tracking-[0.18em] transition-colors duration-500 sm:block ${
+                      i === active ? "text-bone" : "text-sand-dim"
+                    }`}
+                  >
+                    {modeName(j.mode)}
+                  </span>
+                </button>
+              ))}
+            </div>
+            <div className="mt-3 flex justify-between font-display text-sm text-sand md:text-base">
+              <span>{journey[0].from}</span>
+              <span>{journey[journey.length - 1].to}</span>
+            </div>
+          </div>
+
+          {/* ── 3. Map beside the steps ── */}
+          <div className="grid grid-cols-1 gap-4 md:gap-5 lg:grid-cols-12">
+            <figure className="board-in relative flex flex-col overflow-hidden rounded-2xl border border-bone/10 bg-ink p-4 md:p-6 lg:col-span-7">
+              <figcaption className="flex flex-wrap items-baseline justify-between gap-2 px-1">
+                <span className="text-[0.6rem] uppercase tracking-[0.28em] text-sand-dim">Route map</span>
+                <span className="font-display text-base text-bone">
+                  {from.label} <span className="text-ember-400">&rarr;</span> {to.label}
+                </span>
+              </figcaption>
+
+              <svg viewBox="0 0 640 580" className="my-auto block h-auto w-full py-3" aria-hidden="true" fill="none">
+                <defs>
+                  <pattern id={`${uid}-grid`} width="32" height="32" patternUnits="userSpaceOnUse">
+                    <circle cx="1" cy="1" r="1" fill="rgba(244,239,230,0.07)" />
+                  </pattern>
+                  <radialGradient id={`${uid}-glow`}>
+                    <stop offset="0" stopColor="var(--color-ember-400)" stopOpacity="0.5" />
+                    <stop offset="1" stopColor="var(--color-ember-400)" stopOpacity="0" />
+                  </radialGradient>
+                  {/* Legs draw on through masks traced along their paths,
+                      so dashed and dotted legs draw as cleanly as solid ones. */}
+                  {LEGS.map((d, i) => (
+                    <mask
+                      key={i}
+                      id={`${uid}-leg${i}`}
+                      maskUnits="userSpaceOnUse"
+                      x="0"
+                      y="0"
+                      width="640"
+                      height="580"
+                    >
+                      <path className="leg-reveal" d={d} stroke="white" strokeWidth="16" strokeLinecap="round" />
+                    </mask>
+                  ))}
+                </defs>
+
+                <rect width="640" height="580" fill={`url(#${uid}-grid)`} />
+
+                <path d={RIVER} fill="var(--color-neel-900)" />
+                <path d={RIVER} stroke="var(--color-neel-500)" strokeOpacity="0.35" />
+                {[396, 404, 411].map((y, i) => (
+                  <path
+                    key={y}
+                    className="route-flow"
+                    d={`M0 ${y}q40 -6 80 0t80 0 80 0 80 0 80 0 80 0 80 0 80 0`}
+                    stroke="var(--color-neel-300)"
+                    strokeOpacity="0.35"
+                    strokeDasharray="14 46"
+                    style={{ animationDelay: `${-i * 1.7}s` }}
+                  />
+                ))}
+                <text x="600" y="404" textAnchor="end" className="fill-neel-300/70 text-[10px] tracking-[0.35em]">
+                  CHINAI
+                </text>
+
+                <path d={SEA} fill="var(--color-neel-900)" />
+                {[547, 559].map((y, i) => (
+                  <path
+                    key={y}
+                    className="route-flow"
+                    d={`M0 ${y}q40 -6 80 0t80 0 80 0 80 0 80 0 80 0 80 0 80 0`}
+                    stroke="var(--color-neel-300)"
+                    strokeOpacity="0.3"
+                    strokeDasharray="20 40"
+                    style={{ animationDelay: `${-i * 2.3}s` }}
+                  />
+                ))}
+                <text x="320" y="573" textAnchor="middle" className="fill-neel-300/70 text-[10px] tracking-[0.45em]">
+                  BAY OF BENGAL
+                </text>
+
+                <g transform="translate(596 52)">
+                  <circle r="18" stroke="var(--color-sand-dim)" strokeOpacity="0.4" />
+                  <path d="M0 -12 4 0 0 12 -4 0Z" fill="var(--color-sand-dim)" fillOpacity="0.5" />
+                  <path d="M0 -12 4 0H-4Z" fill="var(--color-ember-400)" />
+                  <text y="-24" textAnchor="middle" className="fill-sand-dim text-[9px] tracking-[0.2em]">
+                    N
+                  </text>
+                </g>
+
+                {/* Faint guide for the whole route; also what the marker follows */}
+                {LEGS.map((d, i) => (
+                  <path
+                    key={i}
+                    ref={(p) => {
+                      guideRefs.current[i] = p;
+                    }}
+                    d={d}
+                    stroke="rgba(244,239,230,0.16)"
+                    strokeWidth="1.5"
+                    strokeDasharray="3 6"
+                  />
+                ))}
+
+                {/* Each leg in its own style; the active one at full strength */}
+                {LEGS.map((d, i) => {
+                  const st = LEG_STYLE[i];
+                  return (
+                    <g key={i} className="leg-line" mask={`url(#${uid}-leg${i})`} opacity={i === active ? 1 : 0.4}>
+                      {st.ties && (
+                        <path
+                          d={d}
+                          stroke="var(--color-ember-500)"
+                          strokeOpacity="0.6"
+                          strokeWidth="10"
+                          strokeDasharray="1.6 7"
+                        />
+                      )}
+                      <path
+                        d={d}
+                        stroke="var(--color-ember-400)"
+                        strokeWidth={i === active ? st.width + 0.8 : st.width}
+                        strokeDasharray={st.dash}
+                        strokeLinecap="round"
+                      />
+                    </g>
+                  );
+                })}
+
+                {STATIONS.map((s, k) => {
+                  const last = k === STATIONS.length - 1;
+                  const on = k === active || k === active + 1;
+                  return (
+                    <g key={s.label} className="stn" data-on={on ? "true" : "false"}>
+                      <circle className="stn-ring" cx={s.x} cy={s.y} r={last ? 9 : 7} stroke="var(--color-ember-400)" />
+                      <circle
+                        className="stn-dot"
+                        cx={s.x}
+                        cy={s.y}
+                        r={last ? 8 : 6}
+                        fill="var(--color-ink)"
+                        stroke="rgba(244,239,230,0.45)"
+                        strokeWidth="1.5"
+                      />
+                      <text
+                        className="stn-label fill-sand-dim font-display"
+                        x={s.lx}
+                        y={s.ly}
+                        textAnchor={s.anchor}
+                        fontSize={last ? 20 : 17}
+                      >
+                        {s.label}
+                      </text>
+                      {s.sub && (
+                        <text
+                          className="fill-sand-dim/70"
+                          x={s.sx}
+                          y={s.sy}
+                          textAnchor={s.anchor}
+                          fontSize="8.5"
+                          letterSpacing="2.5"
+                        >
+                          {s.sub.toUpperCase()}
+                        </text>
+                      )}
+                    </g>
+                  );
+                })}
+
+                {/* The traveller, carrying the active leg's vehicle */}
+                <g ref={markerRef} transform={`translate(${STATIONS[0].x} ${STATIONS[0].y})`}>
+                  <circle r="32" fill={`url(#${uid}-glow)`} />
+                  <circle r="14" fill="var(--color-ember-400)" />
+                  <g
+                    transform="translate(-9 -9) scale(0.75)"
+                    fill="none"
+                    stroke="var(--color-abyss)"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    {icons[activeLeg.mode]}
+                  </g>
+                </g>
+              </svg>
+
+              {/* Legend: the four line styles */}
+              <div className="mt-3 flex flex-wrap gap-x-5 gap-y-2 border-t border-bone/10 px-1 pt-4">
+                {LEG_STYLE.map((st, i) => (
+                  <span
+                    key={st.label}
+                    className="flex items-center gap-2 text-[0.6rem] uppercase tracking-[0.2em] text-sand-dim"
+                  >
+                    <svg width="34" height="10" viewBox="0 0 34 10" aria-hidden="true">
+                      {st.ties && (
+                        <path
+                          d="M1 5h32"
+                          stroke="var(--color-ember-500)"
+                          strokeOpacity="0.6"
+                          strokeWidth="8"
+                          strokeDasharray="1.6 5"
+                        />
+                      )}
+                      <path
+                        d="M1 5h32"
+                        stroke="var(--color-ember-400)"
+                        strokeWidth={st.width}
+                        strokeDasharray={st.dash}
+                        strokeLinecap="round"
+                      />
+                    </svg>
+                    {st.label} · {journey[i].duration.replace("≈ ", "")}
+                  </span>
+                ))}
+              </div>
+            </figure>
+
+            <div className="board-in flex flex-col gap-2 lg:col-span-5">
+              <ol className="flex flex-col gap-2">
+                {journey.map((j, i) => {
+                  const on = i === active;
+                  return (
+                    <li key={j.step}>
+                      <button
+                        type="button"
+                        onPointerEnter={() => focusLeg(i)}
+                        onPointerLeave={releaseLeg}
+                        onFocus={() => focusLeg(i)}
+                        onBlur={releaseLeg}
+                        aria-expanded={on}
+                        className={`flex w-full gap-4 rounded-2xl border p-5 text-left transition-colors duration-500 md:p-6 ${
+                          on ? "border-ember-400/60 bg-ember-500/[0.07]" : "border-bone/10 bg-ink hover:border-bone/25"
+                        }`}
+                      >
+                        <span
+                          className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-full border transition-colors duration-500 ${
+                            on ? "border-ember-400 bg-ember-400 text-abyss" : "border-bone/20 text-sand-dim"
+                          }`}
+                        >
+                          <Icon mode={j.mode} className="h-5 w-5" />
+                        </span>
+                        <span className="min-w-0 flex-1">
+                          <span className="flex items-center justify-between gap-3 text-[0.6rem] uppercase tracking-[0.24em] tabular-nums">
+                            <span className={on ? "text-ember-400" : "text-sand-dim"}>
+                              {j.step} · {modeName(j.mode)}
+                            </span>
+                            <span className="text-sand-dim">{j.duration}</span>
+                          </span>
+                          <span className="mt-1.5 block font-display text-xl leading-snug text-bone md:text-2xl">
+                            {j.from} <span className="text-ember-400">&rarr;</span> {j.to}
+                          </span>
+                          {/* The active step opens; the others stay one line */}
+                          <span
+                            className={`grid transition-[grid-template-rows,opacity] duration-500 ease-[cubic-bezier(.16,1,.3,1)] ${
+                              on ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
+                            }`}
+                          >
+                            <span className="overflow-hidden">
+                              <span className="block pt-2 text-sm leading-relaxed text-sand">{j.detail}</span>
+                            </span>
+                          </span>
+                        </span>
+                      </button>
+                    </li>
+                  );
+                })}
+              </ol>
+
+              {/* Arrival: where the steps end, and what to do next */}
+              <div className="flex flex-1 flex-col justify-between gap-6 rounded-2xl border border-bone/10 bg-linear-to-br from-ember-500/[0.12] to-transparent p-6 md:p-7">
+                <div>
+                  <p className="text-[0.6rem] uppercase tracking-[0.28em] text-ember-500">Arrive</p>
+                  <p className="mt-3 font-display text-3xl leading-tight text-bone md:text-4xl">
+                    {journey[journey.length - 1].to}
+                  </p>
+                  <p className="mt-2 text-sm text-sand">
+                    &asymp; {fmt(totalMinutes)} on the move from {journey[0].from}.
+                  </p>
+                </div>
+                <a
+                  href="/contact"
+                  data-cursor="Book"
+                  className="inline-flex w-fit items-center gap-3 rounded-full bg-bone px-6 py-3 text-[0.7rem] font-semibold uppercase tracking-[0.18em] text-abyss transition-colors hover:bg-ember-300"
+                >
+                  Plan your stay <span aria-hidden="true">&rarr;</span>
+                </a>
+              </div>
+            </div>
+          </div>
+
+          {/* ── 4. The practical cards ── */}
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-3 md:gap-5">
+            <div className="board-in rounded-2xl border border-bone/10 bg-ink p-6 transition-transform duration-300 hover:-translate-y-1 md:p-7">
+              <p className="flex items-center gap-2 text-[0.6rem] uppercase tracking-[0.28em] text-ember-500">
+                <Icon mode="Road" className="h-4 w-4" /> Coming by road
+              </p>
+              <ol className="mt-5 flex flex-wrap items-center gap-x-2 gap-y-2 font-display text-lg text-bone">
+                {drivingRoute.map((place, i) => (
+                  <li key={place} className="flex items-center gap-2">
+                    {i > 0 && <span className="text-ember-400">&rarr;</span>}
+                    {place}
+                  </li>
+                ))}
+              </ol>
+              <p className="mt-4 text-sm leading-relaxed text-sand-dim">
+                Then take the ferry across, the same as everyone else.
               </p>
             </div>
 
-            {/* Four-part progress: one bar per leg, labelled by mode */}
-            <div className="mt-5 grid grid-cols-4 gap-2">
-              {journey.map((j) => (
-                <div key={j.step}>
-                  <div className="h-[3px] overflow-hidden rounded-full bg-bone/10">
-                    <div className="leg-bar h-full origin-left scale-x-0 bg-ember-400" />
-                  </div>
-                  <p className="leg-chip mt-2 flex items-center gap-1.5 text-[0.58rem] uppercase tracking-[0.2em] text-sand-dim transition-colors duration-500">
-                    <Icon mode={j.mode} className="h-3.5 w-3.5" />
-                    {j.mode === "Arrival" ? "Toto" : j.mode}
-                  </p>
-                </div>
-              ))}
+            <div className="board-in rounded-2xl border border-bone/10 bg-ink p-6 transition-transform duration-300 hover:-translate-y-1 md:p-7">
+              <p className="flex items-center gap-2 text-[0.6rem] uppercase tracking-[0.28em] text-ember-500">
+                <Icon mode="River" className="h-4 w-4" /> Mind the tide
+              </p>
+              <p className="mt-5 font-display text-lg leading-snug text-bone">
+                Boats run with the tide. Tell us your train and we will time the crossing for you.
+              </p>
+              <a
+                href={`tel:${site.owner.phoneRaw}`}
+                data-cursor="Call"
+                className="mt-5 inline-flex items-center gap-2 rounded-full border border-bone/20 px-5 py-2.5 text-[0.7rem] font-semibold uppercase tracking-[0.16em] text-bone transition-colors hover:border-ember-400 hover:text-ember-300"
+              >
+                Call {site.owner.phone}
+              </a>
             </div>
 
-            {/* The leg cards share one grid cell and swap in place */}
-            <div className="mt-12 grid">
-              {journey.map((j) => (
-                <article key={j.step} className="leg-card [grid-area:1/1]">
-                  <div className="flex items-center gap-4">
-                    <span className="flex h-12 w-12 items-center justify-center rounded-full border border-ember-400/60 bg-ember-500/10 text-ember-300">
-                      <Icon mode={j.mode} className="h-5 w-5" />
-                    </span>
-                    <span className="text-[0.62rem] uppercase tracking-[0.28em] text-ember-500 tabular-nums">
-                      Leg {j.step} / {String(journey.length).padStart(2, "0")}
-                    </span>
-                    <span className="ml-auto rounded-full border border-bone/15 px-3 py-1 text-[0.62rem] uppercase tracking-[0.16em] text-sand tabular-nums">
-                      {j.duration}
-                    </span>
-                  </div>
-                  <h3 className="mt-6 font-display text-[clamp(2rem,3.2vw,3rem)] leading-[1.05] text-bone">
-                    {j.title}
-                  </h3>
-                  <p className="mt-4 max-w-[46ch] leading-relaxed text-sand">{j.detail}</p>
-                </article>
-              ))}
+            <div className="board-in rounded-2xl border border-bone/10 bg-ink p-6 transition-transform duration-300 hover:-translate-y-1 md:p-7">
+              <p className="flex items-center gap-2 text-[0.6rem] uppercase tracking-[0.28em] text-ember-500">
+                <Icon mode="Arrival" className="h-4 w-4" /> Find us
+              </p>
+              <p className="mt-5 text-sm leading-relaxed text-sand">{site.location.full}</p>
+              <a
+                href={`https://www.google.com/maps/search/?api=1&query=${site.location.mapsQuery}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                data-cursor="Map"
+                className="mt-5 inline-flex items-center gap-2 rounded-full bg-bone px-5 py-2.5 text-[0.7rem] font-semibold uppercase tracking-[0.16em] text-abyss transition-colors hover:bg-ember-300"
+              >
+                Open in Google Maps ↗
+              </a>
             </div>
-          </div>
-
-          {/* Right: the route map */}
-          <div className="col-span-7 h-full max-h-[78vh]">
-            <svg
-              viewBox="0 0 640 580"
-              className="h-full w-full overflow-visible"
-              aria-hidden="true"
-              fill="none"
-            >
-              <defs>
-                <pattern id={`${uid}-grid`} width="32" height="32" patternUnits="userSpaceOnUse">
-                  <circle cx="1" cy="1" r="1" fill="rgba(244,239,230,0.07)" />
-                </pattern>
-                <radialGradient id={`${uid}-glow`}>
-                  <stop offset="0" stopColor="var(--color-ember-400)" stopOpacity="0.55" />
-                  <stop offset="1" stopColor="var(--color-ember-400)" stopOpacity="0" />
-                </radialGradient>
-                {/* Each leg is revealed through a mask drawn along its path,
-                    so dashed and dotted legs draw on as cleanly as solid ones. */}
-                {LEGS.map((d, i) => (
-                  <mask key={i} id={`${uid}-leg${i}`} maskUnits="userSpaceOnUse" x="0" y="0" width="640" height="580">
-                    <path className="leg-reveal" d={d} stroke="white" strokeWidth="16" strokeLinecap="round" />
-                  </mask>
-                ))}
-              </defs>
-
-              <rect width="640" height="580" fill={`url(#${uid}-grid)`} />
-
-              {/* Water: the Chinai and the bay, with a slow current */}
-              <path d={RIVER} fill="var(--color-neel-900)" />
-              <path d={RIVER} fill="none" stroke="var(--color-neel-500)" strokeOpacity="0.35" />
-              {[396, 404, 411].map((y, i) => (
-                <path
-                  key={y}
-                  className="route-flow"
-                  d={`M0 ${y}q40 -6 80 0t80 0 80 0 80 0 80 0 80 0 80 0 80 0`}
-                  stroke="var(--color-neel-300)"
-                  strokeOpacity="0.35"
-                  strokeWidth="1"
-                  strokeDasharray="14 46"
-                  style={{ animationDelay: `${-i * 1.7}s` }}
-                />
-              ))}
-              <text x="600" y="404" textAnchor="end" className="fill-neel-300/70 text-[10px] tracking-[0.35em]">
-                CHINAI
-              </text>
-
-              <path d={SEA} fill="var(--color-neel-900)" />
-              {[547, 559].map((y, i) => (
-                <path
-                  key={y}
-                  className="route-flow"
-                  d={`M0 ${y}q40 -6 80 0t80 0 80 0 80 0 80 0 80 0 80 0 80 0`}
-                  stroke="var(--color-neel-300)"
-                  strokeOpacity="0.3"
-                  strokeWidth="1"
-                  strokeDasharray="20 40"
-                  style={{ animationDelay: `${-i * 2.3}s` }}
-                />
-              ))}
-              <text x="320" y="573" textAnchor="middle" className="fill-neel-300/70 text-[10px] tracking-[0.45em]">
-                BAY OF BENGAL
-              </text>
-
-              {/* Compass and scale note */}
-              <g transform="translate(596 52)" className="text-sand-dim">
-                <circle r="18" stroke="currentColor" strokeOpacity="0.35" />
-                <path d="M0 -12 4 0 0 12 -4 0Z" fill="currentColor" fillOpacity="0.5" />
-                <path d="M0 -12 4 0H-4Z" fill="var(--color-ember-400)" />
-                <text y="-24" textAnchor="middle" className="fill-sand-dim text-[9px] tracking-[0.2em]">
-                  N
-                </text>
-              </g>
-              <text x="596" y="96" textAnchor="middle" className="fill-sand-dim/70 text-[8px] tracking-[0.25em]">
-                NOT TO SCALE
-              </text>
-
-              {/* The whole route, faint, so you can see where you are going */}
-              {LEGS.map((d, i) => (
-                <path
-                  key={i}
-                  className="leg-guide"
-                  d={d}
-                  stroke="rgba(244,239,230,0.16)"
-                  strokeWidth="1.5"
-                  strokeDasharray="3 6"
-                />
-              ))}
-
-              {/* Covered legs, each in its own line style */}
-              {LEGS.map((d, i) => {
-                const st = LEG_STYLE[i];
-                return (
-                  <g key={i} mask={`url(#${uid}-leg${i})`}>
-                    {st.ties && (
-                      <path
-                        d={d}
-                        stroke="var(--color-ember-500)"
-                        strokeOpacity="0.55"
-                        strokeWidth="10"
-                        strokeDasharray="1.6 7"
-                      />
-                    )}
-                    <path
-                      d={d}
-                      stroke="var(--color-ember-400)"
-                      strokeWidth={st.stroke}
-                      strokeDasharray={st.dash}
-                      strokeLinecap="round"
-                    />
-                  </g>
-                );
-              })}
-
-              {/* Stations */}
-              {STATIONS.map((s, k) => {
-                const last = k === STATIONS.length - 1;
-                return (
-                  <g key={s.label} className="stn" data-on={k === 0 ? "true" : "false"}>
-                    <circle className="stn-ring" cx={s.x} cy={s.y} r={last ? 9 : 7} stroke="var(--color-ember-400)" />
-                    <circle
-                      className="stn-dot"
-                      cx={s.x}
-                      cy={s.y}
-                      r={last ? 8 : 6}
-                      fill="var(--color-ink)"
-                      stroke="rgba(244,239,230,0.45)"
-                      strokeWidth="1.5"
-                    />
-                    <text
-                      className="stn-label fill-sand-dim font-display"
-                      x={s.lx}
-                      y={s.ly}
-                      textAnchor={s.anchor}
-                      fontSize={last ? 20 : 17}
-                    >
-                      {s.label}
-                    </text>
-                    {s.sub && (
-                      <text
-                        className="fill-sand-dim/70"
-                        x={s.sx}
-                        y={s.sy}
-                        textAnchor={s.anchor}
-                        fontSize="8.5"
-                        letterSpacing="2.5"
-                      >
-                        {s.sub.toUpperCase()}
-                      </text>
-                    )}
-                  </g>
-                );
-              })}
-
-              {/* The traveller: a glowing marker carrying the current vehicle */}
-              <g className="marker" transform={`translate(${STATIONS[0].x} ${STATIONS[0].y})`}>
-                <circle r="34" fill={`url(#${uid}-glow)`} />
-                <circle r="15" fill="var(--color-ember-400)" />
-                {journey.map((j, i) => (
-                  <g
-                    key={j.step}
-                    className="marker-icon text-abyss"
-                    opacity={i === 0 ? 1 : 0}
-                    transform="translate(-9 -9) scale(0.75)"
-                  >
-                    {/* The 24-unit icon, scaled to 18 and centred on the marker */}
-                    <g fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      {icons[j.mode]}
-                    </g>
-                  </g>
-                ))}
-              </g>
-            </svg>
           </div>
         </div>
-      </div>
 
-      {/* ── Phones / reduced motion: boarding-pass tickets ── */}
-      <div className="mx-auto max-w-[100rem] px-6 md:px-10 lg:motion-safe:hidden">
-        <ol className="mt-14 grid gap-5 md:grid-cols-2">
-          {journey.map((j) => (
-            <li
-              key={j.step}
-              className="ticket relative overflow-hidden rounded-xl border border-bone/12 bg-ink"
-            >
-              <div className="flex items-center justify-between px-6 pt-5">
-                <span className="flex items-center gap-2 text-[0.6rem] uppercase tracking-[0.28em] text-ember-500 tabular-nums">
-                  <Icon mode={j.mode} className="h-4 w-4" />
-                  Leg {j.step} · {j.mode === "Arrival" ? "Toto" : j.mode}
-                </span>
-                <span className="ticket-stamp rotate-[-8deg] rounded-md border border-ember-400/70 px-2.5 py-1 text-[0.62rem] font-semibold uppercase tracking-[0.14em] text-ember-300 tabular-nums">
-                  {j.duration}
-                </span>
-              </div>
-
-              <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-3 px-6 pt-5 pb-6">
-                <div>
-                  <p className="text-[0.55rem] uppercase tracking-[0.3em] text-sand-dim">From</p>
-                  <p className="mt-1 font-display text-2xl leading-tight text-bone">{j.from}</p>
-                </div>
-                <span className="flex items-center gap-1.5 text-ember-400">
-                  <span className="h-px w-5 bg-ember-400/50" />
-                  <Icon mode={j.mode} className="h-5 w-5" />
-                  <span className="h-px w-5 bg-ember-400/50" />
-                </span>
-                <div className="text-right">
-                  <p className="text-[0.55rem] uppercase tracking-[0.3em] text-sand-dim">To</p>
-                  <p className="mt-1 font-display text-2xl leading-tight text-bone">{j.to}</p>
-                </div>
-              </div>
-
-              {/* Perforation: a dashed tear line with a notch at each edge */}
-              <div className="relative h-px">
-                <span className="absolute inset-x-6 top-0 border-t border-dashed border-bone/20" />
-                <span className="absolute -left-3 -top-3 h-6 w-6 rounded-full border border-bone/12 bg-abyss" />
-                <span className="absolute -right-3 -top-3 h-6 w-6 rounded-full border border-bone/12 bg-abyss" />
-              </div>
-
-              <p className="px-6 pt-5 pb-6 text-sm leading-relaxed text-sand">{j.detail}</p>
-            </li>
-          ))}
-        </ol>
-        <p className="mt-6 text-[0.66rem] uppercase tracking-[0.22em] text-sand-dim">
-          &asymp; {fmt(totalMinutes)} on the move from {journey[0].from}
-        </p>
-      </div>
-
-      <div className="mx-auto max-w-[100rem] px-6 md:px-10">
-        <div className="mt-10 flex flex-wrap items-center gap-x-6 gap-y-3 border-t border-bone/12 pt-8">
-          <a
-            href={`https://www.google.com/maps/search/?api=1&query=${site.location.mapsQuery}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            data-cursor="Map"
-            className="link-draw text-sm text-bone"
-          >
-            Open {site.location.island} in Google Maps ↗
-          </a>
-          <span className="hidden h-4 w-px bg-bone/20 sm:block" />
-          <p className="text-sm text-sand-dim">{site.location.full}</p>
-          {!standalone && (
-            <a href="/getting-here" className="link-draw text-sm text-ember-300 sm:ml-auto">
+        {!standalone && (
+          <div className="mt-8 flex justify-end">
+            <a href="/getting-here" className="link-draw text-sm text-ember-300">
               The full route &rarr;
             </a>
-          )}
-        </div>
+          </div>
+        )}
       </div>
     </section>
   );

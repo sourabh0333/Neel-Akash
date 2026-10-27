@@ -281,6 +281,9 @@ export const meals: Meal[] = [
  * The route, leg by leg. `from`/`to` name the stations on the route map and
  * the tickets; `minutes` drives the trip clock (approximate, like `duration`).
  */
+/** For guests coming by road instead of the train. */
+export const drivingRoute = ["Amtala", "Diamond Harbour", "Kakdwip", "Bagdanga Ghat"];
+
 export const journey = [
   {
     step: "01",
@@ -301,7 +304,7 @@ export const journey = [
     to: "Bagdanga Ghat",
     minutes: 40,
     detail:
-      "A Tata Magic or auto from outside the station. Driving instead? Amtala, Diamond Harbour, Kakdwip, then the ghat.",
+      "A Tata Magic or auto from outside the station to the ferry ghat.",
     duration: "≈ 40 min",
   },
   {

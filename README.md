@@ -107,21 +107,22 @@ before editing:
   phone number and address sit in a full-width row underneath so neither
   column has to carry them.
 
-- **Getting here** — a live route tracker. On desktop the section pins and
-  scrolling *is* the trip: a glowing marker carrying the current vehicle
-  travels a route map of the delta, and each leg draws on in its own line
-  style — railway sleepers, a solid road, a dashed ferry crossing over the
-  flowing Chinai, a dotted toto lane. Stations light up and pulse on
-  arrival, the leg card swaps, a four-part bar fills, and a trip clock
-  counts the travel time up from `journey[].minutes`. On phones, and for
-  anyone who prefers reduced motion, the same legs become boarding-pass
-  tickets that stamp in as they scroll into view.
+- **Getting here** — a journey board, laid out the way transit planners
+  present a trip: the headline numbers (total time counting up, legs, the
+  ferry, the pickup); the whole trip as one bar split by leg in proportion
+  to its time; a route map beside the step-by-step list; and practical cards
+  for coming by road (`drivingRoute`), the tide, and where to find us. One
+  "active leg" ties it together: a marker loops along the map and that leg
+  lights up in the map, the bar and the steps at once, with its step opening
+  to show the detail. Pointing at a step or bar segment pauses the loop on
+  that leg. Under reduced motion nothing loops and the route is drawn in
+  full.
 
-  > Worth knowing if you edit this: every leg is revealed through an SVG
-  > mask drawn along its path, which is what lets the dashed and dotted legs
-  > draw on as cleanly as the solid ones. Station label positions are set by
-  > hand in `STATIONS` so none lands on a line or in the water — check them
-  > if you move a station.
+  > Worth knowing if you edit this: each leg is revealed through an SVG mask
+  > drawn along its path, which is what lets the dashed and dotted legs draw
+  > on as cleanly as the solid ones. Station label positions are set by hand
+  > in `STATIONS` so none lands on a line or in the water — check them if
+  > you move a station. Times come from `journey[].minutes`.
 
 ## The brand mark
 
