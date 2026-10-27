@@ -252,6 +252,33 @@ selectable and searchable.
 > only jpg/jpeg/png are accepted for that name, so the Apple icon is
 > rasterised through `next/og`.
 
+## Performance
+
+Measured with Lighthouse 12 (mobile, throttled 4G and a 4× slower CPU) on a
+production build. Field metrics Google ranks on are Core Web Vitals:
+
+- **LCP** (largest paint): ~2.0–2.2 s with real throttling on every page —
+  the hero's heading and photo are in the server HTML and paint at first
+  paint. (Lighthouse's default *simulated* mode estimates 4–5 s for these
+  pages; the observed trace puts LCP at first paint, ~1.3 s, so treat that
+  estimate with caution.)
+- **CLS** (layout shift): 0 on every page.
+- **TBT / INP** (main-thread blocking): what is left is hydration and the
+  scroll animations being set up during load.
+
+What keeps it there, if you change things:
+
+- `Reveal` splits and measures a heading only when it is about to scroll
+  into view, never all at load.
+- Hero headings are split into letters on the server (`HeroTitle`), so the
+  intro animates letters that already exist rather than re-creating them.
+- The WebGL sky (`HeroCanvas`) runs only on desktops with a real GPU,
+  starts once the page is idle, and draws at 60% resolution and 30fps; on
+  phones, Save-Data, low memory or software WebGL the CSS sky shows instead.
+- The animated logo is its own compositing layer, so its motion doesn't
+  repaint the blurred header glass.
+- The Bengali font isn't preloaded (57 KB for a few small labels).
+
 ## Bookings
 
 There is no booking engine, deliberately. The enquiry form in the contact

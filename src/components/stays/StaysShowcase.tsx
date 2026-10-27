@@ -92,7 +92,6 @@ export default function StaysShowcase() {
                 <a
                   href={`/stays/${s.id}`}
                   data-cursor="View"
-                  aria-label={`${s.name}: view the stay`}
                   className={`ss-media group relative block aspect-4/5 overflow-hidden rounded-[20px] sm:aspect-16/11 lg:col-span-7 lg:aspect-auto lg:h-[78vh] ${
                     flip ? "lg:order-2 lg:col-start-6" : ""
                   }`}

@@ -252,6 +252,13 @@ html.lenis body {
 
 /* ── Penguin mark (src/components/brand/PenguinMark.tsx) ──── */
 
+/* Its own layer, isolated from the page, so each frame of motion repaints
+   the logo alone — not the blurred header glass it sits on. */
+.pg-live {
+  will-change: transform;
+  contain: paint;
+}
+
 /* A slow waddle on the spot, pivoting on the feet. */
 .pg-live .pg-body {
   animation: pg-waddle 2.6s ease-in-out infinite;

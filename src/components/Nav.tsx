@@ -150,7 +150,6 @@ export default function Nav() {
         <div className="mx-auto flex max-w-[100rem] items-center justify-between px-6 py-5 md:px-10">
           <a
             href="/"
-            aria-label={`${site.name} — home`}
             className="pg-hop-host group/logo flex items-center gap-3.5"
           >
             {/* The link carries the name, so the mark itself is decorative. */}
@@ -161,7 +160,7 @@ export default function Nav() {
             <span className="flex flex-col leading-none">
               <span className="font-display text-[1.45rem] tracking-[-0.01em] text-bone md:text-[1.7rem]">
                 {wordmark.lead}
-              </span>
+              </span>{" "}
               <span className="mt-1.5 text-[0.56rem] font-medium uppercase tracking-[0.42em] text-ember-300 transition-colors duration-500 group-hover/logo:text-ember-400 md:text-[0.6rem]">
                 {wordmark.rest}
               </span>

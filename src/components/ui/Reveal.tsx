@@ -35,7 +35,7 @@ export default function Reveal({
   const ref = useRef<HTMLElement>(null);
 
   useGSAP(
-    () => {
+    (_ctx, contextSafe) => {
       const el = ref.current;
       if (!el) return;
 
@@ -46,46 +46,70 @@ export default function Reveal({
         return;
       }
 
-      if (mode === "fade") {
-        gsap.fromTo(
-          el,
-          { opacity: 0, y: 34 },
-          {
-            opacity: 1,
-            y: 0,
-            duration: 1.2,
-            delay,
-            ease: "power3.out",
-            scrollTrigger: { trigger: el, start },
-          }
-        );
-        return;
-      }
-
-      gsap.set(el, { opacity: 1 });
-
-      const split = SplitText.create(el, {
-        type: "lines",
-        linesClass: "line-inner",
-        mask: "lines",
-        autoSplit: true,
-        // Returning the tween lets GSAP kill it cleanly before each re-split.
-        onSplit: (self: { lines: Element[] }) =>
+      // Nothing is split or measured until the element is about to scroll
+      // into view. Splitting text into lines forces a layout per element,
+      // and a page has dozens of these: doing them all at load was the
+      // biggest block on the main thread. Text that is never reached is
+      // simply never split, and stays visible as plain text.
+      let split: { revert: () => void } | undefined;
+      const setup = contextSafe!(() => {
+        if (mode === "fade") {
           gsap.fromTo(
-            self.lines,
-            { yPercent: 108 },
+            el,
+            { opacity: 0, y: 34 },
             {
-              yPercent: 0,
-              duration: 1.25,
+              opacity: 1,
+              y: 0,
+              duration: 1.2,
               delay,
-              ease: "power4.out",
-              stagger: 0.085,
+              ease: "power3.out",
               scrollTrigger: { trigger: el, start },
             }
-          ),
+          );
+          return;
+        }
+
+        gsap.set(el, { opacity: 1 });
+        split = SplitText.create(el, {
+          type: "lines",
+          linesClass: "line-inner",
+          mask: "lines",
+          autoSplit: true,
+          // Lines stay readable as they are (no aria-label on the element).
+          aria: "none",
+          // Returning the tween lets GSAP kill it cleanly before each re-split.
+          onSplit: (self: { lines: Element[] }) =>
+            gsap.fromTo(
+              self.lines,
+              { yPercent: 108 },
+              {
+                yPercent: 0,
+                duration: 1.25,
+                delay,
+                ease: "power4.out",
+                stagger: 0.085,
+                scrollTrigger: { trigger: el, start },
+              }
+            ),
+        });
       });
 
-      return () => split.revert();
+      const io = new IntersectionObserver(
+        ([entry]) => {
+          if (!entry.isIntersecting) return;
+          io.disconnect();
+          setup();
+        },
+        // A quarter of a screen early, so the hidden start state is set
+        // before the element can be seen.
+        { rootMargin: "0px 0px 25% 0px" }
+      );
+      io.observe(el);
+
+      return () => {
+        io.disconnect();
+        split?.revert();
+      };
     },
     { scope: ref, dependencies: [mode, delay, start] }
   );

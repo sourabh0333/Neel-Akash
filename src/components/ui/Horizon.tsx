@@ -2,7 +2,7 @@
 
 import type { RefObject } from "react";
 import { useGSAP } from "@gsap/react";
-import { gsap, SplitText, prefersReducedMotion } from "@/lib/anim";
+import { gsap, prefersReducedMotion } from "@/lib/anim";
 
 /**
  * The horizon opening shared by the page heroes (Home, the Island).
@@ -11,7 +11,7 @@ import { gsap, SplitText, prefersReducedMotion } from "@/lib/anim";
  *   .hz-frame  the backdrop: draws in to a rounded card as you scroll away
  *   .hz-open   inside it: splits open from a single horizon line on load
  *   .hz-photo  the picture: settles from a slight zoom, drifts on the way out
- *   .hz-chars  the title: rises letter by letter
+ *   .hz-char   each letter of the title (HeroTitle renders them): rises in turn
  *   .hz-rule   a hairline that draws across
  *   .hz-fade   everything else that floats in
  *   .hz-copy   the type block that lifts away on the way out
@@ -27,11 +27,6 @@ export function useHorizon(scope: RefObject<HTMLElement | null>) {
       const el = scope.current;
       if (!el || prefersReducedMotion()) return;
 
-      const split = SplitText.create(el.querySelectorAll(".hz-chars"), {
-        type: "chars",
-        mask: "chars",
-      });
-
       gsap
         .timeline({ defaults: { ease: "power4.out" } })
         .fromTo(
@@ -40,7 +35,7 @@ export function useHorizon(scope: RefObject<HTMLElement | null>) {
           { clipPath: "inset(0% 0% 0% 0%)", duration: 1.6, ease: "expo.inOut", clearProps: "clipPath" }
         )
         .fromTo(".hz-photo", { scale: 1.25 }, { scale: 1, duration: 2.4 }, 0)
-        .fromTo(split.chars, { yPercent: 110 }, { yPercent: 0, duration: 1.3, stagger: 0.045 }, 0.9)
+        .fromTo(".hz-char", { yPercent: 110 }, { yPercent: 0, duration: 1.3, stagger: 0.045 }, 0.9)
         .fromTo(".hz-fade", { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: 1, stagger: 0.08 }, 1.3)
         .fromTo(".hz-rule", { scaleX: 0 }, { scaleX: 1, duration: 1.4, ease: "expo.out" }, 1.2);
 
@@ -58,8 +53,6 @@ export function useHorizon(scope: RefObject<HTMLElement | null>) {
         { yPercent: 0, opacity: 1 },
         { yPercent: -40, opacity: 0, ease: "none", scrollTrigger: { ...exit, end: "65% top" } }
       );
-
-      return () => split.revert();
     },
     { scope }
   );

@@ -11,7 +11,35 @@ import { prefersReducedMotion } from "@/lib/anim";
  * library, which matters a great deal on a 4G connection in the delta.
  * If WebGL is unavailable the component renders nothing and the CSS
  * gradient underneath simply shows through.
+ *
+ * It is an ornament, so it never costs the visitor anything they'd notice:
+ *   - it only runs on a desktop with a real GPU — not on phones or tablets,
+ *     not with Save-Data on, not on low-memory devices, and not where the
+ *     browser is drawing WebGL in software, where every frame would be
+ *     computed on the main thread;
+ *   - it starts once the page is idle, never competing with first paint;
+ *   - it draws at 60% resolution and 30fps, which drifting noise doesn't
+ *     show, for about a fifth of the work.
  */
+
+/** Whether this device should run the live sky at all. */
+function canAfford(gl: WebGLRenderingContext) {
+  const nav = navigator as Navigator & {
+    connection?: { saveData?: boolean };
+    deviceMemory?: number;
+  };
+  if (window.matchMedia("(max-width: 900px), (hover: none), (pointer: coarse)").matches) return false;
+  if (nav.connection?.saveData) return false;
+  if (nav.deviceMemory !== undefined && nav.deviceMemory < 4) return false;
+  const info = gl.getExtension("WEBGL_debug_renderer_info");
+  const renderer = info ? String(gl.getParameter(info.UNMASKED_RENDERER_WEBGL)) : "";
+  if (/swiftshader|llvmpipe|software|basic render/i.test(renderer)) return false;
+  return true;
+}
+
+/** Render scale and frame interval for the live sky. */
+const SCALE = 0.6;
+const FRAME_MS = 1000 / 30;
 
 const VERT = `#version 100
 attribute vec2 aPos;
@@ -126,7 +154,7 @@ export default function HeroCanvas() {
       }) as WebGLRenderingContext | null) ??
       (canvas.getContext("experimental-webgl") as WebGLRenderingContext | null);
 
-    if (!gl) return;
+    if (!gl || !canAfford(gl)) return;
 
     const vs = compile(gl, gl.VERTEX_SHADER, VERT);
     const fs = compile(gl, gl.FRAGMENT_SHADER, FRAG);
@@ -162,8 +190,8 @@ export default function HeroCanvas() {
     const target = { x: 0.5, y: 0.42 };
 
     const resize = () => {
-      // Cap DPR at 1.5 — beyond that the fbm cost stops buying visible quality.
-      const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+      // Drawn small and scaled up by CSS: soft noise looks the same at 60%.
+      const dpr = Math.min(window.devicePixelRatio || 1, 1.5) * SCALE;
       const w = Math.floor(canvas.clientWidth * dpr);
       const h = Math.floor(canvas.clientHeight * dpr);
       if (canvas.width === w && canvas.height === h) return;
@@ -179,11 +207,18 @@ export default function HeroCanvas() {
     };
 
     let raf = 0;
-    let running = true;
+    let running = false;
+    let last = 0;
     const start = performance.now();
 
-    const render = () => {
+    const render = (now = performance.now()) => {
       if (!running) return;
+      // 30fps: skip the frames in between.
+      if (!reduced && now - last < FRAME_MS) {
+        raf = requestAnimationFrame(render);
+        return;
+      }
+      last = now;
       resize();
       const time = reduced ? 0 : (performance.now() - start) / 1000;
 
@@ -194,6 +229,7 @@ export default function HeroCanvas() {
       gl.uniform2f(uMouse, mouse.x, mouse.y);
       gl.uniform1f(uIntensity, 1.0);
       gl.drawArrays(gl.TRIANGLES, 0, 3);
+      if (canvas.style.opacity !== "1") canvas.style.opacity = "1";
 
       // A static frame is enough when motion is not wanted.
       if (reduced) return;
@@ -201,9 +237,10 @@ export default function HeroCanvas() {
     };
 
     // Pause when the tab is hidden or the hero has scrolled away.
+    let ready = false;
     const io = new IntersectionObserver(
       ([entry]) => {
-        const shouldRun = entry.isIntersecting && !document.hidden;
+        const shouldRun = ready && entry.isIntersecting && !document.hidden;
         if (shouldRun && !running) {
           running = true;
           render();
@@ -220,7 +257,7 @@ export default function HeroCanvas() {
       if (document.hidden) {
         running = false;
         cancelAnimationFrame(raf);
-      } else if (!running) {
+      } else if (ready && !running) {
         running = true;
         render();
       }
@@ -236,9 +273,20 @@ export default function HeroCanvas() {
     document.addEventListener("visibilitychange", onVisibility);
     canvas.addEventListener("webglcontextlost", onLost);
 
-    render();
+    // Start once the page has settled; until then the CSS sky shows.
+    const begin = () => {
+      ready = true;
+      if (document.hidden) return;
+      running = true;
+      render();
+    };
+    const idle = window.requestIdleCallback
+      ? window.requestIdleCallback(begin, { timeout: 3000 })
+      : window.setTimeout(begin, 1500);
 
     return () => {
+      if (window.cancelIdleCallback) window.cancelIdleCallback(idle);
+      else window.clearTimeout(idle);
       running = false;
       cancelAnimationFrame(raf);
       io.disconnect();
@@ -256,7 +304,10 @@ export default function HeroCanvas() {
     <canvas
       ref={ref}
       aria-hidden="true"
-      className="absolute inset-0 h-full w-full"
+      // Invisible until its first frame (the canvas is opaque, so before
+      // that it would be a black box); devices that skip the live sky keep
+      // it invisible over the CSS gradient.
+      className="absolute inset-0 h-full w-full opacity-0 transition-opacity duration-1000"
     />
   );
 }

@@ -77,9 +77,9 @@ export default function StaysHero() {
                   )}
                   {inr(s.price)}
                 </dd>
-                <p className="mt-1 text-[0.58rem] uppercase tracking-[0.14em] text-sand-dim">
+                <dd className="mt-1 text-[0.58rem] uppercase tracking-[0.14em] text-sand-dim">
                   {s.priceNote}
-                </p>
+                </dd>
               </div>
             ))}
           </dl>

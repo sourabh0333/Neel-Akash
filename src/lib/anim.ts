@@ -42,6 +42,9 @@ export function splitLines(el: HTMLElement): {
       type: "lines",
       linesClass: "line-inner",
       mask: "lines",
+      // Keep the split pieces readable as they are; the default puts an
+      // aria-label on the element, which isn't allowed on a <p> or <h2>.
+      aria: "none",
     });
     return { targets: split.lines, revert: () => split.revert() };
   } catch {
@@ -55,7 +58,7 @@ export function splitWords(el: HTMLElement): {
   revert: () => void;
 } {
   try {
-    const split = new SplitText(el, { type: "words", wordsClass: "word" });
+    const split = new SplitText(el, { type: "words", wordsClass: "word", aria: "none" });
     return { targets: split.words, revert: () => split.revert() };
   } catch {
     return { targets: [el], revert: () => {} };
