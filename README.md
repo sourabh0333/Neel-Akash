@@ -50,14 +50,18 @@ directions, testimonials and gallery captions all live there.
 
 ## Pages
 
-Every item in the header menu is its own page. Home is the overview: the
-hero, the intro, a preview row for each page, the gallery strip, guest
-quotes and a booking band. Every page is built from `src/lib/site.ts`, so
-there is nothing to keep in step.
+Every item in the header menu is its own page, and Home keeps every
+section in full, top to bottom: hero, intro, island, stays, days here,
+kitchen, gallery, getting here, guest quotes and the booking sentence. So a
+visitor can read the whole story on one scroll, or jump straight to a page.
+Each page is the same section under a page header; a section rendered with
+`standalone` drops its own heading because the page header carries it.
+Every page is built from `src/lib/site.ts`, so there is nothing to keep in
+step.
 
 | Header item | URL | Built from |
 |---|---|---|
-| (logo) | `/` | every preview links on |
+| (logo) | `/` | every section, in full |
 | The Island | `/island` | the island rail |
 | Stays | `/stays`, plus `/stays/<id>` per stay | `stays[]` (add a stay, get a page) |
 | Menu | `/menu` | `meals[]` |

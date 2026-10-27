@@ -164,6 +164,7 @@ export const experiences: Experience[] = [
 /* ── Kitchen ───────────────────────────────────────────────── */
 
 export const kitchen = {
+  heading: "The kitchen",
   copy:
     "Everything is cooked to order by the family, on the day it is bought. The fish came off a boat this morning; nobody here is pretending otherwise.",
 };

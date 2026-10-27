@@ -24,7 +24,7 @@ export default function GettingHerePage() {
         </a>{" "}
         and we will tell you which train to take.
       </PageHeader>
-      <Journey />
+      <Journey standalone />
     </main>
   );
 }

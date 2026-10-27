@@ -17,7 +17,7 @@ export default function StaysPage() {
         morning&rsquo;s breakfast. The group special is one price for the
         whole group.
       </PageHeader>
-      <Stays />
+      <Stays standalone />
     </main>
   );
 }

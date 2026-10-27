@@ -6,6 +6,7 @@ import { useGSAP } from "@gsap/react";
 import { gsap, prefersReducedMotion, isTouchOrSmall } from "@/lib/anim";
 import { stays } from "@/lib/site";
 import PriceTag from "./ui/PriceTag";
+import Reveal from "./ui/Reveal";
 import Magnetic from "./ui/Magnetic";
 import { site } from "@/lib/site";
 
@@ -14,7 +15,12 @@ import { site } from "@/lib/site";
  * cursor — the editorial pattern that keeps the list itself clean.
  * On touch, every row simply carries its own inline image instead.
  */
-export default function Stays() {
+export default function Stays({
+  standalone = false,
+}: {
+  /** On /stays: the page header carries the heading, so the section drops its own. */
+  standalone?: boolean;
+}) {
   const root = useRef<HTMLElement>(null);
   const preview = useRef<HTMLDivElement>(null);
   const [active, setActive] = useState<number | null>(null);
@@ -53,8 +59,38 @@ export default function Stays() {
   );
 
   return (
-    <section ref={root} id="stays" className="relative bg-abyss pb-28 md:pb-36">
+    <section
+      ref={root}
+      id="stays"
+      className={`relative bg-abyss ${standalone ? "pb-28 md:pb-36" : "py-28 md:py-36"}`}
+    >
       <div className="mx-auto max-w-[100rem] px-6 md:px-10">
+        {!standalone && (
+          <div className="mb-16 flex flex-col justify-between gap-6 md:flex-row md:items-end">
+            <div>
+              <Reveal as="p" mode="fade" className="t-eyebrow text-ember-500">
+                Where you sleep
+              </Reveal>
+              <Reveal as="h2" className="font-display t-huge mt-5 text-bone">
+                Twelve doors,
+                <br />
+                <span className="italic text-neel-300">all facing water</span>
+              </Reveal>
+            </div>
+            <Reveal
+              as="p"
+              mode="fade"
+              delay={0.15}
+              className="max-w-[36ch] text-sm leading-relaxed text-sand"
+            >
+              Tent and cottage tariffs are per person, per night, and include a
+              welcome drink, lunch, evening snacks, dinner and the next
+              morning&rsquo;s breakfast. The group special is one price for the
+              whole group.
+            </Reveal>
+          </div>
+        )}
+
         <div className="rule" />
 
         {stays.map((s, i) => (
