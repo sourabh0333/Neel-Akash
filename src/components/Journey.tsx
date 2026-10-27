@@ -83,7 +83,7 @@ const icons: Record<string, React.ReactNode> = {
   ),
 };
 
-function Icon({ mode, className = "" }: { mode: string; className?: string }) {
+export function Icon({ mode, className = "" }: { mode: string; className?: string }) {
   return (
     <svg
       viewBox="0 0 24 24"

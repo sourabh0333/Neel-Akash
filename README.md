@@ -67,7 +67,7 @@ step.
 | Menu | `/menu` | `meals[]`; the page's own sections are in `src/components/menu/` |
 | Gallery | `/gallery` | `photos[]` (every picture in `gallery`, `stays` and `experiences`); sections in `src/components/gallery/` |
 | Days Here | `/days-here` | `experiences[]` and `meals[]`; sections in `src/components/days/` |
-| Getting Here | `/getting-here` | `journey[]` |
+| Getting Here | `/getting-here` | `journey[]`; sections in `src/components/getting/` |
 | Contact | `/contact` | the booking sentence |
 
 `/sitemap.xml` lists them all. The menu itself is `navLinks` in
@@ -153,6 +153,11 @@ before editing:
   `experiences[]` lighting up as the sun reaches it. Then each moment up
   close (the Home cross-dissolve), and a suggested two days hour by hour,
   sorted from the times in `meals[]` and `experiences[]`.
+
+  The Getting Here page opens on the same horizon hero, then the trip as
+  a hand of tickets: the section pins and each leg's ticket slides up over
+  the last, which sinks back into the deck, and is stamped as it lands.
+  Then the journey board below, and a close with the proprietor's number.
 
   The route map (`src/components/route/RouteMap.tsx`) plays the trip like a
   navigation app on the **real delta**: coastline, estuary, islands and the
