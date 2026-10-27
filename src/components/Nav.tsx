@@ -7,6 +7,10 @@ import { lockScroll, unlockScroll } from "@/lib/scroll";
 import Magnetic from "./ui/Magnetic";
 import { LogoMark } from "./brand/Logo";
 
+/** "Penguin Beach Camp" → lead "Penguin", rest "Beach Camp". */
+const [lead, ...restWords] = site.name.split(" ");
+const wordmark = { lead, rest: restWords.join(" ") };
+
 export default function Nav() {
   const bar = useRef<HTMLElement>(null);
   const menu = useRef<HTMLDivElement>(null);
@@ -133,18 +137,29 @@ export default function Nav() {
           <a
             href="#top"
             aria-label={`${site.name} — home`}
-            className="group/logo flex items-center"
+            className="group/logo flex items-center gap-3.5"
           >
             <LogoMark detail="simple"
               className="h-11 w-11 shrink-0 text-bone transition-colors duration-500 group-hover/logo:text-ember-300 md:h-12 md:w-12" />
+            {/* Wordmark: the first word set large in the serif, the rest as
+                tracked small caps beneath — "Penguin / BEACH CAMP". */}
+            <span className="h-8 w-px bg-bone/25 md:h-9" />
+            <span className="flex flex-col leading-none">
+              <span className="font-display text-[1.45rem] tracking-[-0.01em] text-bone md:text-[1.7rem]">
+                {wordmark.lead}
+              </span>
+              <span className="mt-1.5 text-[0.56rem] font-medium uppercase tracking-[0.42em] text-ember-300 transition-colors duration-500 group-hover/logo:text-ember-400 md:text-[0.6rem]">
+                {wordmark.rest}
+              </span>
+            </span>
           </a>
 
-          <nav className="hidden items-center gap-9 lg:flex">
+          <nav className="hidden items-center gap-6 lg:flex xl:gap-9">
             {navLinks.map((l) => (
               <a
                 key={l.href}
                 href={l.href}
-                className="link-draw text-[0.78rem] font-medium tracking-[0.14em] text-sand uppercase transition-colors duration-300 hover:text-bone"
+                className="link-draw whitespace-nowrap text-[0.78rem] font-medium tracking-[0.14em] text-sand uppercase transition-colors duration-300 hover:text-bone"
               >
                 {l.label}
               </a>
