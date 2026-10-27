@@ -1,126 +1,11 @@
 import { site } from "@/lib/site";
-import { VIEWBOX, partsFor, brandColors, type Detail, type Tone } from "./geometry";
+import { penguinInner } from "./penguin";
 
 /**
- * The Penguin Beach Camp mark: a round badge with a King penguin standing on
- * the shore against the sun going down over the bay. See ./geometry.ts for
- * the reasoning and every number.
- *
- * Tiers
- * -----
- *   <LogoMark />                  full, 40px and up
- *   <LogoMark detail="simple" />  24–40px (currently identical to full)
- *   <LogoMark detail="micro" />   no eye, markings or feet, under 24px
- *   <Logo variant="lockup" />     mark + wordmark, horizontal
- *   <Logo variant="stacked" />    mark over wordmark
- *   <LogoSeal />                  mark inside a ring of text — a stamp
- *
- * Wordmarks are real HTML text, never SVG paths: selectable, searchable,
- * translatable, and set in the loaded display face.
- */
-
-function MarkShapes({
-  detail = "full",
-  accent = `var(--color-ember-400, ${brandColors.ember})`,
-  dark = brandColors.night,
-  light = brandColors.bone,
-}: {
-  detail?: Detail;
-  accent?: string;
-  dark?: string;
-  light?: string;
-}) {
-  const colors: Record<Tone, string> = { ink: "currentColor", accent, dark, light };
-  return (
-    <>
-      {partsFor(detail).map((p, i) => {
-        const color = colors[p.tone];
-        return p.stroke ? (
-          <path
-            key={i}
-            d={p.d}
-            transform={p.transform}
-            fill="none"
-            stroke={color}
-            strokeWidth={p.stroke}
-            strokeLinecap="round"
-          />
-        ) : (
-          <path key={i} d={p.d} transform={p.transform} fill={color} />
-        );
-      })}
-    </>
-  );
-}
-
-export function LogoMark({
-  className = "",
-  detail = "full",
-  accent,
-  title,
-}: {
-  className?: string;
-  detail?: Detail;
-  accent?: string;
-  /** Supply only when the mark stands alone with no adjacent brand text. */
-  title?: string;
-}) {
-  return (
-    <svg
-      viewBox={`0 0 ${VIEWBOX.w} ${VIEWBOX.h}`}
-      className={className}
-      role={title ? "img" : "presentation"}
-      aria-label={title}
-      aria-hidden={title ? undefined : true}
-    >
-      <MarkShapes detail={detail} accent={accent} />
-    </svg>
-  );
-}
-
-/**
- * Mark + wordmark, with the island set small underneath.
- */
-export function Logo({
-  variant = "lockup",
-  className = "",
-  markClassName = "",
-  showSubline = true,
-}: {
-  variant?: "lockup" | "stacked";
-  className?: string;
-  markClassName?: string;
-  showSubline?: boolean;
-}) {
-  const stacked = variant === "stacked";
-
-  return (
-    <span
-      className={`flex ${
-        stacked
-          ? "flex-col items-center gap-4 text-center"
-          : "flex-row items-center gap-3.5"
-      } ${className}`}
-    >
-      <LogoMark className={markClassName || (stacked ? "h-16 w-16" : "h-11 w-11")} />
-
-      <span className={`flex flex-col ${stacked ? "items-center" : "items-start"}`}>
-        <span className="font-display text-xl leading-none tracking-tight text-current md:text-2xl">
-          {site.name}
-        </span>
-        {showSubline && (
-          <span className="mt-1.5 text-[0.52rem] uppercase tracking-[0.32em] text-sand-dim">
-            {site.location.island}
-          </span>
-        )}
-      </span>
-    </span>
-  );
-}
-
-/**
- * The stamp: the mark inside a ring of text. Decorative — the same words are
- * always present as real text nearby, so it is hidden from assistive tech.
+ * The stamp: the mark inside a ring of text, set faint behind the footer.
+ * Decorative — the same words are always present as real text nearby, so it
+ * is hidden from assistive tech. The animated mark itself is ./PenguinMark;
+ * both draw from ./penguin.ts.
  */
 export function LogoSeal({ className = "" }: { className?: string }) {
   const words = `${site.name}  ·  ${site.location.island}  ·  ${site.location.state}  ·  `;
@@ -161,17 +46,14 @@ export function LogoSeal({ className = "" }: { className?: string }) {
         </textPath>
       </text>
 
-      {/* 64×64 mark centred in the 140 seal: (140-64)/2 = 38 */}
-      <g transform="translate(38 38)">
-        {/* The seal is a faint stamp, so every fixed tone is dimmed to match
-            the ink, which arrives already faint through currentColor. */}
-        <MarkShapes
-          detail="simple"
-          accent="rgb(243 156 74 / 0.3)"
-          dark="rgb(11 20 36 / 0.6)"
-          light="rgb(244 239 230 / 0.3)"
-        />
-      </g>
+      {/* The 200-unit mark drawn 64 wide in the middle of the seal, washed
+          out to grey so it reads as a stamp rather than a second logo. */}
+      <g
+        transform="translate(38 38) scale(0.32)"
+        opacity={0.3}
+        style={{ filter: "grayscale(1)" }}
+        dangerouslySetInnerHTML={{ __html: penguinInner("seal") }}
+      />
     </svg>
   );
 }

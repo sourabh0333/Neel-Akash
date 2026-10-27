@@ -207,30 +207,20 @@ before editing:
 ## The brand mark
 
 ```
+src/components/brand/penguin.ts       the drawing: SVG markup, one source for everything
 src/components/brand/PenguinMark.tsx  the animated mark in the header and footer
-src/components/brand/geometry.ts      every number, plus an SVG-string builder
-src/components/brand/Logo.tsx         the React mark and lockups
-scripts/gen-brand.ts                  regenerates the static files
+src/components/brand/Logo.tsx         LogoSeal, the faint stamp behind the footer
+scripts/gen-brand.ts                  regenerates the favicon and public/brand files
+src/app/apple-icon.tsx                the iPhone icon (PNG, drawn from penguin.ts)
+src/app/opengraph-image.tsx           the share card (PNG, drawn from penguin.ts)
 public/brand/*.svg                    print and signage assets
 ```
 
-**The animated mark** (`PenguinMark`) is what visitors see in the header
-and footer: a King penguin drawn true to the bird — slate-grey back, the
-dark line between back and belly, white belly warming to gold at the
-breast, orange ear patches running down the neck, a long slender bill
-with an orange stripe — standing on the shore of a sunset badge. It
-waddles on the spot, flaps a flipper now and then, blinks, looks out to
-sea; the sun breathes and the waves run. Pointing at the header logo makes
-it hop. It is all CSS (the "Penguin mark" block in `globals.css`), so it
-costs nothing to run and stops under reduced motion. `still` draws it
-without motion; `title=""` hides it from screen readers where a link
-already names the camp.
-
-> The favicon, app icon, social image and `public/brand` files are still
-> drawn from `geometry.ts` (the earlier penguin) until they are redrawn to
-> match.
-
-Regenerate the static assets after changing the geometry:
+**One drawing, everywhere.** `penguin.ts` returns the mark as SVG markup.
+The header and footer logo, the favicon, the iPhone icon, the share card,
+the footer stamp and the files in `public/brand` are all made from it, so
+they cannot drift apart. After changing the drawing, regenerate the static
+files:
 
 ```bash
 node --experimental-strip-types scripts/gen-brand.ts
@@ -238,29 +228,20 @@ node --experimental-strip-types scripts/gen-brand.ts
 
 ### Why it looks like this
 
-**A round badge with a real penguin in it.** A King penguin stands on the
-shore in profile, against the sun going down over the bay. The whole sky
-inside the ring is one ember disc, so the penguin always reads as a crisp
-silhouette. Its markings are the real ones: a dark back and head, a white
-front, and an ember stripe on the beak, ear patch and feet. The surf at its
-feet is pale enough to read as ice as well as foam.
+**A King penguin, drawn true to the bird**: slate-grey back, the dark line
+between back and belly, a white belly warming to gold at the breast, orange
+ear patches running down the neck, and a long slender bill with an orange
+stripe. It stands on the shore of a round sunset badge, the sun low over
+the bay, with the sea and the sand at its feet.
 
-**Built to be reproduced.** It uses flat fills in four tones:
-
-| Tone | Colour | Used for |
-|---|---|---|
-| `ink` | `currentColor` | the ring and sea, so the badge follows the text colour around it |
-| `accent` | ember | sky, beak stripe, ear patch, feet |
-| `dark` | blue-black `#0b1424` | the penguin's back, head and beak |
-| `light` | bone | the penguin's front and eye |
-
-### Tiers
-
-| Tier | Keeps | Use |
-|---|---|---|
-| `full` | everything | 40px and up: footer, OG card, print |
-| `simple` | everything (identical to `full` for now) | 24–40px: nav, seal |
-| `micro` | ring, sky, sea, silhouette and front | under 24px: favicon |
+**It lives.** On the site (`PenguinMark`), the penguin waddles on the spot,
+flaps a flipper now and then, blinks and looks out to sea; the sun breathes
+and the waves run. Pointing at the header logo makes it hop. It is all CSS
+(the "Penguin mark" block in `globals.css`), so it costs nothing to run and
+stops under reduced motion. Everywhere that CSS is absent (icons, print)
+the same markup simply stands still. `still` draws it without motion on the
+site; `title=""` hides it from screen readers where a link already names
+the camp.
 
 Wordmarks are always real HTML text, never SVG paths, so they stay
 selectable and searchable.

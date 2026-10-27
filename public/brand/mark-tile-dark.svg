@@ -1,13 +1,70 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 88 88">
-  <rect width="88" height="88" fill="#05070d" rx="18"/>
-  <g transform="translate(12 12)">
-    <path d="M32 5a27 27 0 0 1 20.56 44.5H11.44A27 27 0 0 1 32 5Z" fill="#f39c4a"/>
-    <path d="M9.9 47.5q5.53-2.6 11.05 0t11.05 0 11.05 0 11.05 0A27 27 0 0 1 9.9 47.5Z" fill="#f4efe6"/>
-    <path d="M2.4 32a29.6 29.6 0 1 0 59.2 0a29.6 29.6 0 1 0-59.2 0Z" fill="none" stroke="#f4efe6" stroke-width="2.4" stroke-linecap="round"/>
-    <path d="M30 6C24.5 6 21.5 10.5 21.5 15.5C21.5 19 21 22 19.5 26C16.5 34 15.5 44 17.5 51C18.3 54 19.5 56 21 57L15.5 60L23.5 58.2C27 58.8 33 58.8 37 57.6C42 55.6 44.6 49 44.1 41C43.6 33 41.2 27 38.2 22.6C37.4 21.4 37.6 19.8 38 18.4C38.8 15.6 38.6 12.8 37.2 10.6C35.6 7.6 33 6 30 6Z M37 12.4L46.4 15.4L37.4 17.8C38.2 16 38.1 14.2 37 12.4Z" transform="translate(11.5 7.2) scale(0.66)" fill="#0b1424"/>
-    <path d="M37.3 19.8C40.2 24.2 42.7 30.5 42.8 40C42.9 48 40.4 54 35.4 56.3C32.8 52 31.4 44 31.7 36C32 29 34 23.8 37.3 19.8Z" transform="translate(11.5 7.2) scale(0.66)" fill="#f4efe6"/>
-    <path d="M31.4 12.2a1.15 1.15 0 1 0 2.3 0a1.15 1.15 0 1 0-2.3 0Z" transform="translate(11.5 7.2) scale(0.66)" fill="#f4efe6"/>
-    <path d="M38.2 16.3L45.2 15.5L37.6 17.7Z M30.6 16.4C33.6 17.6 35.4 20.2 35 23.6C33.4 21.8 31.6 19.8 30.6 16.4Z" transform="translate(11.5 7.2) scale(0.66)" fill="#f39c4a"/>
-    <path d="M29 57.8C31.5 57.1 36 57.1 40 58.3C37.2 59.8 32.6 60 29 59.3Z" transform="translate(11.5 7.2) scale(0.66)" fill="#f39c4a"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 228 228"><rect width="228" height="228" fill="#05070d" rx="50"/><g transform="translate(14 14)">
+<defs>
+  <radialGradient id="sky-pg" cx="50%" cy="68%" r="70%">
+    <stop offset="0" stop-color="#ffd38a"/><stop offset="0.38" stop-color="#f39c4a"/>
+    <stop offset="0.8" stop-color="#c45a26"/><stop offset="1" stop-color="#7a2f1c"/>
+  </radialGradient>
+  <linearGradient id="sea-pg" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#2d63ad"/><stop offset="1" stop-color="#0a1730"/>
+  </linearGradient>
+  <linearGradient id="sand-pg" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#f4e6cc"/><stop offset="1" stop-color="#d9bf93"/>
+  </linearGradient>
+  <linearGradient id="back-pg" x1="1" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#7d8ea3"/><stop offset="0.55" stop-color="#3e4b5d"/><stop offset="1" stop-color="#1a2230"/>
+  </linearGradient>
+  <linearGradient id="belly-pg" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#ef8424"/><stop offset="0.12" stop-color="#f6b24a"/>
+    <stop offset="0.3" stop-color="#fde9c4"/><stop offset="0.5" stop-color="#ffffff"/><stop offset="1" stop-color="#e6e0d6"/>
+  </linearGradient>
+  <linearGradient id="ear-pg" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#ffb13b"/><stop offset="1" stop-color="#ef7a1a"/>
+  </linearGradient>
+  <radialGradient id="head-pg" cx="40%" cy="35%" r="70%">
+    <stop offset="0" stop-color="#2a3342"/><stop offset="1" stop-color="#090d14"/>
+  </radialGradient>
+  <clipPath id="badge-pg"><circle cx="100" cy="100" r="92"/></clipPath>
+</defs>
+
+<circle cx="100" cy="100" r="99" fill="#f4efe6"/>
+<circle cx="100" cy="100" r="95" fill="#0b1220"/>
+
+<g clip-path="url(#badge-pg)">
+  <rect width="200" height="200" fill="url(#sky-pg)"/>
+  <g class="pg-sun" style="transform-origin:100px 128px;transform-box:view-box">
+    <circle cx="100" cy="128" r="54" fill="#ffd38a" opacity="0.28"/>
+    <circle cx="100" cy="128" r="36" fill="#ffe2a8" opacity="0.9"/>
   </g>
-</svg>
+  <rect y="130" width="200" height="70" fill="url(#sea-pg)"/>
+  <g class="pg-waves">
+    <path d="M-200 136 q12.5 -5 25 0 t25 0 t25 0 t25 0 t25 0 t25 0 t25 0 t25 0 t25 0 t25 0 t25 0 t25 0 t25 0 t25 0 t25 0 t25 0" fill="none" stroke="#c3dcf7" stroke-opacity="0.6" stroke-width="1.6" stroke-linecap="round"/>
+    <path d="M-200 146 q12.5 -5 25 0 t25 0 t25 0 t25 0 t25 0 t25 0 t25 0 t25 0 t25 0 t25 0 t25 0 t25 0 t25 0 t25 0 t25 0 t25 0" fill="none" stroke="#c3dcf7" stroke-opacity="0.35" stroke-width="1.6" stroke-linecap="round"/>
+  </g>
+  <path d="M0 168 C40 156 80 154 112 158 C150 162 178 160 200 154 V200 H0 Z" fill="url(#sand-pg)"/>
+
+  <g class="pg-body" style="transform-origin:100px 172px;transform-box:view-box">
+    <ellipse cx="100" cy="174" rx="26" ry="4" fill="#7a5b3a" opacity="0.35"/>
+    <path d="M84 170 q-6 4 -2 6 h14 q2 -3 -2 -6 Z" fill="#1a1a1a"/>
+    <path d="M102 170 q-4 4 0 6 h14 q3 -3 -2 -6 Z" fill="#1a1a1a"/>
+    <path d="M96 52 C110 52 117 64 116 78 C125 95 129 118 127 140 C125 160 117 172 103 174 L89 174 C77 170 71 157 72 138 C74 114 79 94 84 80 C82 64 85 52 96 52 Z" fill="url(#back-pg)"/>
+    <path d="M85 80 C78 100 75 124 77 144 C79 161 87 170 98 170 C108 169 113 160 112 143 C110 120 103 98 94 83 C91 79 88 78 85 80 Z" fill="url(#belly-pg)"/>
+    <path d="M94 83 C103 98 110 120 112 143 C113 160 108 169 98 170" fill="none" stroke="#0d1420" stroke-width="2.6" stroke-linecap="round"/>
+    <g class="pg-flipper" style="transform-origin:116px 92px;transform-box:view-box">
+      <path d="M114 90 C124 104 128 124 124 146 C122 150 119 150 118 146 C114 128 110 110 110 96 Z" fill="#141b26"/>
+      <path d="M115 96 C122 110 124 126 121 142" fill="none" stroke="#5c6c80" stroke-width="1.2" stroke-linecap="round"/>
+    </g>
+    <g class="pg-head" style="transform-origin:98px 76px;transform-box:view-box">
+      <ellipse cx="96" cy="64" rx="15.5" ry="14.5" fill="url(#head-pg)"/>
+      <path d="M101 57 C106.5 57.5 108.5 62.5 106.5 67.5 C104.5 71.5 101.5 74.5 99.5 79 C98.5 75 99 70 99.3 66 C99.4 62 99.6 59 101 57 Z" fill="url(#ear-pg)"/>
+      <path d="M99.5 79 C97.5 82 95 84.5 92 86.5" fill="none" stroke="#ef7a1a" stroke-width="2.2" stroke-linecap="round"/>
+      <path d="M81 60 C70 61 58 66 48 74 C60 71 71 69 82 67 Z" fill="#101318"/>
+      <path d="M81 65.5 C71 66.5 61 69.5 51 73.2 C61 73 72 72.2 81.5 71.2 Z" fill="#f08a3e"/>
+      <g class="pg-eye" style="transform-origin:88px 59px;transform-box:view-box">
+        <circle cx="88" cy="59" r="2.1" fill="#000"/>
+        <circle cx="88.7" cy="58.3" r="0.7" fill="#fff"/>
+      </g>
+    </g>
+  </g>
+</g>
+
+<circle cx="100" cy="100" r="92" fill="none" stroke="#f4efe6" stroke-opacity="0.5" stroke-width="1"/></g></svg>
