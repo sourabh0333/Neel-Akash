@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { breadcrumbs, pageMeta } from "@/lib/meta";
+import JsonLd from "@/components/JsonLd";
 import Image from "next/image";
 import { site } from "@/lib/site";
 import Journey from "@/components/Journey";
@@ -7,11 +9,12 @@ import Magnetic from "@/components/ui/Magnetic";
 import GettingHero from "@/components/getting/GettingHero";
 import GettingTickets from "@/components/getting/GettingTickets";
 
-export const metadata: Metadata = {
-  title: "Getting here",
-  description: `How to reach ${site.name} on ${site.location.island}: train from Sealdah to Namkhana, road to Bagdanga Ghat, ferry across the Chinai, then a toto to the camp.`,
-  alternates: { canonical: "/getting-here" },
-};
+export const metadata: Metadata = pageMeta({
+  path: "/getting-here",
+  title: "How to Reach Mousuni Island from Kolkata: Train & Ferry",
+  description:
+    "Sealdah to Namkhana by local train, a van to Bagdanga Ghat, a 10-minute ferry and a toto to the camp: about 4 hours from Kolkata, step by step.",
+});
 
 /**
  * The page guests forward to each other before a trip, told in order: the
@@ -20,6 +23,7 @@ export const metadata: Metadata = {
 export default function GettingHerePage() {
   return (
     <main>
+      <JsonLd data={breadcrumbs([{ name: "Getting Here", path: "/getting-here" }])} />
       <GettingHero />
       <GettingTickets />
 

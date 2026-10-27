@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { breadcrumbs, pageMeta } from "@/lib/meta";
+import JsonLd from "@/components/JsonLd";
 import { site } from "@/lib/site";
 import Contact from "@/components/Contact";
 import Testimonials from "@/components/Testimonials";
@@ -8,11 +10,12 @@ import ContactWays from "@/components/contact/ContactWays";
 import ContactFind from "@/components/contact/ContactFind";
 import ContactFaq from "@/components/contact/ContactFaq";
 
-export const metadata: Metadata = {
-  title: "Contact & booking",
-  description: `Book a stay at ${site.name}: a WhatsApp message to ${site.owner.name}, or call ${site.owner.phone}.`,
-  alternates: { canonical: "/contact" },
-};
+export const metadata: Metadata = pageMeta({
+  path: "/contact",
+  title: "Book Penguin Beach Camp, Mousuni – Call or WhatsApp",
+  description:
+    "Book a tent or cottage on Mousuni Island with one WhatsApp message to Bijoy Jana, or call +91 98325 15735. No online payment, no forms. From ₹900.",
+});
 
 /**
  * Booking, told in order: the horizon, three ways in, the sentence that
@@ -22,6 +25,7 @@ export const metadata: Metadata = {
 export default function ContactPage() {
   return (
     <main>
+      <JsonLd data={breadcrumbs([{ name: "Contact", path: "/contact" }])} />
       <ContactHero />
       <ContactWays />
 

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageMeta } from "@/lib/meta";
 import Hero from "@/components/Hero";
 import Intro from "@/components/Intro";
 import Island from "@/components/Island";
@@ -10,9 +11,12 @@ import Journey from "@/components/Journey";
 import Testimonials from "@/components/Testimonials";
 import Contact from "@/components/Contact";
 
-export const metadata: Metadata = {
-  alternates: { canonical: "/" },
-};
+export const metadata: Metadata = pageMeta({
+  path: "/",
+  title: "Penguin Beach Camp – Mousuni Island Tents & Cottages",
+  description:
+    "Sea-facing tents and cottages on Mousuni Island, 120 km from Kolkata. From ₹900 per head a night with all meals, bonfire nights and a long, quiet beach.",
+});
 
 export default function Home() {
   return (

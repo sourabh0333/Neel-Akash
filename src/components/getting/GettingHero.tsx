@@ -56,8 +56,8 @@ export default function GettingHero() {
 
         <div className="mt-7 grid gap-8 lg:grid-cols-12 lg:items-end">
           <p className="hz-fade max-w-[46ch] text-base leading-relaxed text-sand md:text-lg lg:col-span-6">
-            A train, a van and a boat. The last leg is a ferry, so the tide
-            matters &mdash; call{" "}
+            From Kolkata to Mousuni Island it is a train, a van and a boat.
+            The last leg is a ferry, so the tide matters &mdash; call{" "}
             <a href={`tel:${site.owner.phoneRaw}`} className="link-draw text-ember-300">
               {site.owner.phone}
             </a>{" "}

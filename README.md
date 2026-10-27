@@ -315,8 +315,19 @@ src/app/robots.ts       /robots.txt
 - **Canonicals:** every page declares its own (`alternates.canonical`), so
   addresses with tracking parameters or a trailing slash fold into one.
   The 404 is `noindex`.
-- **Structured data:** the layout carries a `Resort` record (address,
-  coordinates, phone, price range, amenities, image) for rich results.
+- **Per-page titles and snippets** (`pageMeta` in `src/lib/meta.ts`): each
+  page leads with what people actually search for ("Mousuni Island tent
+  booking", "how to reach Mousuni Island from Kolkata", "things to do on
+  Mousuni Island"…), titles 45–60 characters so Google shows them whole,
+  descriptions 140–160 characters with the facts people compare camps on:
+  price per head with food, distance, how to book. The same title and text
+  go to Open Graph and Twitter, so a shared link previews its own page. Each
+  stay's title and snippet are written from its data in `stays[]`, so a
+  price change reaches search too.
+- **Structured data:** the layout carries the business as a `Resort` and
+  `Campground` (address, coordinates, phone, price range, amenities, image,
+  and each stay as an `Offer` with its real price); every inner page adds a
+  `BreadcrumbList` (Home › Stays › Cottage).
 
 After going live:
 
