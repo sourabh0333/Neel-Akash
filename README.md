@@ -173,7 +173,11 @@ before editing:
   out as you reach them, and the proprietor's number.
 
   The 404 (`src/app/not-found.tsx`, also shown for a stay id that does not
-  exist) uses the same horizon hero, "Off the map", with every way back.
+  exist) is its own page rather than a hero: a giant "404" with the bay
+  inside the digits (dusk sky above, waves rolling below, the waterline
+  rising and falling) that leans toward the pointer, the address that was
+  not found, a "did you mean" for addresses one or two typos away from a
+  real page, and every page in the menu as a card.
 
   The route map (`src/components/route/RouteMap.tsx`) plays the trip like a
   navigation app on the **real delta**: coastline, estuary, islands and the
