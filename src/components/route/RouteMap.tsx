@@ -21,9 +21,13 @@ import { CHINAI, LABELS, LAND, LEGS, RIVERS, STATIONS, TOWNS, VIEW } from "./geo
  * to the DOM from one ticker; React only hears about leg changes.
  */
 
-const ASPECT = 11 / 16; // height / width of the map window
-/** Camera width, in map units, while following each leg. */
-const FOLLOW_W = [560, 170, 120, 150];
+/**
+ * Camera width, in map units, while following each leg — for a map window
+ * of BASE_ASPECT. Other shapes keep the same visible area, so the train
+ * looks as close on a wide desktop map as on a tall phone one.
+ */
+const FOLLOW_W = [560, 200, 160, 185];
+const BASE_ASPECT = 11 / 16;
 /** Seconds the traveller spends on each leg. */
 const LEG_SECONDS = [7, 3.2, 3, 3.2];
 const TRAIN_CARS = 3;
@@ -34,14 +38,19 @@ const fmt = (min: number) => {
   return `${Math.floor(m / 60)}h ${String(m % 60).padStart(2, "0")}m`;
 };
 
-/** The whole route, framed with room around it. */
-const OVERVIEW = (() => {
+/** The whole route, framed with room around it, for a window of `aspect`. */
+const ROUTE_BOX = (() => {
   const xs = STATIONS.map((s) => s.x);
   const ys = STATIONS.map((s) => s.y);
   const [x0, x1, y0, y1] = [Math.min(...xs), Math.max(...xs), Math.min(...ys), Math.max(...ys)];
-  const w = Math.max(x1 - x0 + 260, (y1 - y0 + 220) / ASPECT);
-  return { x: (x0 + x1) / 2, y: (y0 + y1) / 2, w };
+  return { x: (x0 + x1) / 2, y: (y0 + y1) / 2, spanX: x1 - x0 + 260, spanY: y1 - y0 + 220 };
 })();
+const overview = (aspect: number) => ({
+  x: ROUTE_BOX.x,
+  y: ROUTE_BOX.y,
+  w: Math.max(ROUTE_BOX.spanX, ROUTE_BOX.spanY / aspect),
+});
+const INITIAL = overview(BASE_ASPECT);
 
 type Props = {
   /** The leg the rest of the board is showing. */
@@ -69,9 +78,11 @@ export default function RouteMap({ active, focus, onLeg }: Props) {
     leg: 0,
     f: 0,
     mode: "overview" as "overview" | "follow" | "focus",
-    cam: { ...OVERVIEW },
+    cam: { ...INITIAL },
     lens: [] as number[],
     pxW: 760,
+    /** Height / width of the map window, as laid out. */
+    aspect: BASE_ASPECT,
     reduced: false,
   });
   const loop = useRef<gsap.core.Timeline | null>(null);
@@ -93,16 +104,20 @@ export default function RouteMap({ active, focus, onLeg }: Props) {
     const pos = at(L * s.f);
 
     // Camera target: the traveller, the focused leg, or the whole route.
-    let target = OVERVIEW;
+    let target = overview(s.aspect);
     if (s.mode === "follow") {
       const ahead = at(L * s.f + 18);
-      target = { x: pos.x * 0.7 + ahead.x * 0.3, y: pos.y * 0.7 + ahead.y * 0.3, w: FOLLOW_W[leg] };
+      target = {
+        x: pos.x * 0.7 + ahead.x * 0.3,
+        y: pos.y * 0.7 + ahead.y * 0.3,
+        w: FOLLOW_W[leg] * Math.sqrt(BASE_ASPECT / s.aspect),
+      };
     } else if (s.mode === "focus") {
       const b = path.getBBox();
       target = {
         x: b.x + b.width / 2,
         y: b.y + b.height / 2,
-        w: Math.max(b.width + 90, (b.height + 90) / ASPECT, 110),
+        w: Math.max(b.width + 90, (b.height + 90) / s.aspect, 110),
       };
     }
     const k = dt <= 0 ? 1 : 1 - Math.exp(-dt * 2.6);
@@ -110,7 +125,7 @@ export default function RouteMap({ active, focus, onLeg }: Props) {
     c.x += (target.x - c.x) * k;
     c.y += (target.y - c.y) * k;
     c.w += (target.w - c.w) * k;
-    const h = c.w * ASPECT;
+    const h = c.w * s.aspect;
     svg.current.setAttribute("viewBox", `${c.x - c.w / 2} ${c.y - h / 2} ${c.w} ${h}`);
     const u = c.w / s.pxW; // map units per screen pixel
 
@@ -167,7 +182,13 @@ export default function RouteMap({ active, focus, onLeg }: Props) {
     s.lens = legPaths.current.map((p) => p?.getTotalLength() ?? 0);
     reveals.current.forEach((r, i) => r && (r.style.strokeDasharray = String(s.lens[i])));
 
-    const measure = () => (s.pxW = wrap.current?.clientWidth || 760);
+    const measure = () => {
+      const el = wrap.current;
+      if (!el) return;
+      s.pxW = el.clientWidth || 760;
+      s.aspect = el.clientHeight && el.clientWidth ? el.clientHeight / el.clientWidth : BASE_ASPECT;
+      if (s.reduced) draw(0);
+    };
     measure();
     const ro = new ResizeObserver(measure);
     if (wrap.current) ro.observe(wrap.current);
@@ -279,7 +300,10 @@ export default function RouteMap({ active, focus, onLeg }: Props) {
     : `${leg.from} → ${leg.to}`;
 
   return (
-    <div ref={wrap} className="relative aspect-[16/11] w-full overflow-hidden rounded-xl bg-[#071226]">
+    <div
+      ref={wrap}
+      className="relative aspect-[4/5] w-full overflow-hidden rounded-xl bg-[#071226] sm:aspect-[16/10] lg:aspect-[21/9]"
+    >
       <style>{`
         @keyframes rm-flow { to { stroke-dashoffset: -40; } }
         @keyframes rm-ping { 0% { transform: scale(.6); opacity: .7 } 100% { transform: scale(2.4); opacity: 0 } }
@@ -298,7 +322,7 @@ export default function RouteMap({ active, focus, onLeg }: Props) {
 
       <svg
         ref={svg}
-        viewBox={`${OVERVIEW.x - OVERVIEW.w / 2} ${OVERVIEW.y - (OVERVIEW.w * ASPECT) / 2} ${OVERVIEW.w} ${OVERVIEW.w * ASPECT}`}
+        viewBox={`${INITIAL.x - INITIAL.w / 2} ${INITIAL.y - (INITIAL.w * BASE_ASPECT) / 2} ${INITIAL.w} ${INITIAL.w * BASE_ASPECT}`}
         preserveAspectRatio="xMidYMid slice"
         className="absolute inset-0 h-full w-full"
         aria-hidden="true"
