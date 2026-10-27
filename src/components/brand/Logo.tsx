@@ -1,16 +1,16 @@
 import { site } from "@/lib/site";
-import { VIEWBOX, partsFor, brandColors, type Detail } from "./geometry";
+import { VIEWBOX, partsFor, brandColors, type Detail, type Tone } from "./geometry";
 
 /**
- * The Penguin Beach Camp mark: a round badge with the sun going down into the
- * bay and a penguin — which is also an A-frame tent — on the shore in front
- * of it. See ./geometry.ts for the reasoning and every number.
+ * The Penguin Beach Camp mark: a round badge with a King penguin standing on
+ * the shore against the sun going down over the bay. See ./geometry.ts for
+ * the reasoning and every number.
  *
  * Tiers
  * -----
  *   <LogoMark />                  full, 40px and up
  *   <LogoMark detail="simple" />  24–40px (currently identical to full)
- *   <LogoMark detail="micro" />   no eyes or beak, under 24px
+ *   <LogoMark detail="micro" />   no eye, markings or feet, under 24px
  *   <Logo variant="lockup" />     mark + wordmark, horizontal
  *   <Logo variant="stacked" />    mark over wordmark
  *   <LogoSeal />                  mark inside a ring of text — a stamp
@@ -22,14 +22,19 @@ import { VIEWBOX, partsFor, brandColors, type Detail } from "./geometry";
 function MarkShapes({
   detail = "full",
   accent = `var(--color-ember-400, ${brandColors.ember})`,
+  dark = brandColors.night,
+  light = brandColors.bone,
 }: {
   detail?: Detail;
   accent?: string;
+  dark?: string;
+  light?: string;
 }) {
+  const colors: Record<Tone, string> = { ink: "currentColor", accent, dark, light };
   return (
     <>
       {partsFor(detail).map((p, i) => {
-        const color = p.tone === "accent" ? accent : "currentColor";
+        const color = colors[p.tone];
         return p.stroke ? (
           <path
             key={i}
@@ -41,7 +46,7 @@ function MarkShapes({
             strokeLinecap="round"
           />
         ) : (
-          <path key={i} d={p.d} transform={p.transform} fill={color} fillRule="evenodd" />
+          <path key={i} d={p.d} transform={p.transform} fill={color} />
         );
       })}
     </>
@@ -158,8 +163,14 @@ export function LogoSeal({ className = "" }: { className?: string }) {
 
       {/* 64×64 mark centred in the 140 seal: (140-64)/2 = 38 */}
       <g transform="translate(38 38)">
-        {/* The seal is a faint stamp, so the sun is dimmed with the ink. */}
-        <MarkShapes detail="simple" accent="rgb(243 156 74 / 0.3)" />
+        {/* The seal is a faint stamp, so every fixed tone is dimmed to match
+            the ink, which arrives already faint through currentColor. */}
+        <MarkShapes
+          detail="simple"
+          accent="rgb(243 156 74 / 0.3)"
+          dark="rgb(11 20 36 / 0.6)"
+          light="rgb(244 239 230 / 0.3)"
+        />
       </g>
     </svg>
   );
