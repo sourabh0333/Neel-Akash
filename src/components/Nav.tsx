@@ -15,6 +15,7 @@ const wordmark = { lead, rest: restWords.join(" ") };
 export default function Nav() {
   const bar = useRef<HTMLElement>(null);
   const menu = useRef<HTMLDivElement>(null);
+  const scroller = useRef<HTMLDivElement>(null);
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
   /** The current page, or its parent ("Stays" while on a single stay). */
@@ -59,6 +60,11 @@ export default function Nav() {
     const el = menu.current;
     if (!el) return;
     el.dataset.open = String(open);
+    if (bar.current) bar.current.dataset.menu = String(open);
+    // The bar may have slid away on scroll; the close button lives in it.
+    if (open) gsap.to(bar.current, { yPercent: 0, duration: 0.4, overwrite: true });
+    // Always open at the top of the list.
+    if (open) scroller.current?.scrollTo(0, 0);
 
     if (prefersReducedMotion()) {
       gsap.set(el, { autoAlpha: open ? 1 : 0 });
@@ -136,7 +142,10 @@ export default function Nav() {
       <header
         ref={bar}
         data-solid="false"
-        className="group fixed inset-x-0 top-0 z-[80] transition-colors duration-500 data-[solid=true]:bg-abyss/55 data-[solid=true]:backdrop-blur-xl"
+        data-menu="false"
+        // Above the open menu (z-90), so its close button stays on top; the
+        // glass backing drops away there so the bar sits on the curtain.
+        className="group fixed inset-x-0 top-0 z-[80] transition-colors duration-500 data-[menu=true]:z-[95] data-[solid=true]:bg-abyss/55 data-[solid=true]:backdrop-blur-xl data-[menu=true]:!bg-transparent data-[menu=true]:!backdrop-blur-none"
       >
         <div className="mx-auto flex max-w-[100rem] items-center justify-between px-6 py-5 md:px-10">
           <a
@@ -188,8 +197,13 @@ export default function Nav() {
               onClick={() => setOpen((v) => !v)}
               aria-expanded={open}
               aria-label={open ? "Close menu" : "Open menu"}
-              className="relative z-[92] flex h-11 w-11 items-center justify-center rounded-full border border-bone/20 transition-colors duration-400 hover:border-ember-400"
+              className="relative flex h-11 min-w-11 items-center justify-center gap-2.5 rounded-full border border-bone/20 px-3 transition-colors duration-400 hover:border-ember-400 aria-expanded:border-ember-400/70 aria-expanded:pl-4"
             >
+              {open && (
+                <span className="text-[0.66rem] font-medium tracking-[0.2em] text-bone uppercase">
+                  Close
+                </span>
+              )}
               <span className="relative block h-3 w-5">
                 <span
                   className="absolute left-0 h-px w-full bg-bone transition-all duration-400"
@@ -219,47 +233,57 @@ export default function Nav() {
         className="invisible fixed inset-0 z-[90] opacity-0"
       >
         <div className="nav-curtain absolute inset-0 bg-ink" />
-        <div className="relative flex h-full flex-col justify-between px-6 pb-10 pt-28 md:px-10 md:pt-32">
-          <nav className="flex flex-col">
-            {navLinks.map((l, i) => (
-              <div key={l.href} className="overflow-hidden">
+        {/* Its own scroller, starting below the bar so nothing slides under
+            the logo: seven links plus contact outgrow a short screen.
+            data-lenis-prevent hands wheel and touch back to the browser here,
+            since Lenis is stopped (and swallowing them) while the menu is open. */}
+        <div
+          ref={scroller}
+          data-lenis-prevent
+          className="absolute inset-x-0 top-[5.25rem] bottom-0 overflow-y-auto overscroll-contain [mask-image:linear-gradient(to_bottom,transparent,#000_1.5rem)] md:top-[5.5rem]"
+        >
+          <div className="flex min-h-full flex-col justify-between gap-12 px-6 pb-10 pt-8 md:px-10 md:pt-10">
+            <nav className="flex flex-col">
+              {navLinks.map((l, i) => (
+                <div key={l.href} className="overflow-hidden">
+                  <a
+                    href={l.href}
+                    onClick={() => setOpen(false)}
+                    aria-current={isCurrent(l.href) ? "page" : undefined}
+                    className="nav-item group/nav flex items-baseline gap-5 py-1 md:py-1.5"
+                  >
+                    <span className="font-sans text-[0.6rem] tracking-[0.3em] text-ember-500 tabular-nums">
+                      0{i + 1}
+                    </span>
+                    <span className="font-display text-[clamp(2.2rem,min(6.5vw,8.5vh),5.5rem)] leading-[1.02] text-bone transition-colors duration-500 group-hover/nav:text-ember-400 group-aria-[current=page]/nav:text-ember-300">
+                      {l.label}
+                    </span>
+                  </a>
+                </div>
+              ))}
+            </nav>
+
+            <div className="nav-aside grid gap-8 border-t border-bone/10 pt-8 sm:grid-cols-3">
+              <div>
+                <p className="t-eyebrow mb-2 text-sand-dim">Reservations</p>
                 <a
-                  href={l.href}
-                  onClick={() => setOpen(false)}
-                  aria-current={isCurrent(l.href) ? "page" : undefined}
-                  className="nav-item group/nav flex items-baseline gap-5 py-1 md:py-1.5"
+                  href={`tel:${site.owner.phoneRaw}`}
+                  className="link-draw font-display text-2xl text-bone"
                 >
-                  <span className="font-sans text-[0.6rem] tracking-[0.3em] text-ember-500 tabular-nums">
-                    0{i + 1}
-                  </span>
-                  <span className="font-display text-[clamp(2.2rem,min(6.5vw,8.5vh),5.5rem)] leading-[1.02] text-bone transition-colors duration-500 group-hover/nav:text-ember-400 group-aria-[current=page]/nav:text-ember-300">
-                    {l.label}
-                  </span>
+                  {site.owner.phone}
                 </a>
               </div>
-            ))}
-          </nav>
-
-          <div className="nav-aside grid gap-8 border-t border-bone/10 pt-8 sm:grid-cols-3">
-            <div>
-              <p className="t-eyebrow mb-2 text-sand-dim">Reservations</p>
-              <a
-                href={`tel:${site.owner.phoneRaw}`}
-                className="link-draw font-display text-2xl text-bone"
-              >
-                {site.owner.phone}
-              </a>
-            </div>
-            <div>
-              <p className="t-eyebrow mb-2 text-sand-dim">Find us</p>
-              <p className="max-w-[22ch] text-sm leading-relaxed text-sand">
-                {site.location.island}, {site.location.block},<br />
-                {site.location.state} {site.location.pin}
-              </p>
-            </div>
-            <div>
-              <p className="t-eyebrow mb-2 text-sand-dim">Proprietor</p>
-              <p className="text-sm text-sand">{site.owner.name}</p>
+              <div>
+                <p className="t-eyebrow mb-2 text-sand-dim">Find us</p>
+                <p className="max-w-[22ch] text-sm leading-relaxed text-sand">
+                  {site.location.island}, {site.location.block},<br />
+                  {site.location.state} {site.location.pin}
+                </p>
+              </div>
+              <div>
+                <p className="t-eyebrow mb-2 text-sand-dim">Proprietor</p>
+                <p className="text-sm text-sand">{site.owner.name}</p>
+              </div>
             </div>
           </div>
         </div>
