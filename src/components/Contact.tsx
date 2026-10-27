@@ -340,7 +340,7 @@ export default function Contact() {
               rel="noopener noreferrer"
               className="link-draw mt-2 inline-block text-sm text-ember-300"
             >
-              Get directions &nearr;
+              Get directions ↗
             </a>
           </div>
         </div>

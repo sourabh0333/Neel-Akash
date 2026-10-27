@@ -235,7 +235,7 @@ export default function Journey() {
             data-cursor="Map"
             className="link-draw text-sm text-bone"
           >
-            Open {site.location.island} in Google Maps &nearr;
+            Open {site.location.island} in Google Maps ↗
           </a>
           <span className="hidden h-4 w-px bg-bone/20 sm:block" />
           <p className="text-sm text-sand-dim">{site.location.full}</p>
