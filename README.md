@@ -107,17 +107,21 @@ before editing:
   phone number and address sit in a full-width row underneath so neither
   column has to carry them.
 
-- **Getting here** — the route line is built from per-step segments inside
-  each row's own rail column, so it is anchored to the station nodes by
-  construction. Each segment fills as you scroll past it and hands over to the
-  next, and a station lights up the moment the line reaches it. Every mode
-  carries a glyph: rails, a van, water, a tent.
+- **Getting here** — a live route tracker. On desktop the section pins and
+  scrolling *is* the trip: a glowing marker carrying the current vehicle
+  travels a route map of the delta, and each leg draws on in its own line
+  style — railway sleepers, a solid road, a dashed ferry crossing over the
+  flowing Chinai, a dotted toto lane. Stations light up and pulse on
+  arrival, the leg card swaps, a four-part bar fills, and a trip clock
+  counts the travel time up from `journey[].minutes`. On phones, and for
+  anyone who prefers reduced motion, the same legs become boarding-pass
+  tickets that stamp in as they scroll into view.
 
-  > Worth knowing if you edit this: the first version was a single stretched
-  > SVG curve laid *beside* the list. With `preserveAspectRatio="none"` it was
-  > squashed unevenly and wandered ±29px horizontally while the nodes stayed
-  > fixed, so it never actually joined them up. Keep the line and the nodes in
-  > the same box; do not position them independently.
+  > Worth knowing if you edit this: every leg is revealed through an SVG
+  > mask drawn along its path, which is what lets the dashed and dotted legs
+  > draw on as cleanly as the solid ones. Station label positions are set by
+  > hand in `STATIONS` so none lands on a line or in the water — check them
+  > if you move a station.
 
 ## The brand mark
 

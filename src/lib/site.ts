@@ -277,11 +277,18 @@ export const meals: Meal[] = [
 
 /* ── Getting here ──────────────────────────────────────────── */
 
+/**
+ * The route, leg by leg. `from`/`to` name the stations on the route map and
+ * the tickets; `minutes` drives the trip clock (approximate, like `duration`).
+ */
 export const journey = [
   {
     step: "01",
     mode: "Rail",
     title: "Sealdah → Namkhana",
+    from: "Sealdah",
+    to: "Namkhana",
+    minutes: 180,
     detail:
       "The Namkhana Local runs from Sealdah South. Roughly three hours through the delta.",
     duration: "≈ 3 hrs",
@@ -290,6 +297,9 @@ export const journey = [
     step: "02",
     mode: "Road",
     title: "Namkhana → Bagdanga Ghat",
+    from: "Namkhana",
+    to: "Bagdanga Ghat",
+    minutes: 40,
     detail:
       "A Tata Magic or auto from outside the station. Driving instead? Amtala, Diamond Harbour, Kakdwip, then the ghat.",
     duration: "≈ 40 min",
@@ -298,6 +308,9 @@ export const journey = [
     step: "03",
     mode: "River",
     title: "Cross the Chinai",
+    from: "Bagdanga Ghat",
+    to: "Mousuni Island",
+    minutes: 10,
     detail:
       "A short ferry to the island. Boats run with the tide, so tell us your train and we will time it for you.",
     duration: "≈ 10 min",
@@ -306,6 +319,9 @@ export const journey = [
     step: "04",
     mode: "Arrival",
     title: "Ghat → Penguin Beach Camp",
+    from: "Mousuni Island",
+    to: "Penguin Beach Camp",
+    minutes: 15,
     detail:
       "A toto through the paddy and the betel groves. We meet you at the ghat if you let us know you are coming.",
     duration: "≈ 15 min",
