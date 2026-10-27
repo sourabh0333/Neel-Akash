@@ -72,8 +72,9 @@ export default function Stays() {
             delay={0.15}
             className="max-w-[36ch] text-sm leading-relaxed text-sand"
           >
-            Every tariff below is per person, per night, and includes breakfast,
-            lunch, evening tea and dinner. There is no hidden second menu.
+            Every tariff below is per person, per night, and includes a welcome
+            drink, lunch, evening snacks, dinner and the next morning&rsquo;s
+            breakfast. There is no hidden second menu.
           </Reveal>
         </div>
 

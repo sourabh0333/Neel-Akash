@@ -68,15 +68,16 @@ of the same shape and nothing else needs to change:
 | `stay-tent/bamboo/family.jpg` | Room list previews | 4:5 portrait |
 | `xp-sunrise/lowtide/boat/bonfire.jpg` | Pinned "a day here" scenes | wide |
 | `g-1.jpg` … `g-6.jpg` | Gallery contact sheet | mixed |
-| `dish-*.jpg` | Menu dish previews (9) | square-ish |
+| `dish-*.jpg` | Menu dish previews (8) | square-ish |
 
 ## How the four "feature" sections work
 
 These carry the heavier interaction design, so they are worth knowing about
 before editing:
 
-- **The kitchen** — the menu is the day's running order (breakfast → lunch →
-  evening tea → dinner), not a price list. Hovering or focusing a dish wipes
+- **The kitchen** — the menu is the stay's running order, transcribed from
+  the camp's menu card (welcome drink → lunch → evening snacks → dinner →
+  next morning's breakfast), not a price list. Hovering or focusing a dish wipes
   its photograph into the sticky plate panel and swaps the Bengali name and
   description. On touch there is no hover channel, so every dish carries its
   own inline thumbnail instead.
