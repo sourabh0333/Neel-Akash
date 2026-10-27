@@ -1,21 +1,16 @@
 import { site } from "@/lib/site";
-import {
-  MATRA,
-  VIEWBOX,
-  rowsFor,
-  brandColors,
-  type Detail,
-} from "./geometry";
+import { VIEWBOX, TIER_SHIFT, partsFor, brandColors, type Detail } from "./geometry";
 
 /**
- * The Penguin Beach Camp mark: a Bengali matra with the island hanging
- * beneath it in kantha running stitch. See ./geometry.ts for the reasoning and every number.
+ * The Penguin Beach Camp mark: a penguin that is also an A-frame tent, with
+ * the sun over its shoulder and a wave underfoot. See ./geometry.ts for the
+ * reasoning and every number.
  *
  * Tiers
  * -----
- *   <LogoMark />                  full — five stitched rows, 40px and up
- *   <LogoMark detail="simple" />  four rows, 24–40px
- *   <LogoMark detail="micro" />   three solid rows, under 24px
+ *   <LogoMark />                  full — with the wave, 40px and up
+ *   <LogoMark detail="simple" />  no wave, 24–40px
+ *   <LogoMark detail="micro" />   silhouette, door, beak and sun, under 24px
  *   <Logo variant="lockup" />     mark + wordmark, horizontal
  *   <Logo variant="stacked" />    mark over wordmark
  *   <LogoSeal />                  mark inside a ring of text — a stamp
@@ -27,55 +22,28 @@ import {
 function MarkShapes({
   detail = "full",
   accent = `var(--color-ember-400, ${brandColors.ember})`,
-  animated = false,
 }: {
   detail?: Detail;
   accent?: string;
-  animated?: boolean;
 }) {
-  const { solid, stitches } = rowsFor(detail);
-
   return (
-    <>
-      {/* The matra — flat caps, because it is a typographic rule */}
-      <line
-        className={animated ? "logo-matra" : undefined}
-        x1={MATRA.x1}
-        y1={MATRA.y}
-        x2={MATRA.x2}
-        y2={MATRA.y}
-        strokeWidth={MATRA.width}
-        pathLength={1}
-      />
-
-      <g
-        className={animated ? "logo-stitches" : undefined}
-        strokeWidth={2.1}
-        strokeLinecap="round"
-      >
-        {solid.map((r) => (
-          <line
-            key={`s${r.y}`}
-            x1={32 - r.half}
-            y1={r.y}
-            x2={32 + r.half}
-            y2={r.y}
-            stroke={r.accent ? accent : undefined}
-          />
-        ))}
-        {stitches.map((s, i) => (
-          <line
+    <g transform={`translate(0 ${TIER_SHIFT[detail]})`}>
+      {partsFor(detail).map((p, i) => {
+        const color = p.tone === "accent" ? accent : "currentColor";
+        return p.stroke ? (
+          <path
             key={i}
-            className="logo-stitch"
-            x1={s.x1}
-            y1={s.y}
-            x2={s.x2}
-            y2={s.y}
-            stroke={s.accent ? accent : undefined}
+            d={p.d}
+            fill="none"
+            stroke={color}
+            strokeWidth={p.stroke}
+            strokeLinecap="round"
           />
-        ))}
-      </g>
-    </>
+        ) : (
+          <path key={i} d={p.d} fill={color} fillRule="evenodd" />
+        );
+      })}
+    </g>
   );
 }
 
@@ -84,14 +52,12 @@ export function LogoMark({
   detail = "full",
   accent,
   title,
-  animated = false,
 }: {
   className?: string;
   detail?: Detail;
   accent?: string;
   /** Supply only when the mark stands alone with no adjacent brand text. */
   title?: string;
-  animated?: boolean;
 }) {
   return (
     <svg
@@ -100,18 +66,14 @@ export function LogoMark({
       role={title ? "img" : "presentation"}
       aria-label={title}
       aria-hidden={title ? undefined : true}
-      fill="none"
-      stroke="currentColor"
-      strokeLinecap="butt"
     >
-      <MarkShapes detail={detail} accent={accent} animated={animated} />
+      <MarkShapes detail={detail} accent={accent} />
     </svg>
   );
 }
 
 /**
- * Mark + wordmark. The Bengali sits under its own rule in the lockup, which
- * rhymes with the matra in the mark — the same device at two scales.
+ * Mark + wordmark, with the island set small underneath.
  */
 export function Logo({
   variant = "lockup",
@@ -194,12 +156,7 @@ export function LogoSeal({ className = "" }: { className?: string }) {
       </text>
 
       {/* 64×64 mark centred in the 140 seal: (140-64)/2 = 38 */}
-      <g
-        transform="translate(38 38)"
-        fill="none"
-        stroke="currentColor"
-        strokeLinecap="butt"
-      >
+      <g transform="translate(38 38)">
         <MarkShapes detail="simple" />
       </g>
     </svg>

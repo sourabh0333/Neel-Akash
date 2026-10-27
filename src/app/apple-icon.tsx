@@ -10,7 +10,7 @@ export const contentType = "image/png";
  */
 export default function AppleIcon() {
   const tile = markSvgString({
-    stroke: c.bone,
+    ink: c.bone,
     accent: c.ember,
     background: c.ink,
     pad: 12,
