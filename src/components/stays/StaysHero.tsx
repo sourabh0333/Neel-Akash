@@ -55,8 +55,9 @@ export default function StaysHero() {
 
         <div className="mt-7 grid gap-8 lg:grid-cols-12 lg:items-end">
           <p className="hz-fade max-w-[40ch] text-base leading-relaxed text-sand md:text-lg lg:col-span-5">
-            Tents on the sand, cottages raised above it, and one price for a
-            whole group. Every tent and cottage night comes with all meals.
+            Sea-facing tents on the sand of Mousuni Island, cottages raised
+            above it, and one price for a whole group. Every tent and cottage
+            night comes with all meals.
           </p>
 
           <dl className="hz-fade grid grid-cols-3 gap-6 lg:col-span-6 lg:col-start-7">

@@ -1,16 +1,18 @@
 import type { Metadata } from "next";
-import { site } from "@/lib/site";
+import { breadcrumbs, pageMeta } from "@/lib/meta";
+import JsonLd from "@/components/JsonLd";
 import Kitchen from "@/components/Kitchen";
 import Reveal from "@/components/ui/Reveal";
 import MenuHero from "@/components/menu/MenuHero";
 import MenuPlates from "@/components/menu/MenuPlates";
 import MenuCta from "@/components/menu/MenuCta";
 
-export const metadata: Metadata = {
-  title: "Menu",
-  description: `The full meal plan at ${site.name}: welcome drink, lunch, evening snacks, dinner and next morning's breakfast.`,
-  alternates: { canonical: "/menu" },
-};
+export const metadata: Metadata = pageMeta({
+  path: "/menu",
+  title: "Mousuni Island Camp Food: Bengali Fish & Meals Menu",
+  description:
+    "Pomfret and prawns, rice, dal and sabji, chicken at dinner and luchi for breakfast: every meal at Penguin Beach Camp, included with tents and cottages.",
+});
 
 /**
  * The menu, told in order: the horizon, every plate on one rail, the day
@@ -19,6 +21,7 @@ export const metadata: Metadata = {
 export default function MenuPage() {
   return (
     <main>
+      <JsonLd data={breadcrumbs([{ name: "Menu", path: "/menu" }])} />
       <MenuHero />
       <MenuPlates />
 

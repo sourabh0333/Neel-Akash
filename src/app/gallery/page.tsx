@@ -1,16 +1,18 @@
 import type { Metadata } from "next";
+import { breadcrumbs, pageMeta } from "@/lib/meta";
+import JsonLd from "@/components/JsonLd";
 import Image from "next/image";
-import { site } from "@/lib/site";
 import GalleryHero from "@/components/gallery/GalleryHero";
 import GalleryZoom from "@/components/gallery/GalleryZoom";
 import GalleryWall from "@/components/gallery/GalleryWall";
 import Magnetic from "@/components/ui/Magnetic";
 
-export const metadata: Metadata = {
-  title: "Gallery",
-  description: `Photographs of the beach, the tide, the stays and the days at ${site.name}, ${site.location.island}.`,
-  alternates: { canonical: "/gallery" },
-};
+export const metadata: Metadata = pageMeta({
+  path: "/gallery",
+  title: "Penguin Beach Camp Photos – Mousuni Island Gallery",
+  description:
+    "Photos of the beach, the tents and cottages, the boats and the bonfire nights at Penguin Beach Camp on Mousuni Island. Tap any photo to see it large.",
+});
 
 /**
  * The gallery, told in order: the horizon, a field of frames you scroll
@@ -19,6 +21,7 @@ export const metadata: Metadata = {
 export default function GalleryPage() {
   return (
     <main>
+      <JsonLd data={breadcrumbs([{ name: "Gallery", path: "/gallery" }])} />
       <GalleryHero />
       <GalleryZoom />
       <GalleryWall />

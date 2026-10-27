@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Instrument_Serif, Inter, Noto_Serif_Bengali } from "next/font/google";
-import { site } from "@/lib/site";
+import { site, stays } from "@/lib/site";
 import SmoothScroll from "@/components/SmoothScroll";
 import Cursor from "@/components/Cursor";
 import Nav from "@/components/Nav";
@@ -73,7 +73,8 @@ export const viewport: Viewport = {
 /* Rich result for "resort near me" style searches. */
 const jsonLd = {
   "@context": "https://schema.org",
-  "@type": "Resort",
+  // A beach camp: Campground says what it is, Resort how people search for it.
+  "@type": ["Resort", "Campground"],
   name: site.name,
   url,
   image: `${url}/opengraph-image`,
@@ -93,6 +94,19 @@ const jsonLd = {
   },
   telephone: site.owner.phoneRaw,
   priceRange: "₹₹",
+  // The stays and their real prices, each pointing at its own page.
+  makesOffer: stays.map((s) => ({
+    "@type": "Offer",
+    name: s.name,
+    description: s.blurb,
+    url: `${url}/stays/${s.id}`,
+    priceSpecification: {
+      "@type": "UnitPriceSpecification",
+      price: s.price,
+      priceCurrency: "INR",
+      unitText: s.priceNote,
+    },
+  })),
   amenityFeature: [
     "Sea-facing tents",
     "Bonfire",

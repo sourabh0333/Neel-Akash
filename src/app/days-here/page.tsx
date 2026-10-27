@@ -1,17 +1,19 @@
 import type { Metadata } from "next";
+import { breadcrumbs, pageMeta } from "@/lib/meta";
+import JsonLd from "@/components/JsonLd";
 import Image from "next/image";
-import { site } from "@/lib/site";
 import Experiences from "@/components/Experiences";
 import DaysHero from "@/components/days/DaysHero";
 import DaysSunArc from "@/components/days/DaysSunArc";
 import DaysPlan from "@/components/days/DaysPlan";
 import Magnetic from "@/components/ui/Magnetic";
 
-export const metadata: Metadata = {
-  title: "Days here",
-  description: `A day at ${site.name}: sunrise over the Chinai, the long walk at low tide, boats to Kakramarir Chor and a bonfire at night.`,
-  alternates: { canonical: "/days-here" },
-};
+export const metadata: Metadata = pageMeta({
+  path: "/days-here",
+  title: "Things to Do on Mousuni Island – Sunrise to Bonfire",
+  description:
+    "Sunrise over the Chinai, a low-tide beach walk, a boat to the Kakramarir Chor sandbar and a bonfire at night: a day on Mousuni Island, plus a 2-day plan.",
+});
 
 /**
  * The day, told in order: the horizon, the sun's arc across it, each moment
@@ -20,6 +22,7 @@ export const metadata: Metadata = {
 export default function DaysHerePage() {
   return (
     <main>
+      <JsonLd data={breadcrumbs([{ name: "Days Here", path: "/days-here" }])} />
       <DaysHero />
       <DaysSunArc />
       <Experiences />
