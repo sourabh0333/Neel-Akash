@@ -6,7 +6,7 @@ import { gsap, ScrollTrigger, prefersReducedMotion } from "@/lib/anim";
 import { site, navLinks } from "@/lib/site";
 import { lockScroll, unlockScroll } from "@/lib/scroll";
 import Magnetic from "./ui/Magnetic";
-import { LogoMark } from "./brand/Logo";
+import PenguinMark from "./brand/PenguinMark";
 
 /** "Penguin Beach Camp" → lead "Penguin", rest "Beach Camp". */
 const [lead, ...restWords] = site.name.split(" ");
@@ -151,10 +151,10 @@ export default function Nav() {
           <a
             href="/"
             aria-label={`${site.name} — home`}
-            className="group/logo flex items-center gap-3.5"
+            className="pg-hop-host group/logo flex items-center gap-3.5"
           >
-            <LogoMark detail="simple"
-              className="h-11 w-11 shrink-0 text-bone transition-colors duration-500 group-hover/logo:text-ember-300 md:h-12 md:w-12" />
+            {/* The link carries the name, so the mark itself is decorative. */}
+            <PenguinMark title="" className="h-11 w-11 shrink-0 md:h-12 md:w-12" />
             {/* Wordmark: the first word set large in the serif, the rest as
                 tracked small caps beneath — "Penguin / BEACH CAMP". */}
             <span className="h-8 w-px bg-bone/25 md:h-9" />

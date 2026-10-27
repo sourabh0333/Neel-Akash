@@ -4,7 +4,8 @@ import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import { gsap, prefersReducedMotion } from "@/lib/anim";
 import { site, navLinks, stayLinks } from "@/lib/site";
-import { LogoMark, LogoSeal } from "./brand/Logo";
+import { LogoSeal } from "./brand/Logo";
+import PenguinMark from "./brand/PenguinMark";
 
 export default function Footer() {
   const root = useRef<HTMLElement>(null);
@@ -41,7 +42,7 @@ export default function Footer() {
           <div className="relative md:col-span-2">
             <LogoSeal className="pointer-events-none absolute right-6 top-0 hidden h-28 w-28 text-bone/25 lg:block" />
             <div className="flex items-center gap-4">
-              <LogoMark className="h-14 w-14 text-bone" />
+              <PenguinMark className="h-14 w-14" />
               <p className="font-bn text-3xl text-bone">{site.nameBn}</p>
             </div>
             <p className="mt-4 max-w-[34ch] text-sm leading-relaxed text-sand-dim">

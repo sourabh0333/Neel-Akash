@@ -207,11 +207,28 @@ before editing:
 ## The brand mark
 
 ```
-src/components/brand/geometry.ts   every number, plus an SVG-string builder
-src/components/brand/Logo.tsx      the React mark and lockups
-scripts/gen-brand.ts               regenerates the static files
-public/brand/*.svg                 print and signage assets
+src/components/brand/PenguinMark.tsx  the animated mark in the header and footer
+src/components/brand/geometry.ts      every number, plus an SVG-string builder
+src/components/brand/Logo.tsx         the React mark and lockups
+scripts/gen-brand.ts                  regenerates the static files
+public/brand/*.svg                    print and signage assets
 ```
+
+**The animated mark** (`PenguinMark`) is what visitors see in the header
+and footer: a King penguin drawn true to the bird — slate-grey back, the
+dark line between back and belly, white belly warming to gold at the
+breast, orange ear patches running down the neck, a long slender bill
+with an orange stripe — standing on the shore of a sunset badge. It
+waddles on the spot, flaps a flipper now and then, blinks, looks out to
+sea; the sun breathes and the waves run. Pointing at the header logo makes
+it hop. It is all CSS (the "Penguin mark" block in `globals.css`), so it
+costs nothing to run and stops under reduced motion. `still` draws it
+without motion; `title=""` hides it from screen readers where a link
+already names the camp.
+
+> The favicon, app icon, social image and `public/brand` files are still
+> drawn from `geometry.ts` (the earlier penguin) until they are redrawn to
+> match.
 
 Regenerate the static assets after changing the geometry:
 
