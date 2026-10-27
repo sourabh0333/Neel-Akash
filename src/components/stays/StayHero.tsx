@@ -4,6 +4,7 @@ import { useRef } from "react";
 import Image from "next/image";
 import type { Stay } from "@/lib/site";
 import { useHorizon, TideLine, ScrollCue } from "../ui/Horizon";
+import HeroTitle from "../ui/HeroTitle";
 
 const inr = (n: number) => `₹${n.toLocaleString("en-IN")}`;
 
@@ -41,10 +42,16 @@ export default function StayHero({ stay }: { stay: Stay }) {
           <span className="hidden text-ember-400 sm:inline">{stay.kicker}</span>
         </div>
 
-        <h1 className="hz-chars font-display text-[clamp(3rem,11vw,11rem)] leading-[0.86] tracking-[-0.035em] text-bone">
-          {words.length > 0 && <>{words.join(" ")} </>}
-          <span className="italic text-ember-300">{last}</span>
-        </h1>
+        <HeroTitle
+          lead={words.join(" ") || undefined}
+          accent={last ?? stay.name}
+          tail={
+            stay.mealsIncluded
+              ? `on Mousuni Island · ${inr(stay.price)} a night with all meals`
+              : `on Mousuni Island · ${inr(stay.price)} a night for the whole group`
+          }
+          size="text-[clamp(3rem,11vw,11rem)]"
+        />
 
         <div className="hz-rule mt-8 h-px origin-left bg-bone/20" />
 

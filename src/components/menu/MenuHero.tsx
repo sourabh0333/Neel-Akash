@@ -4,6 +4,7 @@ import { useRef } from "react";
 import Image from "next/image";
 import { kitchen, meals, site } from "@/lib/site";
 import { useHorizon, TideLine, ScrollCue, dms } from "../ui/Horizon";
+import HeroTitle from "../ui/HeroTitle";
 
 const dishCount = meals.reduce((n, m) => n + m.dishes.length, 0);
 
@@ -50,9 +51,12 @@ export default function MenuHero() {
           </span>
         </div>
 
-        <h1 className="hz-chars font-display text-[clamp(3.6rem,15vw,15rem)] leading-[0.82] tracking-[-0.035em] whitespace-nowrap text-bone">
-          The <span className="italic text-ember-300">kitchen</span>
-        </h1>
+        <HeroTitle
+          lead="The camp"
+          accent="menu"
+          tail="Bengali fish, rice and dal on Mousuni Island — every meal included"
+          size="text-[clamp(3.2rem,13vw,13rem)]"
+        />
 
         <div className="hz-rule mt-8 h-px origin-left bg-bone/20" />
 

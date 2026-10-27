@@ -4,6 +4,7 @@ import { useRef } from "react";
 import Image from "next/image";
 import { journey, site } from "@/lib/site";
 import { useHorizon, TideLine, ScrollCue, dms } from "../ui/Horizon";
+import HeroTitle from "../ui/HeroTitle";
 
 const total = journey.reduce((n, j) => n + j.minutes, 0);
 const doorToDoor = `≈ ${Math.floor(total / 60)}h ${String(total % 60).padStart(2, "0")}m`;
@@ -48,9 +49,12 @@ export default function GettingHero() {
           </span>
         </div>
 
-        <h1 className="hz-chars font-display text-[clamp(3.2rem,12.5vw,13rem)] leading-[0.82] tracking-[-0.035em] whitespace-nowrap text-bone">
-          Getting <span className="italic text-ember-300">here</span>
-        </h1>
+        <HeroTitle
+          lead="How to"
+          accent="reach"
+          tail="Mousuni Island from Kolkata by train & ferry"
+          size="text-[clamp(3.4rem,14vw,14rem)]"
+        />
 
         <div className="hz-rule mt-8 h-px origin-left bg-bone/20" />
 

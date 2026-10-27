@@ -4,6 +4,7 @@ import { useRef } from "react";
 import Image from "next/image";
 import { site, stays } from "@/lib/site";
 import { useHorizon, TideLine, ScrollCue, dms } from "../ui/Horizon";
+import HeroTitle from "../ui/HeroTitle";
 
 const inr = (n: number) => `₹${n.toLocaleString("en-IN")}`;
 
@@ -47,9 +48,12 @@ export default function StaysHero() {
           </span>
         </div>
 
-        <h1 className="hz-chars font-display text-[clamp(3.6rem,15vw,15rem)] leading-[0.82] tracking-[-0.035em] whitespace-nowrap text-bone">
-          Twelve <span className="italic text-ember-300">doors</span>
-        </h1>
+        <HeroTitle
+          lead="Tents &"
+          accent="cottages"
+          tail="on Mousuni Island, from ₹900 a night with all meals"
+          size="text-[clamp(3rem,12vw,12rem)]"
+        />
 
         <div className="hz-rule mt-8 h-px origin-left bg-bone/20" />
 
