@@ -10,6 +10,7 @@ import Magnetic from "@/components/ui/Magnetic";
 export const metadata: Metadata = {
   title: "Days here",
   description: `A day at ${site.name}: sunrise over the Chinai, the long walk at low tide, boats to Kakramarir Chor and a bonfire at night.`,
+  alternates: { canonical: "/days-here" },
 };
 
 /**

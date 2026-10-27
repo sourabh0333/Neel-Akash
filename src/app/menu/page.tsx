@@ -9,6 +9,7 @@ import MenuCta from "@/components/menu/MenuCta";
 export const metadata: Metadata = {
   title: "Menu",
   description: `The full meal plan at ${site.name}: welcome drink, lunch, evening snacks, dinner and next morning's breakfast.`,
+  alternates: { canonical: "/menu" },
 };
 
 /**

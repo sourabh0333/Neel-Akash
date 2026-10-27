@@ -6,8 +6,13 @@
  */
 
 export const site = {
-  /** Placeholder until the real domain is bought — feeds metadata and the sitemap. */
-  url: "https://penguinbeachcamp.example",
+  /**
+   * The live address — every canonical URL, the sitemap and robots.txt are
+   * built from it. Set NEXT_PUBLIC_SITE_URL to the real domain when the site
+   * goes live (e.g. https://penguinbeachcamp.in); the fallback is only a
+   * placeholder and must not be what search engines see.
+   */
+  url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://penguinbeachcamp.example",
   name: "Penguin Beach Camp",
   // The same name written in Bengali script (a transliteration, not a
   // translation) — shown beside the English in the nav, intro and footer.
