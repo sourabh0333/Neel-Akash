@@ -17,7 +17,7 @@ import { TokenInput, TokenSelect, TokenDate, Word } from "./ui/Token";
 export default function Contact({
   standalone = false,
 }: {
-  /** On /contact: the page header carries the heading, so the section drops its own. */
+  /** On /contact: the page carries the heading and the direct details, so the section drops its own. */
   standalone?: boolean;
 }) {
   const root = useRef<HTMLElement>(null);
@@ -320,48 +320,51 @@ export default function Contact({
           </div>
         </div>
 
-        {/* ── Direct details, full width so neither column carries them ── */}
-        <div className="mt-16 grid gap-8 border-t border-bone/12 pt-9 sm:grid-cols-3">
-          <div>
-            <p className="text-[0.58rem] uppercase tracking-[0.24em] text-sand-dim">
-              Call or WhatsApp
-            </p>
-            <a
-              href={`tel:${site.owner.phoneRaw}`}
-              data-cursor="Call"
-              className="link-draw mt-2 inline-block font-display text-2xl text-bone md:text-3xl"
-            >
-              {site.owner.phone}
-            </a>
+        {/* ── Direct details, full width so neither column carries them.
+            On /contact the sections around it already carry these. ── */}
+        {!standalone && (
+          <div className="mt-16 grid gap-8 border-t border-bone/12 pt-9 sm:grid-cols-3">
+            <div>
+              <p className="text-[0.58rem] uppercase tracking-[0.24em] text-sand-dim">
+                Call or WhatsApp
+              </p>
+              <a
+                href={`tel:${site.owner.phoneRaw}`}
+                data-cursor="Call"
+                className="link-draw mt-2 inline-block font-display text-2xl text-bone md:text-3xl"
+              >
+                {site.owner.phone}
+              </a>
+            </div>
+            <div>
+              <p className="text-[0.58rem] uppercase tracking-[0.24em] text-sand-dim">
+                Find us
+              </p>
+              <p className="mt-2 text-sm leading-relaxed text-sand">
+                {site.location.village}, {site.location.island}
+                <br />
+                {site.location.block}, {site.location.district} &mdash;{" "}
+                {site.location.pin}
+              </p>
+            </div>
+            <div>
+              <p className="text-[0.58rem] uppercase tracking-[0.24em] text-sand-dim">
+                Proprietor
+              </p>
+              <p className="mt-2 font-display text-2xl text-bone">
+                {site.owner.name}
+              </p>
+              <a
+                href={`https://www.google.com/maps/search/?api=1&query=${site.location.mapsQuery}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="link-draw mt-2 inline-block text-sm text-ember-300"
+              >
+                Get directions ↗
+              </a>
+            </div>
           </div>
-          <div>
-            <p className="text-[0.58rem] uppercase tracking-[0.24em] text-sand-dim">
-              Find us
-            </p>
-            <p className="mt-2 text-sm leading-relaxed text-sand">
-              {site.location.village}, {site.location.island}
-              <br />
-              {site.location.block}, {site.location.district} &mdash;{" "}
-              {site.location.pin}
-            </p>
-          </div>
-          <div>
-            <p className="text-[0.58rem] uppercase tracking-[0.24em] text-sand-dim">
-              Proprietor
-            </p>
-            <p className="mt-2 font-display text-2xl text-bone">
-              {site.owner.name}
-            </p>
-            <a
-              href={`https://www.google.com/maps/search/?api=1&query=${site.location.mapsQuery}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="link-draw mt-2 inline-block text-sm text-ember-300"
-            >
-              Get directions ↗
-            </a>
-          </div>
-        </div>
+        )}
       </div>
     </section>
   );

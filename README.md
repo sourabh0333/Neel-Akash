@@ -68,7 +68,7 @@ step.
 | Gallery | `/gallery` | `photos[]` (every picture in `gallery`, `stays` and `experiences`); sections in `src/components/gallery/` |
 | Days Here | `/days-here` | `experiences[]` and `meals[]`; sections in `src/components/days/` |
 | Getting Here | `/getting-here` | `journey[]`; sections in `src/components/getting/` |
-| Contact | `/contact` | the booking sentence |
+| Contact | `/contact` | the booking sentence; sections in `src/components/contact/` |
 
 `/sitemap.xml` lists them all. The menu itself is `navLinks` in
 `src/lib/site.ts`; the current page is highlighted. Seven items need the
@@ -158,6 +158,13 @@ before editing:
   a hand of tickets: the section pins and each leg's ticket slides up over
   the last, which sinks back into the deck, and is stamped as it lands.
   Then the journey board below, and a close with the proprietor's number.
+
+  The Contact page opens on the same horizon hero, then three ways in
+  (write, call, find) as cards with a glow that follows the pointer, the
+  booking sentence, a map of the island that settles in from a wider view
+  with the camp pulsing, the guest voices, and a few questions answered
+  from what the site already says (prices from `stays[]`, the route from
+  `journey[]`).
 
   The route map (`src/components/route/RouteMap.tsx`) plays the trip like a
   navigation app on the **real delta**: coastline, estuary, islands and the
