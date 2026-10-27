@@ -16,7 +16,6 @@ export default function GettingHerePage() {
         eyebrow="Getting here"
         title="A train, a van,"
         accent="and a boat"
-        back={{ href: "/#journey", label: "Home" }}
       >
         Roughly four and a half hours door to door from central Kolkata. The
         last leg is a ferry, so the tide matters &mdash; call{" "}
@@ -25,7 +24,7 @@ export default function GettingHerePage() {
         </a>{" "}
         and we will tell you which train to take.
       </PageHeader>
-      <Journey standalone />
+      <Journey />
     </main>
   );
 }

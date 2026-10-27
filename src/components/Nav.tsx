@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { usePathname } from "next/navigation";
 import { gsap, ScrollTrigger, prefersReducedMotion } from "@/lib/anim";
 import { site, navLinks } from "@/lib/site";
 import { lockScroll, unlockScroll } from "@/lib/scroll";
@@ -15,6 +16,10 @@ export default function Nav() {
   const bar = useRef<HTMLElement>(null);
   const menu = useRef<HTMLDivElement>(null);
   const [open, setOpen] = useState(false);
+  const pathname = usePathname();
+  /** The current page, or its parent ("Stays" while on a single stay). */
+  const isCurrent = (href: string) =>
+    pathname === href || pathname.startsWith(`${href}/`);
 
   /* Hide on scroll down, reveal on scroll up, and go glass once past the hero. */
   useEffect(() => {
@@ -154,12 +159,14 @@ export default function Nav() {
             </span>
           </a>
 
-          <nav className="hidden items-center gap-6 lg:flex xl:gap-9">
+          {/* Seven pages need the room: inline from xl, the menu button below. */}
+          <nav className="hidden items-center gap-6 xl:flex 2xl:gap-9">
             {navLinks.map((l) => (
               <a
                 key={l.href}
                 href={l.href}
-                className="link-draw whitespace-nowrap text-[0.78rem] font-medium tracking-[0.14em] text-sand uppercase transition-colors duration-300 hover:text-bone"
+                aria-current={isCurrent(l.href) ? "page" : undefined}
+                className="link-draw whitespace-nowrap text-[0.74rem] font-medium tracking-[0.14em] text-sand uppercase transition-colors duration-300 hover:text-bone aria-[current=page]:text-ember-300"
               >
                 {l.label}
               </a>
@@ -219,12 +226,13 @@ export default function Nav() {
                 <a
                   href={l.href}
                   onClick={() => setOpen(false)}
-                  className="nav-item group/nav flex items-baseline gap-5 py-1.5 md:py-2"
+                  aria-current={isCurrent(l.href) ? "page" : undefined}
+                  className="nav-item group/nav flex items-baseline gap-5 py-1 md:py-1.5"
                 >
                   <span className="font-sans text-[0.6rem] tracking-[0.3em] text-ember-500 tabular-nums">
                     0{i + 1}
                   </span>
-                  <span className="font-display t-huge text-bone transition-colors duration-500 group-hover/nav:text-ember-400">
+                  <span className="font-display text-[clamp(2.2rem,min(6.5vw,8.5vh),5.5rem)] leading-[1.02] text-bone transition-colors duration-500 group-hover/nav:text-ember-400 group-aria-[current=page]/nav:text-ember-300">
                     {l.label}
                   </span>
                 </a>

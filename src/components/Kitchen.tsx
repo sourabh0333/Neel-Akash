@@ -4,8 +4,7 @@ import { useRef, useState } from "react";
 import Image from "next/image";
 import { useGSAP } from "@gsap/react";
 import { gsap, prefersReducedMotion, isTouchOrSmall } from "@/lib/anim";
-import { kitchen, meals, site, type Dish } from "@/lib/site";
-import Reveal from "./ui/Reveal";
+import { meals, site, type Dish } from "@/lib/site";
 
 /** Flat list so the preview panel can address any dish by index. */
 const allDishes: Dish[] = meals.flatMap((m) => m.dishes);
@@ -104,31 +103,8 @@ export default function Kitchen() {
   const current = allDishes[active];
 
   return (
-    <section ref={root} className="relative bg-abyss py-28 md:py-36">
+    <section ref={root} className="relative bg-abyss pb-28 md:pb-36">
       <div className="mx-auto max-w-[100rem] px-6 md:px-10">
-        {/* Header */}
-        <div className="mb-16 grid gap-8 lg:grid-cols-12 lg:items-end">
-          <div className="lg:col-span-7">
-            <Reveal as="p" mode="fade" className="t-eyebrow text-ember-500">
-              All meals included
-            </Reveal>
-            <Reveal as="h2" className="font-display t-huge mt-5 text-bone">
-              {kitchen.heading}
-              <span className="font-bn ml-4 align-middle text-[0.42em] text-neel-300">
-                রান্নাঘর
-              </span>
-            </Reveal>
-          </div>
-          <Reveal
-            as="p"
-            mode="fade"
-            delay={0.1}
-            className="max-w-[44ch] leading-relaxed text-sand lg:col-span-5"
-          >
-            {kitchen.copy}
-          </Reveal>
-        </div>
-
         <div className="grid gap-12 lg:grid-cols-12 lg:gap-16">
           {/* ── Sticky plate (desktop) ── */}
           <div className="hidden lg:col-span-5 lg:block">
@@ -251,9 +227,6 @@ export default function Kitchen() {
                 className="link-draw text-sm text-ember-300"
               >
                 Tell us when you book
-              </a>
-              <a href="/menu" className="link-draw text-sm text-ember-300 sm:ml-auto">
-                See the full menu &rarr;
               </a>
             </div>
           </div>

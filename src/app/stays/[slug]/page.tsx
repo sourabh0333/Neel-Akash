@@ -42,7 +42,7 @@ export default async function StayPage({ params }: { params: Promise<Params> }) 
       <PageHeader
         eyebrow={stay.kicker}
         title={stay.name}
-        back={{ href: "/#stays", label: "All stays" }}
+        back={{ href: "/stays", label: "All stays" }}
       >
         {stay.blurb}
       </PageHeader>
@@ -118,7 +118,7 @@ export default async function StayPage({ params }: { params: Promise<Params> }) 
                 <PriceTag stay={stay} size="lg" />
                 <div className="mt-8 flex flex-col gap-3">
                   <a
-                    href={`/?stay=${stay.id}#contact`}
+                    href={`/contact?stay=${stay.id}`}
                     data-cursor="Book"
                     className="inline-flex items-center justify-center gap-3 rounded-full bg-bone px-8 py-4 text-[0.76rem] font-semibold uppercase tracking-[0.18em] text-abyss transition-colors duration-300 hover:bg-ember-300"
                   >

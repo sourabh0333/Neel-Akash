@@ -50,52 +50,35 @@ directions, testimonials and gallery captions all live there.
 
 ## Pages
 
-The home page is the full scrolling overview. Every other page is generated
-from the same data in `src/lib/site.ts`, so there is nothing to keep in step:
+Every item in the header menu is its own page. Home is the overview: the
+hero, the intro, a preview row for each page, the gallery strip, guest
+quotes and a booking band. Every page is built from `src/lib/site.ts`, so
+there is nothing to keep in step.
 
-| URL | What it is | Built from |
+| Header item | URL | Built from |
 |---|---|---|
-| `/` | the whole story, top to bottom | every section |
-| `/stays/<id>` | one page per stay: photo, features, price, "Book this stay" | `stays[]` (add a stay, get a page) |
-| `/menu` | the full meal plan from the menu card | `meals[]` |
-| `/getting-here` | the route from Kolkata, step by step | `journey[]` |
-| `/gallery` | every photograph, click to enlarge | `gallery[]` |
-| `/sitemap.xml` | all of the above, for search engines | `pages` |
+| (logo) | `/` | every preview links on |
+| The Island | `/island` | the island rail |
+| Stays | `/stays`, plus `/stays/<id>` per stay | `stays[]` (add a stay, get a page) |
+| Menu | `/menu` | `meals[]` |
+| Gallery | `/gallery` | `gallery[]` |
+| Days Here | `/days-here` | `experiences[]` |
+| Getting Here | `/getting-here` | `journey[]` |
+| Contact | `/contact` | the booking sentence |
 
-The nav, footer, cursor and smooth scrolling live in `src/app/layout.tsx` and
-wrap every page. Nav links are root-relative (`/#stays`), so they work from
-any page. "Book this stay" links to `/?stay=<id>#contact`, which opens the
-booking sentence with that stay already chosen.
-
-### ⚠️ Two things to confirm before going live
-
-1. **Exact village.** A JustDial listing under the old name, "Mousuni Island
-   Neel Akash Resort", places it in **Kusumtala**; most Mousuni camps are in
-   **Baliara**. Set `site.location.village` to whichever is correct.
-2. **Coordinates.** `site.location.lat/lng` are the island centroid, not the
-   plot. Drop a pin on Google Maps and paste the real values — they feed the
-   `Resort` structured data used for local search results.
-
-### Photographs
-
-`public/images/` currently holds **stock photography as placeholders** —
-they are not pictures of this property. Replace each file with a real photo
-of the same shape and nothing else needs to change:
-
-| File | Used for | Shape |
-|---|---|---|
-| `hero.jpg` | Hero background | wide, 2400px |
-| `stay-tent/bamboo/family.jpg` | Room list previews | 4:5 portrait |
-| `xp-sunrise/lowtide/boat/bonfire.jpg` | Pinned "a day here" scenes | wide |
-| `g-1.jpg` … `g-6.jpg` | Gallery contact sheet | mixed |
-| `dish-*.jpg` | Menu dish previews (8) | square-ish |
+`/sitemap.xml` lists them all. The menu itself is `navLinks` in
+`src/lib/site.ts`; the current page is highlighted. Seven items need the
+width, so they sit inline from 1280px and behind the menu button below that.
+The nav, footer, cursor and smooth scrolling live in `src/app/layout.tsx`.
+"Book this stay" links to `/contact?stay=<id>`, which opens the booking
+sentence with that stay already chosen.
 
 ## How the four "feature" sections work
 
 These carry the heavier interaction design, so they are worth knowing about
 before editing:
 
-- **The kitchen** — the menu is the stay's running order, transcribed from
+- **The kitchen** (`/menu`) — the menu is the stay's running order, transcribed from
   the camp's menu card (welcome drink → lunch → evening snacks → dinner →
   next morning's breakfast), not a price list. Hovering or focusing a dish wipes
   its photograph into the sticky plate panel and swaps the Bengali name and

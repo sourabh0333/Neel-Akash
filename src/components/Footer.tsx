@@ -3,7 +3,7 @@
 import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import { gsap, prefersReducedMotion } from "@/lib/anim";
-import { site, navLinks, pages } from "@/lib/site";
+import { site, navLinks, stayLinks } from "@/lib/site";
 import { LogoMark, LogoSeal } from "./brand/Logo";
 
 export default function Footer() {
@@ -50,7 +50,7 @@ export default function Footer() {
           </div>
 
           <div>
-            <p className="t-eyebrow mb-4 text-sand-dim">Sections</p>
+            <p className="t-eyebrow mb-4 text-sand-dim">Explore</p>
             <ul className="space-y-2.5">
               {navLinks.map((l) => (
                 <li key={l.href}>
@@ -66,9 +66,9 @@ export default function Footer() {
           </div>
 
           <div>
-            <p className="t-eyebrow mb-4 text-sand-dim">Pages</p>
+            <p className="t-eyebrow mb-4 text-sand-dim">Stays</p>
             <ul className="space-y-2.5">
-              {pages.map((l) => (
+              {stayLinks.map((l) => (
                 <li key={l.href}>
                   <a
                     href={l.href}

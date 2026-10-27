@@ -164,7 +164,6 @@ export const experiences: Experience[] = [
 /* ── Kitchen ───────────────────────────────────────────────── */
 
 export const kitchen = {
-  heading: "The kitchen",
   copy:
     "Everything is cooked to order by the family, on the day it is bought. The fish came off a boat this morning; nobody here is pretending otherwise.",
 };
@@ -406,19 +405,19 @@ export const testimonials: Testimonial[] = [
 
 /* ── Nav ───────────────────────────────────────────────────── */
 
-/** Root-relative, so they work from every page, not just the home page. */
+/** The header menu. Every item is its own page. */
 export const navLinks = [
-  { label: "The Island", href: "/#island" },
-  { label: "Stays", href: "/#stays" },
-  { label: "Days Here", href: "/#experiences" },
-  { label: "Getting Here", href: "/#journey" },
-  { label: "Contact", href: "/#contact" },
+  { label: "The Island", href: "/island" },
+  { label: "Stays", href: "/stays" },
+  { label: "Menu", href: "/menu" },
+  { label: "Gallery", href: "/gallery" },
+  { label: "Days Here", href: "/days-here" },
+  { label: "Getting Here", href: "/getting-here" },
+  { label: "Contact", href: "/contact" },
 ];
 
-/** Every stand-alone page, for the footer and the sitemap. */
-export const pages = [
-  ...stays.map((s) => ({ label: s.name, href: `/stays/${s.id}` })),
-  { label: "Menu", href: "/menu" },
-  { label: "Getting Here", href: "/getting-here" },
-  { label: "Gallery", href: "/gallery" },
-];
+/** One page per stay, under /stays. */
+export const stayLinks = stays.map((s) => ({ label: s.name, href: `/stays/${s.id}` }));
+
+/** Every page except home, for the sitemap. */
+export const pages = [...navLinks, ...stayLinks];

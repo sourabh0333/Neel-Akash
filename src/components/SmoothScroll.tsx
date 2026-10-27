@@ -32,8 +32,8 @@ export default function SmoothScroll() {
     gsap.ticker.add(raf);
     gsap.ticker.lagSmoothing(0);
 
-    // Same-page anchor links ("#contact", or "/#contact" while already on
-    // the home page) must go through Lenis or they teleport.
+    // Same-page anchor links ("#part", or "/page#part" while already on that
+    // page) must go through Lenis or they teleport.
     const onClick = (e: MouseEvent) => {
       const anchor = (e.target as HTMLElement)?.closest?.(
         "a[href]"
@@ -60,7 +60,7 @@ export default function SmoothScroll() {
     document.fonts?.ready.then(refresh);
     window.addEventListener("load", refresh);
 
-    // Arriving from another page on "/#contact": the browser jumps to the
+    // Arriving from another page on "/page#part": the browser jumps to the
     // target early, then pinned sections above it gain their spacing and
     // push it down, and each ScrollTrigger refresh can move the page again.
     // So for the first few seconds, re-aim after every refresh — unless the

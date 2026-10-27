@@ -4,7 +4,6 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { useGSAP } from "@gsap/react";
 import { gsap, prefersReducedMotion } from "@/lib/anim";
 import { site, stays } from "@/lib/site";
-import Reveal from "./ui/Reveal";
 import Magnetic from "./ui/Magnetic";
 import { TokenInput, TokenSelect, TokenDate, Word } from "./ui/Token";
 
@@ -30,7 +29,7 @@ export default function Contact() {
   const set = (k: keyof typeof form) => (v: string) =>
     setForm((f) => ({ ...f, [k]: v }));
 
-  // A room page links here as "/?stay=cottage#contact": preselect that stay.
+  // A room page links here as "/contact?stay=cottage": preselect that stay.
   useEffect(() => {
     const id = new URLSearchParams(window.location.search).get("stay");
     const chosen = stays.find((s) => s.id === id);
@@ -109,30 +108,8 @@ export default function Contact() {
   );
 
   return (
-    <section ref={root} id="contact" className="relative bg-abyss py-28 md:py-36">
+    <section ref={root} id="contact" className="relative bg-abyss pb-28 md:pb-36">
       <div className="mx-auto max-w-[100rem] px-6 md:px-10">
-        <div className="mb-14 grid gap-6 lg:grid-cols-12 lg:items-end">
-          <div className="lg:col-span-7">
-            <Reveal as="p" mode="fade" className="t-eyebrow text-ember-500">
-              Reservations
-            </Reveal>
-            <Reveal as="h2" className="font-display t-huge mt-5 text-bone">
-              Come for
-              <span className="italic text-neel-300"> a few days</span>
-            </Reveal>
-          </div>
-          <Reveal
-            as="p"
-            mode="fade"
-            delay={0.1}
-            className="text-sm leading-relaxed text-sand lg:col-span-5"
-          >
-            Fill in the sentence. It becomes a WhatsApp message to{" "}
-            {site.owner.name} with everything he needs — no forms, no accounts,
-            no card details.
-          </Reveal>
-        </div>
-
         <div className="composer grid gap-12 lg:grid-cols-12 lg:gap-14">
           {/* ── The sentence ── */}
           <div className="lg:col-span-7">

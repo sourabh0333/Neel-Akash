@@ -118,7 +118,7 @@ export default function Hero() {
 
           <Magnetic strength={0.3}>
             <a
-              href="#contact"
+              href="/contact"
               data-cursor="Book"
               className="group/cta relative inline-flex items-center gap-4 overflow-hidden rounded-full bg-bone px-8 py-4 text-abyss"
             >
