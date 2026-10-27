@@ -4,10 +4,11 @@ import { useRef } from "react";
 import Image from "next/image";
 import { site } from "@/lib/site";
 import { useHorizon, TideLine, ScrollCue, dms } from "../ui/Horizon";
+import HeroTitle from "../ui/HeroTitle";
 
 /**
  * The island page opens on the horizon: the photograph splits open from a
- * single line, "Mousuni" rises letter by letter, and on the way out the frame
+ * single line, "Mousuni Island" rises letter by letter, and on the way out the frame
  * draws in to a card while the name drifts up past it.
  */
 export default function IslandHero() {
@@ -46,9 +47,12 @@ export default function IslandHero() {
           </span>
         </div>
 
-        <h1 className="hz-chars font-display text-[clamp(4.2rem,19vw,19rem)] leading-[0.8] tracking-[-0.04em] text-bone">
-          Mousuni
-        </h1>
+        <HeroTitle
+          lead="Mousuni"
+          accent="Island"
+          tail="Travel guide: Baliara beach, four villages and the delta, mapped"
+          size="text-[clamp(3.4rem,13vw,13rem)]"
+        />
 
         <div className="hz-rule mt-8 h-px origin-left bg-bone/20" />
 

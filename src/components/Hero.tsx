@@ -6,6 +6,7 @@ import { site } from "@/lib/site";
 import HeroCanvas from "./HeroCanvas";
 import Magnetic from "./ui/Magnetic";
 import { useHorizon, TideLine, ScrollCue, dms } from "./ui/Horizon";
+import HeroTitle from "./ui/HeroTitle";
 
 /**
  * Home opens the way the Island page does: the sky and sea split open from
@@ -68,9 +69,12 @@ export default function Hero() {
           </span>
         </div>
 
-        <h1 className="hz-chars font-display t-mega whitespace-nowrap text-bone">
-          Penguin <span className="italic text-ember-300">Beach Camp</span>
-        </h1>
+        <HeroTitle
+          lead="Penguin"
+          accent="Beach Camp"
+          tail="Sea-facing tents & cottages on Mousuni Island, West Bengal"
+          size="t-mega"
+        />
 
         <div className="hz-rule mt-8 h-px origin-left bg-bone/20" />
 

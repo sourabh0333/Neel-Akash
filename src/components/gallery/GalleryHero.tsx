@@ -4,6 +4,7 @@ import { useRef } from "react";
 import Image from "next/image";
 import { photos, site } from "@/lib/site";
 import { useHorizon, TideLine, ScrollCue, dms } from "../ui/Horizon";
+import HeroTitle from "../ui/HeroTitle";
 
 /** The gallery opens the way the other pages do — on the horizon. */
 export default function GalleryHero() {
@@ -45,9 +46,12 @@ export default function GalleryHero() {
           </span>
         </div>
 
-        <h1 className="hz-chars font-display text-[clamp(3.6rem,15vw,15rem)] leading-[0.82] tracking-[-0.035em] whitespace-nowrap text-bone">
-          In <span className="italic text-ember-300">pictures</span>
-        </h1>
+        <HeroTitle
+          lead="Mousuni in"
+          accent="pictures"
+          tail="Photos of the beach, the tents and the bonfire nights"
+          size="text-[clamp(2.8rem,10vw,10.5rem)]"
+        />
 
         <div className="hz-rule mt-8 h-px origin-left bg-bone/20" />
 

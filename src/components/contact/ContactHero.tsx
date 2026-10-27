@@ -4,6 +4,7 @@ import { useRef } from "react";
 import Image from "next/image";
 import { site } from "@/lib/site";
 import { useHorizon, TideLine, ScrollCue, dms } from "../ui/Horizon";
+import HeroTitle from "../ui/HeroTitle";
 
 /** Contact opens the way the other pages do — on the horizon. */
 export default function ContactHero() {
@@ -45,9 +46,12 @@ export default function ContactHero() {
           </span>
         </div>
 
-        <h1 className="hz-chars font-display text-[clamp(3.2rem,12.5vw,13rem)] leading-[0.82] tracking-[-0.035em] whitespace-nowrap text-bone">
-          Say <span className="italic text-ember-300">namaskar</span>
-        </h1>
+        <HeroTitle
+          lead="Book your"
+          accent="stay"
+          tail="at Penguin Beach Camp, Mousuni Island — call or WhatsApp"
+          size="text-[clamp(3.2rem,12.5vw,13rem)]"
+        />
 
         <div className="hz-rule mt-8 h-px origin-left bg-bone/20" />
 

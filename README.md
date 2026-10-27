@@ -324,6 +324,11 @@ src/app/robots.ts       /robots.txt
   go to Open Graph and Twitter, so a shared link previews its own page. Each
   stay's title and snippet are written from its data in `stays[]`, so a
   price change reaches search too.
+- **Headings:** every page's single `<h1>` is keyword-led and reads as one
+  phrase — a big display line plus a smaller line that finishes the
+  sentence (`HeroTitle` in `src/components/ui/`), e.g. "How to reach ·
+  Mousuni Island from Kolkata by train & ferry", "Tents & cottages · on
+  Mousuni Island, from ₹900 a night with all meals".
 - **Structured data:** the layout carries the business as a `Resort` and
   `Campground` (address, coordinates, phone, price range, amenities, image,
   and each stay as an `Offer` with its real price); every inner page adds a
