@@ -10,6 +10,7 @@ import GettingTickets from "@/components/getting/GettingTickets";
 export const metadata: Metadata = {
   title: "Getting here",
   description: `How to reach ${site.name} on ${site.location.island}: train from Sealdah to Namkhana, road to Bagdanga Ghat, ferry across the Chinai, then a toto to the camp.`,
+  alternates: { canonical: "/getting-here" },
 };
 
 /**

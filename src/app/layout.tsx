@@ -49,10 +49,11 @@ export const metadata: Metadata = {
     "West Bengal beach camping",
   ],
   authors: [{ name: site.owner.name }],
+  // No og:url here: a layout's would be inherited by every page and point
+  // them all at the home page. Each page declares its own canonical instead.
   openGraph: {
     type: "website",
     locale: "en_IN",
-    url,
     siteName: site.name,
     title: `${site.name} — ${site.tagline}`,
     description: site.description,
@@ -62,7 +63,6 @@ export const metadata: Metadata = {
     title: `${site.name} — ${site.location.island}`,
     description: site.description,
   },
-  robots: { index: true, follow: true },
 };
 
 export const viewport: Viewport = {
@@ -75,6 +75,8 @@ const jsonLd = {
   "@context": "https://schema.org",
   "@type": "Resort",
   name: site.name,
+  url,
+  image: `${url}/opengraph-image`,
   description: site.description,
   address: {
     "@type": "PostalAddress",

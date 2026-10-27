@@ -46,7 +46,7 @@ directions, testimonials and gallery captions all live there.
 | How to reach steps | `journey[]` in `src/lib/site.ts` |
 | Colours / type scale | `@theme` block in `src/app/globals.css` |
 | Photographs | replace files in `public/images/` (keep the filenames) |
-| Live domain (metadata, sitemap) | `site.url` in `src/lib/site.ts` |
+| Live domain (canonicals, sitemap, robots) | `NEXT_PUBLIC_SITE_URL` (see Deploying) |
 
 ## Pages
 
@@ -70,7 +70,7 @@ step.
 | Getting Here | `/getting-here` | `journey[]`; sections in `src/components/getting/` |
 | Contact | `/contact` | the booking sentence; sections in `src/components/contact/` |
 
-`/sitemap.xml` lists them all. The menu itself is `navLinks` in
+`/sitemap.xml` lists them all (see SEO below). The menu itself is `navLinks` in
 `src/lib/site.ts`; the current page is highlighted. Seven items need the
 width, so they sit inline from 1280px and behind the menu button below that.
 The nav, footer, cursor and smooth scrolling live in `src/app/layout.tsx`.
@@ -283,13 +283,49 @@ means no server, no payment integration and no PII stored anywhere.
 
 ## Deploying
 
-Static, no environment variables, no database:
+Static, no database. One environment variable:
 
 ```bash
-npx vercel
+NEXT_PUBLIC_SITE_URL=https://your-real-domain.in npx vercel
 ```
 
-Before launch, set the real domain in `metadata.metadataBase` in
-[`src/app/layout.tsx`](src/app/layout.tsx) (currently a placeholder) so Open
-Graph and canonical URLs resolve correctly, and add an
-`opengraph-image.jpg` to `src/app/` for link previews.
+`NEXT_PUBLIC_SITE_URL` is the live address. Every canonical URL, the
+sitemap and robots.txt are built from it, so set it in the hosting
+dashboard before the first public deploy; without it they point at a
+placeholder domain.
+
+## SEO
+
+```
+src/lib/seo.ts          every page: its address, the files it is built from, its photos
+src/app/sitemap.ts      /sitemap.xml
+src/app/robots.ts       /robots.txt
+```
+
+- **`/sitemap.xml`** lists every page with its canonical, absolute URL and
+  the photographs on it (an image sitemap). Its `lastmod` is the date of
+  the last commit that changed the files the page is built from, taken
+  from git at build time; if the build has no git history (a shallow
+  clone) the date is left out rather than guessed. `priority` and
+  `changefreq` are deliberately not used: Google and Bing ignore both, and
+  Google only trusts `lastmod` while it stays accurate. A new page goes in
+  `routes` in `src/lib/seo.ts`; a new stay is picked up automatically.
+- **`/robots.txt`** opens the whole site to crawlers and gives the sitemap's
+  address.
+- **Canonicals:** every page declares its own (`alternates.canonical`), so
+  addresses with tracking parameters or a trailing slash fold into one.
+  The 404 is `noindex`.
+- **Structured data:** the layout carries a `Resort` record (address,
+  coordinates, phone, price range, amenities, image) for rich results.
+
+After going live:
+
+1. Add the domain to [Google Search Console](https://search.google.com/search-console)
+   (a Domain property, verified by a DNS TXT record), then under
+   **Sitemaps** submit `sitemap.xml`. Google no longer accepts sitemap
+   "pings", so this and robots.txt are how it finds the sitemap.
+2. Do the same in [Bing Webmaster Tools](https://www.bing.com/webmasters)
+   (it can import the site straight from Search Console).
+3. Create the camp's [Google Business Profile](https://business.google.com)
+   with the same name, address and phone as the site. For "beach camp near
+   Kolkata" style searches it matters as much as the site itself.

@@ -10,6 +10,7 @@ import IslandCta from "@/components/island/IslandCta";
 export const metadata: Metadata = {
   title: "The island",
   description: `${site.location.island}, where the Muri Ganga and the Chinai meet the Bay of Bengal: four villages and one long beach, three hours from Kolkata.`,
+  alternates: { canonical: "/island" },
 };
 
 /**

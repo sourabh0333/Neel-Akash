@@ -9,6 +9,7 @@ import StaysCta from "@/components/stays/StaysCta";
 export const metadata: Metadata = {
   title: "Stays",
   description: `Sea-facing tents, cottages and a group special at ${site.name}, ${site.location.island}. Prices per night with all meals.`,
+  alternates: { canonical: "/stays" },
 };
 
 /**

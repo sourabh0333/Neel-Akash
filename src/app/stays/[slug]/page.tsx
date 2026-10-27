@@ -26,6 +26,7 @@ export async function generateMetadata({
   return {
     title: stay.name,
     description: stay.blurb,
+    alternates: { canonical: `/stays/${stay.id}` },
     openGraph: { title: `${stay.name} · ${site.name}`, description: stay.blurb },
   };
 }

@@ -9,6 +9,7 @@ import Magnetic from "@/components/ui/Magnetic";
 export const metadata: Metadata = {
   title: "Gallery",
   description: `Photographs of the beach, the tide, the stays and the days at ${site.name}, ${site.location.island}.`,
+  alternates: { canonical: "/gallery" },
 };
 
 /**

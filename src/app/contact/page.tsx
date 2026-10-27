@@ -11,6 +11,7 @@ import ContactFaq from "@/components/contact/ContactFaq";
 export const metadata: Metadata = {
   title: "Contact & booking",
   description: `Book a stay at ${site.name}: a WhatsApp message to ${site.owner.name}, or call ${site.owner.phone}.`,
+  alternates: { canonical: "/contact" },
 };
 
 /**
