@@ -166,6 +166,12 @@ before editing:
   from what the site already says (prices from `stays[]`, the route from
   `journey[]`).
 
+  Each stay's own page (`/stays/<id>`) opens on the same horizon hero over
+  its photograph, with the price, who it sleeps and whether meals are in;
+  then what you get as tiles beside a booking card that stays in view, the
+  day's meals (only for stays that include them), the other stays opening
+  out as you reach them, and the proprietor's number.
+
   The route map (`src/components/route/RouteMap.tsx`) plays the trip like a
   navigation app on the **real delta**: coastline, estuary, islands and the
   Hooghly from Natural Earth, with the railway drawn through its real
