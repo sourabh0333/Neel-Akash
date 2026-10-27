@@ -1,11 +1,14 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1500" height="288" viewBox="0 0 500 96">
   <title>Penguin Beach Camp — Mousuni Island</title>
   <g transform="translate(14 16)"><g transform="translate(0 0)">
+    <path d="M32 5a27 27 0 0 1 20.56 44.5H11.44A27 27 0 0 1 32 5Z" fill="#f39c4a"/>
+    <path d="M9.9 47.5q5.53-2.6 11.05 0t11.05 0 11.05 0 11.05 0A27 27 0 0 1 9.9 47.5Z" fill="#f4efe6"/>
     <path d="M2.4 32a29.6 29.6 0 1 0 59.2 0a29.6 29.6 0 1 0-59.2 0Z" fill="none" stroke="#f4efe6" stroke-width="2.4" stroke-linecap="round"/>
-    <path d="M13.33 47.5A19 19 0 1 1 50.67 47.5Z" fill="#f39c4a" fill-rule="evenodd"/>
-    <path d="M9.9 47.5q5.53-2.6 11.05 0t11.05 0 11.05 0 11.05 0A27 27 0 0 1 9.9 47.5Z" fill="#f4efe6" fill-rule="evenodd"/>
-    <path d="M32 6.5C35 6.5 37.2 8.6 38.5 12L52.5 48.5C53.6 51.4 51.9 53.5 49 53.5H15C12.1 53.5 10.4 51.4 11.5 48.5L25.5 12C26.8 8.6 29 6.5 32 6.5Z M32 26.5C36 33 39.6 43 42.6 53.5H21.4C24.4 43 28 33 32 26.5Z M27.6 16.2a1.7 1.7 0 1 0 3.4 0a1.7 1.7 0 1 0-3.4 0Z M33 16.2a1.7 1.7 0 1 0 3.4 0a1.7 1.7 0 1 0-3.4 0Z" transform="translate(32 31.4) scale(0.56) translate(-32 -30)" fill="#f4efe6" fill-rule="evenodd"/>
-    <path d="M29.9 19.4H34.1L32 22.7Z" transform="translate(32 31.4) scale(0.56) translate(-32 -30)" fill="#f39c4a" fill-rule="evenodd"/>
+    <path d="M30 6C24.5 6 21.5 10.5 21.5 15.5C21.5 19 21 22 19.5 26C16.5 34 15.5 44 17.5 51C18.3 54 19.5 56 21 57L15.5 60L23.5 58.2C27 58.8 33 58.8 37 57.6C42 55.6 44.6 49 44.1 41C43.6 33 41.2 27 38.2 22.6C37.4 21.4 37.6 19.8 38 18.4C38.8 15.6 38.6 12.8 37.2 10.6C35.6 7.6 33 6 30 6Z M37 12.4L46.4 15.4L37.4 17.8C38.2 16 38.1 14.2 37 12.4Z" transform="translate(11.5 7.2) scale(0.66)" fill="#0b1424"/>
+    <path d="M37.3 19.8C40.2 24.2 42.7 30.5 42.8 40C42.9 48 40.4 54 35.4 56.3C32.8 52 31.4 44 31.7 36C32 29 34 23.8 37.3 19.8Z" transform="translate(11.5 7.2) scale(0.66)" fill="#f4efe6"/>
+    <path d="M31.4 12.2a1.15 1.15 0 1 0 2.3 0a1.15 1.15 0 1 0-2.3 0Z" transform="translate(11.5 7.2) scale(0.66)" fill="#f4efe6"/>
+    <path d="M38.2 16.3L45.2 15.5L37.6 17.7Z M30.6 16.4C33.6 17.6 35.4 20.2 35 23.6C33.4 21.8 31.6 19.8 30.6 16.4Z" transform="translate(11.5 7.2) scale(0.66)" fill="#f39c4a"/>
+    <path d="M29 57.8C31.5 57.1 36 57.1 40 58.3C37.2 59.8 32.6 60 29 59.3Z" transform="translate(11.5 7.2) scale(0.66)" fill="#f39c4a"/>
   </g></g>
   <text x="100" y="52" fill="#f4efe6" font-family="Instrument Serif, Georgia, 'Times New Roman', serif" font-size="38" letter-spacing="-0.5">Penguin Beach Camp</text>
   <text x="102" y="72" fill="#8d8577" font-family="Inter, Helvetica, Arial, sans-serif" font-size="10" letter-spacing="3.4">MOUSUNI ISLAND · WEST BENGAL</text>

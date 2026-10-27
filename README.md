@@ -129,19 +129,21 @@ node --experimental-strip-types scripts/gen-brand.ts
 
 ### Why it looks like this
 
-**A round badge.** The sun is going down into the bay, and a penguin stands
-on the shore in front of it.
+**A round badge with a real penguin in it.** A King penguin stands on the
+shore in profile, against the sun going down over the bay. The whole sky
+inside the ring is one ember disc, so the penguin always reads as a crisp
+silhouette. Its markings are the real ones: a dark back and head, a white
+front, and an ember stripe on the beak, ear patch and feet. The surf at its
+feet is pale enough to read as ice as well as foam.
 
-**The penguin is the tent.** A penguin standing upright is already an
-A-frame: narrow at the head, wide at the base. So the body is one rounded
-triangle, and the white belly is cut out as the tent's door, with the sun
-showing through it. One shape says both halves of the name, penguin and camp,
-and the sun and sea around it say beach.
+**Built to be reproduced.** It uses flat fills in four tones:
 
-**Built to be reproduced.** It uses flat fills in two tones only: ink
-(`currentColor`) and ember. The eyes and door are holes (even-odd fill). The
-penguin stands clear of the water rather than being outlined in the
-background colour, so the badge sits cleanly on dark, light or a photograph.
+| Tone | Colour | Used for |
+|---|---|---|
+| `ink` | `currentColor` | the ring and sea, so the badge follows the text colour around it |
+| `accent` | ember | sky, beak stripe, ear patch, feet |
+| `dark` | blue-black `#0b1424` | the penguin's back, head and beak |
+| `light` | bone | the penguin's front and eye |
 
 ### Tiers
 
@@ -149,7 +151,7 @@ background colour, so the badge sits cleanly on dark, light or a photograph.
 |---|---|---|
 | `full` | everything | 40px and up: footer, OG card, print |
 | `simple` | everything (identical to `full` for now) | 24–40px: nav, seal |
-| `micro` | drops the eyes and beak | under 24px: favicon |
+| `micro` | ring, sky, sea, silhouette and front | under 24px: favicon |
 
 Wordmarks are always real HTML text, never SVG paths, so they stay
 selectable and searchable.
