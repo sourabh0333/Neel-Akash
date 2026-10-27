@@ -12,7 +12,7 @@ export const contentType = "image/png";
  * share card and the site can never disagree about what the logo looks like.
  */
 export default function OpengraphImage() {
-  const mark = markSvgString({ stroke: c.bone, accent: c.ember });
+  const mark = markSvgString({ ink: c.bone, accent: c.ember });
   const src = `data:image/svg+xml;base64,${Buffer.from(mark).toString("base64")}`;
 
   return new ImageResponse(

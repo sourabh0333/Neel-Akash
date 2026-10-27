@@ -128,45 +128,31 @@ node --experimental-strip-types scripts/gen-brand.ts
 
 ### Why it looks like this
 
-A disc on a horizon inside a circle is the house style of every beach resort
-on earth. Swap the name and it still works, which is the proof that it says
-nothing. This mark is built from two things that belong to this island and
-nowhere else.
+**The penguin is the tent.** A penguin standing upright is already an
+A-frame: narrow at the head, wide at the base. So the body is one rounded
+triangle, and the white belly is cut out as the tent's door. One shape says
+both halves of the name, penguin and camp. Flippers flare off it like
+guy-lines, and the ember feet double as tent pegs.
 
-**The matra (মাত্রা).** Bengali is written hanging from a horizontal
-headstroke that runs along the top of every word and binds it together — the
-single most recognisable feature of the script. So the mark is a matra with
-everything hanging beneath it, and the empty field above the stroke is the sky
-over the bay: not a picture of a sky, the typographic one that Bengali itself
-hangs from.
+**The beach is around it.** A low ember sun sits over its shoulder, the way
+it hangs over the bay, and a single wave runs underfoot.
 
-**Kantha (কাঁথা).** The running-stitch quilting of rural Bengal, sewn by women
-from layered worn saris — the craft of this exact stretch of delta. Its
-earliest form is a plain running stitch, and a running stitch is literally a
-dashed line; it is prized for the rippled effect the stitches produce, which
-is water. So the land and sea below the matra are stitched, not drawn.
-
-**The taper.** Rows narrow as they descend. Mousuni is a deltaic island
-tapering south into the Bay of Bengal and losing its south-western edge to
-erosion; the rows read equally as the island and as the tide going out across
-four kilometres of flat sand. One stitch in the last row is ember — kantha is
-often worked with a contrasting thread pulled from a different sari.
-
-Kantha is sewn from memory without pre-drawing, so stitch lengths carry a
-small **deterministic** wobble (fixed seed, identical every build). The mark
-is hand-sewn, not printed — and it is still reproducible.
+**Built to be reproduced.** It uses flat fills in two tones only: ink
+(`currentColor`) and ember. The eyes and door are holes (even-odd fill), not
+white shapes, so the mark sits cleanly on dark, light or a photograph with no
+halo.
 
 ### Tiers
 
-| Tier | Rows | Use |
+| Tier | Keeps | Use |
 |---|---|---|
-| `full` | 5 stitched rows | 40px and up — footer, hero |
-| `simple` | 4 stitched rows | 24–40px — nav, seal |
-| `micro` | 3 solid rows | under 24px — favicon |
+| `full` | everything, including the wave | 40px and up: footer, OG card, print |
+| `simple` | drops the wave | 24–40px: nav, seal |
+| `micro` | body, door, beak and sun | under 24px: favicon |
 
-Below about 24px a dash pattern silts up into mud, so `micro` drops the
-stitching and keeps the silhouette. Wordmarks are always real HTML text,
-never SVG paths, so they stay selectable and searchable.
+Below about 20px the eyes and flippers fill in and muddy the silhouette, so
+`micro` keeps only the shape that still reads. Wordmarks are always real HTML
+text, never SVG paths, so they stay selectable and searchable.
 
 > Two traps. Turbopack's SVG dimension parser rejects any file containing an
 > XML comment (`Source code does not contain a <svg> root element`) — the

@@ -6,118 +6,92 @@
  * Every surface reads from here: the React component, the favicon, the print
  * files, the share card. Nothing is drawn twice, so the mark cannot drift.
  *
- * ── WHY THIS, AND NOT A SUN OVER WATER ──────────────────────
+ * ── THE IDEA ────────────────────────────────────────────────
  *
- * A disc on a horizon inside a circle is the house style of every beach
- * resort on earth. Swap the name and it still works — which is the proof
- * that it says nothing. This mark is built from two things that belong to
- * this island and nowhere else.
+ * The penguin IS the tent. A penguin standing upright is already an A-frame:
+ * narrow at the head, wide at the base. So the body is one rounded triangle,
+ * and the white belly is cut out as the tent's door. One shape says both
+ * halves of the name — penguin, camp — and the rest says beach:
  *
- * 1. THE MATRA (মাত্রা)
- *    Bengali is written hanging from a horizontal headstroke — the matra —
- *    that runs along the top of every word and binds it together. It is the
- *    single most recognisable feature of the script.
+ *    • an ember sun over its shoulder, low, the way it sits over the bay
+ *    • a single wave underfoot
+ *    • ember feet that double as tent pegs
  *
- *    So the mark is a matra with everything hanging beneath it, and the
- *    empty field above the stroke is the sky over the bay. Not a picture of
- *    a sky — the typographic one, the line Bengali itself hangs from.
+ * ── THE RULES ───────────────────────────────────────────────
  *
- * 2. KANTHA (কাঁথা)
- *    The running-stitch quilting of rural Bengal, sewn by women from layered
- *    worn saris — the craft of this exact stretch of delta. Its earliest and
- *    plainest form is a straight running stitch, and a running stitch is
- *    literally a dashed line. It is also, in every account of it, prized for
- *    the "rippled effect" the stitches produce: water.
- *
- *    So the land and sea below the matra are stitched, not drawn. Kantha is
- *    worked from memory without pre-drawing, so the stitch lengths here carry
- *    a small deterministic irregularity — the mark is hand-sewn, not printed.
- *
- * THE FORM
- *    Rows of stitching narrow as they descend: Mousuni is a deltaic island
- *    tapering south into the Bay of Bengal, and it is losing its south-western
- *    edge to erosion. The rows read equally as the island itself and as the
- *    tide going out across four kilometres of flat sand.
- *
- *    One stitch in the last row is ember — the single warm thread. Kantha is
- *    often worked with a contrasting thread pulled from a different sari.
+ *    • Flat fills only, two tones: ink (currentColor) and ember.
+ *    • Eyes and door are holes (even-odd), not white shapes, so the mark sits
+ *      on any background — dark, light or photograph — without a halo.
+ *    • Drawn on a 64-unit grid, centred on x = 32.
  */
-
-/* ── The matra ─────────────────────────────────────────────────
-   Flat caps, not round: it is a typographic rule, not a drawn line. */
-export const MATRA = { y: 14, x1: 8, x2: 56, width: 3 };
-
-/**
- * Stitched rows. `half` is the half-width about x=32, so every row is
- * centred by construction and the taper is arithmetic.
- */
-export const ROWS = [
-  { y: 24, half: 24 },
-  { y: 31, half: 22 },
-  { y: 38, half: 19 },
-  { y: 45, half: 15 },
-  { y: 52, half: 9, accent: true },
-];
-
-const STITCH = 3.4;
-const GAP = 2.6;
-
-/** Deterministic jitter — a fixed seed, so every render is identical. */
-function wobble(seed: number) {
-  const x = Math.sin(seed * 12.9898) * 43758.5453;
-  return x - Math.floor(x); // 0…1
-}
-
-export type Stitch = { x1: number; x2: number; y: number; accent?: boolean };
-
-/**
- * Lay a row of running stitches between x1 and x2. Stitch count is chosen so
- * the row begins and ends with a whole stitch — a real seam does not stop
- * mid-stitch — then the leftover is shared out and each length nudged
- * slightly, because kantha is sewn by eye.
- */
-function stitchRow(y: number, half: number, seed: number, accent = false): Stitch[] {
-  const x1 = 32 - half;
-  const x2 = 32 + half;
-  const span = x2 - x1;
-
-  const n = Math.max(2, Math.round((span + GAP) / (STITCH + GAP)));
-  const gap = (span - n * STITCH) / (n - 1);
-
-  const out: Stitch[] = [];
-  for (let i = 0; i < n; i++) {
-    const nudge = (wobble(seed * 31 + i) - 0.5) * 0.7;
-    const start = x1 + i * (STITCH + gap);
-    const end = Math.min(x2, start + STITCH + nudge);
-    out.push({
-      x1: Math.round(start * 100) / 100,
-      y,
-      x2: Math.round(end * 100) / 100,
-      // The warm thread sits one in from the end, not dead centre.
-      accent: accent && i === n - 2,
-    });
-  }
-  return out;
-}
 
 export type Detail = "full" | "simple" | "micro";
 
-/** Which rows survive, and whether they are stitched or solid. */
-export function rowsFor(detail: Detail) {
+export type Part = {
+  d: string;
+  tone: "ink" | "accent";
+  /** Stroke width; when absent the part is filled. */
+  stroke?: number;
+};
+
+/* ── Pieces ──────────────────────────────────────────────────── */
+
+/** Rounded A-frame: head at the apex, canvas flaring to the ground. */
+const BODY =
+  "M32 6.5C35 6.5 37.2 8.6 38.5 12L52.5 48.5C53.6 51.4 51.9 53.5 49 53.5H15C12.1 53.5 10.4 51.4 11.5 48.5L25.5 12C26.8 8.6 29 6.5 32 6.5Z";
+
+/** The door — and the belly. Curved flaps, open to the ground. */
+const DOOR = "M32 26.5C36 33 39.6 43 42.6 53.5H21.4C24.4 43 28 33 32 26.5Z";
+
+const EYES =
+  "M27.6 16.2a1.7 1.7 0 1 0 3.4 0a1.7 1.7 0 1 0-3.4 0Z M33 16.2a1.7 1.7 0 1 0 3.4 0a1.7 1.7 0 1 0-3.4 0Z";
+
+/** Flippers flare off the canvas like guy-lines pulled taut. */
+const FLIPPERS =
+  "M17.6 33.5C13 37 10 42.5 9.6 48.2C12.6 45.6 14.8 43.6 16.4 42.2Z M46.4 33.5C51 37 54 42.5 54.4 48.2C51.4 45.6 49.2 43.6 47.6 42.2Z";
+
+const BEAK = "M29.9 19.4H34.1L32 22.7Z";
+
+const SUN = "M41 14.5a6.5 6.5 0 1 0 13 0a6.5 6.5 0 1 0-13 0Z";
+
+const FEET =
+  "M17.5 53.5h5a1.5 1.5 0 0 1 0 3h-5a1.5 1.5 0 0 1 0-3Z M41.5 53.5h5a1.5 1.5 0 0 1 0 3h-5a1.5 1.5 0 0 1 0-3Z";
+
+const WAVE = "M4 60.5q7-3.6 14 0t14 0 14 0 14 0";
+
+/* ── Tiers ───────────────────────────────────────────────────── */
+
+/**
+ * Which pieces survive at each size.
+ *
+ *   full    40px and up — everything
+ *   simple  24–40px (nav, seal) — drops the wave, which turns to a smudge
+ *   micro   under 24px (favicon) — body, door, beak and sun only; eyes and
+ *           flippers fill in below ~20px and just muddy the silhouette
+ */
+export function partsFor(detail: Detail): Part[] {
+  const sun: Part = { d: SUN, tone: "accent" };
+  const beak: Part = { d: BEAK, tone: "accent" };
+
   if (detail === "micro") {
-    // Below ~24px a dash pattern silts up into mud. Keep the silhouette,
-    // drop the stitching, and carry only three rows.
-    return {
-      solid: [ROWS[0], ROWS[2], ROWS[4]],
-      stitches: [] as Stitch[],
-    };
+    return [sun, { d: `${BODY} ${DOOR}`, tone: "ink" }, beak];
   }
-  const rows = detail === "simple" ? [ROWS[0], ROWS[1], ROWS[2], ROWS[4]] : ROWS;
-  return {
-    solid: [] as typeof ROWS,
-    stitches: rows.flatMap((r, i) => stitchRow(r.y, r.half, i + 1, r.accent)),
-  };
+
+  const parts: Part[] = [
+    sun,
+    { d: `${BODY} ${DOOR} ${EYES} ${FLIPPERS}`, tone: "ink" },
+    beak,
+    { d: FEET, tone: "accent" },
+  ];
+  if (detail === "full") parts.push({ d: WAVE, tone: "ink", stroke: 2.4 });
+  return parts;
 }
+
+/**
+ * Vertical nudge per tier. Micro loses the feet and wave, so what is left
+ * sits high on the grid; this re-centres it in the favicon tile.
+ */
+export const TIER_SHIFT: Record<Detail, number> = { full: 0, simple: 0, micro: 2 };
 
 export const VIEWBOX = { w: 64, h: 64 };
 
@@ -136,14 +110,14 @@ export const brandColors = {
  */
 export function markSvgString({
   detail = "full",
-  stroke = brandColors.bone,
+  ink = brandColors.bone,
   accent = brandColors.ember,
   background,
   size,
   pad = 0,
 }: {
   detail?: Detail;
-  stroke?: string;
+  ink?: string;
   accent?: string;
   background?: string;
   size?: number;
@@ -158,31 +132,19 @@ export function markSvgString({
       }/>`
     : "";
 
-  const { solid, stitches } = rowsFor(detail);
-
-  const solidRows = solid
-    .map(
-      (r) =>
-        `<line x1="${32 - r.half}" y1="${r.y}" x2="${32 + r.half}" y2="${r.y}"${
-          r.accent ? ` stroke="${accent}"` : ""
-        }/>`
-    )
-    .join("");
-
-  const sewn = stitches
-    .map(
-      (s) =>
-        `<line x1="${s.x1}" y1="${s.y}" x2="${s.x2}" y2="${s.y}"${
-          s.accent ? ` stroke="${accent}"` : ""
-        }/>`
-    )
-    .join("");
+  const paths = partsFor(detail)
+    .map((p) => {
+      const color = p.tone === "accent" ? accent : ink;
+      return p.stroke
+        ? `<path d="${p.d}" fill="none" stroke="${color}" stroke-width="${p.stroke}" stroke-linecap="round"/>`
+        : `<path d="${p.d}" fill="${color}" fill-rule="evenodd"/>`;
+    })
+    .join("\n    ");
 
   return `<svg xmlns="http://www.w3.org/2000/svg"${dim} viewBox="0 0 ${w} ${h}">
   ${bg}
-  <g transform="translate(${pad} ${pad})">
-    <line x1="${MATRA.x1}" y1="${MATRA.y}" x2="${MATRA.x2}" y2="${MATRA.y}" stroke="${stroke}" stroke-width="${MATRA.width}"/>
-    <g stroke="${stroke}" stroke-width="2.1" stroke-linecap="round">${solidRows}${sewn}</g>
+  <g transform="translate(${pad} ${pad + TIER_SHIFT[detail]})">
+    ${paths}
   </g>
 </svg>`;
 }
