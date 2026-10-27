@@ -14,7 +14,7 @@ export default function MenuPage() {
       <PageHeader eyebrow="All meals included · রান্নাঘর" title="The menu">
         {kitchen.copy}
       </PageHeader>
-      <Kitchen />
+      <Kitchen standalone />
     </main>
   );
 }

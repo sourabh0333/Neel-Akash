@@ -16,7 +16,7 @@ export default function ContactPage() {
         {site.owner.name} with everything he needs — no forms, no accounts,
         no card details.
       </PageHeader>
-      <Contact />
+      <Contact standalone />
     </main>
   );
 }

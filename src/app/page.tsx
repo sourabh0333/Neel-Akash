@@ -1,23 +1,32 @@
 import Hero from "@/components/Hero";
 import Intro from "@/components/Intro";
-import Chapters from "@/components/Chapters";
+import Island from "@/components/Island";
+import Stays from "@/components/Stays";
+import Experiences from "@/components/Experiences";
+import Kitchen from "@/components/Kitchen";
 import Gallery from "@/components/Gallery";
+import Journey from "@/components/Journey";
 import Testimonials from "@/components/Testimonials";
-import BookingBand from "@/components/BookingBand";
+import Contact from "@/components/Contact";
 
-/**
- * Home is the overview: it sets the scene, then previews every page in the
- * header and sends people on. The full content lives on those pages.
- */
 export default function Home() {
   return (
     <main>
+      {/* Act I — arrival */}
       <Hero />
       <Intro />
-      <Chapters />
+
+      {/* Act II — the place */}
+      <Island />
+      <Stays />
+      <Experiences />
+      <Kitchen />
+
+      {/* Act III — persuasion and logistics */}
       <Gallery />
+      <Journey />
       <Testimonials />
-      <BookingBand />
+      <Contact />
     </main>
   );
 }
