@@ -89,8 +89,10 @@ export default function Cursor() {
     };
   }, []);
 
+  // The native cursor is hidden site-wide, so this layer must sit above
+  // every overlay (menu at 90, photo viewer at 97–99) or the pointer vanishes.
   return (
-    <div aria-hidden="true" className="pointer-events-none fixed inset-0 z-[95]">
+    <div aria-hidden="true" className="pointer-events-none fixed inset-0 z-[200]">
       <div
         ref={dot}
         className="fixed left-0 top-0 h-1.5 w-1.5 rounded-full bg-ember-400"
