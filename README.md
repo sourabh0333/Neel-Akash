@@ -46,6 +46,26 @@ directions, testimonials and gallery captions all live there.
 | How to reach steps | `journey[]` in `src/lib/site.ts` |
 | Colours / type scale | `@theme` block in `src/app/globals.css` |
 | Photographs | replace files in `public/images/` (keep the filenames) |
+| Live domain (metadata, sitemap) | `site.url` in `src/lib/site.ts` |
+
+## Pages
+
+The home page is the full scrolling overview. Every other page is generated
+from the same data in `src/lib/site.ts`, so there is nothing to keep in step:
+
+| URL | What it is | Built from |
+|---|---|---|
+| `/` | the whole story, top to bottom | every section |
+| `/stays/<id>` | one page per stay: photo, features, price, "Book this stay" | `stays[]` (add a stay, get a page) |
+| `/menu` | the full meal plan from the menu card | `meals[]` |
+| `/getting-here` | the route from Kolkata, step by step | `journey[]` |
+| `/gallery` | every photograph, click to enlarge | `gallery[]` |
+| `/sitemap.xml` | all of the above, for search engines | `pages` |
+
+The nav, footer, cursor and smooth scrolling live in `src/app/layout.tsx` and
+wrap every page. Nav links are root-relative (`/#stays`), so they work from
+any page. "Book this stay" links to `/?stay=<id>#contact`, which opens the
+booking sentence with that stay already chosen.
 
 ### ⚠️ Two things to confirm before going live
 

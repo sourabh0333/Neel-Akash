@@ -3,7 +3,7 @@
 import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import { gsap, prefersReducedMotion } from "@/lib/anim";
-import { site, navLinks } from "@/lib/site";
+import { site, navLinks, pages } from "@/lib/site";
 import { LogoMark, LogoSeal } from "./brand/Logo";
 
 export default function Footer() {
@@ -37,8 +37,9 @@ export default function Footer() {
       className="relative overflow-hidden border-t border-bone/10 bg-abyss pt-20"
     >
       <div className="mx-auto max-w-[100rem] px-6 md:px-10">
-        <div className="grid gap-12 pb-16 md:grid-cols-4">
-          <div className="md:col-span-2">
+        <div className="grid gap-12 pb-16 md:grid-cols-5">
+          <div className="relative md:col-span-2">
+            <LogoSeal className="pointer-events-none absolute right-6 top-0 hidden h-28 w-28 text-bone/25 lg:block" />
             <div className="flex items-center gap-4">
               <LogoMark className="h-14 w-14 text-bone" />
               <p className="font-bn text-3xl text-bone">{site.nameBn}</p>
@@ -64,8 +65,23 @@ export default function Footer() {
             </ul>
           </div>
 
-          <div className="relative">
-            <LogoSeal className="pointer-events-none absolute -top-4 right-0 hidden h-28 w-28 text-bone/25 lg:block" />
+          <div>
+            <p className="t-eyebrow mb-4 text-sand-dim">Pages</p>
+            <ul className="space-y-2.5">
+              {pages.map((l) => (
+                <li key={l.href}>
+                  <a
+                    href={l.href}
+                    className="link-draw text-sm text-sand transition-colors hover:text-bone"
+                  >
+                    {l.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div>
             <p className="t-eyebrow mb-4 text-sand-dim">Reservations</p>
             <a
               href={`tel:${site.owner.phoneRaw}`}

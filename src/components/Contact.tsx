@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useGSAP } from "@gsap/react";
 import { gsap, prefersReducedMotion } from "@/lib/anim";
 import { site, stays } from "@/lib/site";
@@ -29,6 +29,13 @@ export default function Contact() {
 
   const set = (k: keyof typeof form) => (v: string) =>
     setForm((f) => ({ ...f, [k]: v }));
+
+  // A room page links here as "/?stay=cottage#contact": preselect that stay.
+  useEffect(() => {
+    const id = new URLSearchParams(window.location.search).get("stay");
+    const chosen = stays.find((s) => s.id === id);
+    if (chosen) setForm((f) => ({ ...f, stay: chosen.name }));
+  }, []);
 
   const prettyDate = useMemo(() => {
     if (!form.checkIn) return "";

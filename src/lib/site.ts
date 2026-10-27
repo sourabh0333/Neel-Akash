@@ -6,6 +6,8 @@
  */
 
 export const site = {
+  /** Placeholder until the real domain is bought — feeds metadata and the sitemap. */
+  url: "https://penguinbeachcamp.example",
   name: "Penguin Beach Camp",
   // The same name written in Bengali script (a transliteration, not a
   // translation) — shown beside the English in the nav, intro and footer.
@@ -56,6 +58,8 @@ export type Stay = {
   /** Regular price, shown struck through when `price` is a discount. */
   originalPrice?: number;
   priceNote: string;
+  /** Whether the price includes the full meal plan in `meals`. */
+  mealsIncluded: boolean;
   capacity: string;
   features: string[];
   image: string;
@@ -70,6 +74,7 @@ export const stays: Stay[] = [
       "Canvas pitched on the sand, mouth open to the Bay. You will hear the tide turn at three in the morning and you will not mind.",
     price: 900,
     priceNote: "per person / night",
+    mealsIncluded: true,
     capacity: "2 – 3 guests",
     features: ["Direct beach access", "Attached washroom", "Power & fan", "Mosquito nets"],
     image:
@@ -83,6 +88,7 @@ export const stays: Stay[] = [
       "Woven bamboo, a private porch, and a floor lifted clear of the high tide. The quiet upgrade for anyone who wants a door that latches.",
     price: 1200,
     priceNote: "per person / night",
+    mealsIncluded: true,
     capacity: "2 – 4 guests",
     features: ["Private porch", "Attached washroom", "Ceiling fan", "Sea view"],
     image:
@@ -97,6 +103,8 @@ export const stays: Stay[] = [
     price: 3000,
     originalPrice: 4000,
     priceNote: "per night",
+    // Not yet confirmed with the owner — don't promise meals until it is.
+    mealsIncluded: false,
     capacity: "Whole group",
     features: ["One price for the whole group", "Book directly by phone or WhatsApp"],
     image:
@@ -398,10 +406,19 @@ export const testimonials: Testimonial[] = [
 
 /* ── Nav ───────────────────────────────────────────────────── */
 
+/** Root-relative, so they work from every page, not just the home page. */
 export const navLinks = [
-  { label: "The Island", href: "#island" },
-  { label: "Stays", href: "#stays" },
-  { label: "Days Here", href: "#experiences" },
-  { label: "Getting Here", href: "#journey" },
-  { label: "Contact", href: "#contact" },
+  { label: "The Island", href: "/#island" },
+  { label: "Stays", href: "/#stays" },
+  { label: "Days Here", href: "/#experiences" },
+  { label: "Getting Here", href: "/#journey" },
+  { label: "Contact", href: "/#contact" },
+];
+
+/** Every stand-alone page, for the footer and the sitemap. */
+export const pages = [
+  ...stays.map((s) => ({ label: s.name, href: `/stays/${s.id}` })),
+  { label: "Menu", href: "/menu" },
+  { label: "Getting Here", href: "/getting-here" },
+  { label: "Gallery", href: "/gallery" },
 ];
