@@ -3,19 +3,20 @@
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { SplitText } from "gsap/SplitText";
+import { Flip } from "gsap/Flip";
 
 /**
  * GSAP is registered once, on the client only.
  * Every plugin here is free for commercial use (GSAP 3.13+, Webflow).
  */
 if (typeof window !== "undefined") {
-  gsap.registerPlugin(ScrollTrigger, SplitText);
+  gsap.registerPlugin(ScrollTrigger, SplitText, Flip);
 
   // A slightly slower baseline than GSAP's default — luxury reads as unhurried.
   gsap.defaults({ ease: "power3.out", duration: 1.1 });
 }
 
-export { gsap, ScrollTrigger, SplitText };
+export { gsap, ScrollTrigger, SplitText, Flip };
 
 /** ~25% of macOS/iOS users have this on. Respect it. */
 export const prefersReducedMotion = () =>
