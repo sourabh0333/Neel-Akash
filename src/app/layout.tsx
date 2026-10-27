@@ -124,7 +124,14 @@ export default function RootLayout({
     <html
       lang="en-IN"
       className={`${instrument.variable} ${inter.variable} ${bengali.variable}`}
+      // The inline script below adds "js" before React hydrates.
+      suppressHydrationWarning
     >
+      <head>
+        {/* Mark that JavaScript runs, before first paint: fade-in text is
+            only hidden for its entrance when it will actually animate. */}
+        <script dangerouslySetInnerHTML={{ __html: "document.documentElement.classList.add('js')" }} />
+      </head>
       <body className="grain antialiased">
         <script
           type="application/ld+json"

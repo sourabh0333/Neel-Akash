@@ -329,6 +329,12 @@ src/app/robots.ts       /robots.txt
   sentence (`HeroTitle` in `src/components/ui/`), e.g. "How to reach ·
   Mousuni Island from Kolkata by train & ferry", "Tents & cottages · on
   Mousuni Island, from ₹900 a night with all meals".
+- **Share cards:** every page names the 1200×630 card (`/opengraph-image`)
+  for Open Graph and Twitter. It has to be explicit: a page that sets its
+  own `openGraph` replaces the layout's, image and all.
+- **Text without JavaScript:** fade-in text is only hidden for its entrance
+  once an inline script has marked `html.js`, so crawlers and readers
+  without JavaScript always see every word.
 - **Structured data:** the layout carries the business as a `Resort` and
   `Campground` (address, coordinates, phone, price range, amenities, image,
   and each stay as an `Offer` with its real price); every inner page adds a
