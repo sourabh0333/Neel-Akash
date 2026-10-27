@@ -53,6 +53,8 @@ export type Stay = {
   kicker: string;
   blurb: string;
   price: number;
+  /** Regular price, shown struck through when `price` is a discount. */
+  originalPrice?: number;
   priceNote: string;
   capacity: string;
   features: string[];
@@ -66,36 +68,37 @@ export const stays: Stay[] = [
     kicker: "01 — Closest to the water",
     blurb:
       "Canvas pitched on the sand, mouth open to the Bay. You will hear the tide turn at three in the morning and you will not mind.",
-    price: 1400,
-    priceNote: "per person / night, all meals included",
+    price: 900,
+    priceNote: "per person / night",
     capacity: "2 – 3 guests",
     features: ["Direct beach access", "Attached washroom", "Power & fan", "Mosquito nets"],
     image:
       "/images/stay-tent.jpg",
   },
   {
-    id: "bamboo-cottage",
-    name: "Bamboo Cottage",
+    id: "cottage",
+    name: "Cottage",
     kicker: "02 — Raised above the sand",
     blurb:
       "Woven bamboo, a private porch, and a floor lifted clear of the high tide. The quiet upgrade for anyone who wants a door that latches.",
-    price: 1800,
-    priceNote: "per person / night, all meals included",
+    price: 1200,
+    priceNote: "per person / night",
     capacity: "2 – 4 guests",
     features: ["Private porch", "Attached washroom", "Ceiling fan", "Sea view"],
     image:
       "/images/stay-bamboo.jpg",
   },
   {
-    id: "family-cottage",
-    name: "Family Cottage",
-    kicker: "03 — Room for everyone",
+    id: "group-special",
+    name: "Group Special",
+    kicker: "03 — Bring everyone",
     blurb:
-      "Two rooms, one long verandah, and enough space for grandparents and grandchildren to disagree about the sunset in comfort.",
-    price: 2200,
-    priceNote: "per person / night, all meals included",
-    capacity: "4 – 6 guests",
-    features: ["Two bedrooms", "Air conditioning", "Verandah", "Family dining"],
+      "Friends, family or the whole office: one flat price for the group, instead of counting heads at the gate.",
+    price: 3000,
+    originalPrice: 4000,
+    priceNote: "per night",
+    capacity: "Whole group",
+    features: ["One price for the whole group", "Book directly by phone or WhatsApp"],
     image:
       "/images/stay-family.jpg",
   },
@@ -361,7 +364,7 @@ export const testimonials: Testimonial[] = [
     name: "Anirban & Rituparna",
     initials: "AR",
     from: "Kolkata",
-    stay: "Bamboo Cottage",
+    stay: "Cottage",
     when: "December 2025",
   },
   {
@@ -379,7 +382,7 @@ export const testimonials: Testimonial[] = [
     name: "Devjit Roy",
     initials: "DR",
     from: "Durgapur",
-    stay: "Family Cottage",
+    stay: "Group Special",
     when: "February 2026",
   },
   {

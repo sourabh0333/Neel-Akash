@@ -72,9 +72,10 @@ export default function Stays() {
             delay={0.15}
             className="max-w-[36ch] text-sm leading-relaxed text-sand"
           >
-            Every tariff below is per person, per night, and includes a welcome
-            drink, lunch, evening snacks, dinner and the next morning&rsquo;s
-            breakfast. There is no hidden second menu.
+            Tent and cottage tariffs are per person, per night, and include a
+            welcome drink, lunch, evening snacks, dinner and the next
+            morning&rsquo;s breakfast. The group special is one price for the
+            whole group.
           </Reveal>
         </div>
 
@@ -112,8 +113,22 @@ export default function Stays() {
               </p>
 
               <div className="col-span-12 md:col-span-2 md:text-right">
+                {s.originalPrice && (
+                  <div className="mb-1.5 flex items-center gap-2.5 md:justify-end">
+                    <span className="rounded-full bg-ember-500/15 px-2.5 py-1 text-[0.6rem] font-semibold uppercase tracking-[0.14em] text-ember-300">
+                      &#8377;{(s.originalPrice - s.price).toLocaleString("en-IN")} off
+                    </span>
+                    <s className="font-display text-lg text-sand-dim decoration-ember-400/70">
+                      <span className="sr-only">Regular price </span>
+                      &#8377;{s.originalPrice.toLocaleString("en-IN")}
+                    </s>
+                  </div>
+                )}
                 <p className="font-display text-2xl text-bone md:text-3xl">
                   &#8377;{s.price.toLocaleString("en-IN")}
+                </p>
+                <p className="mt-1 text-[0.64rem] uppercase tracking-[0.14em] text-sand-dim">
+                  {s.priceNote}
                 </p>
                 <p className="mt-1 text-[0.64rem] uppercase tracking-[0.14em] text-sand-dim">
                   {s.capacity}
@@ -138,7 +153,7 @@ export default function Stays() {
 
         <div className="mt-14 flex flex-col items-start gap-6 sm:flex-row sm:items-center sm:justify-between">
           <p className="max-w-[46ch] text-sm text-sand-dim">
-            Group and off-season rates are negotiable &mdash; speak to{" "}
+            Off-season and larger-group rates are negotiable &mdash; speak to{" "}
             {site.owner.name} directly.
           </p>
           <Magnetic strength={0.28}>
