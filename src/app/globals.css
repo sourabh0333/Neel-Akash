@@ -227,6 +227,26 @@ html.lenis body {
   }
 }
 
+/* ── Island page ───────────────────────────────────────────── */
+
+/* The scroll cue: a drop of light running down its line. */
+@keyframes ih-drip {
+  from {
+    transform: translateY(-100%);
+  }
+  to {
+    transform: translateY(200%);
+  }
+}
+
+/* Each map stop's card text arriving. */
+@keyframes im-in {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+}
+
 /* ── Custom cursor ─────────────────────────────────────────── */
 
 @media (hover: hover) and (pointer: fine) {

@@ -62,7 +62,7 @@ step.
 | Header item | URL | Built from |
 |---|---|---|
 | (logo) | `/` | every section, in full |
-| The Island | `/island` | the island rail |
+| The Island | `/island` | its own sections (`src/components/island/`) plus the island rail |
 | Stays | `/stays`, plus `/stays/<id>` per stay | `stays[]` (add a stay, get a page) |
 | Menu | `/menu` | `meals[]` |
 | Gallery | `/gallery` | `gallery[]` |
@@ -119,6 +119,14 @@ before editing:
   to show the detail. Pointing at a step or bar segment pauses the loop on
   that leg. Under reduced motion nothing loops and the route is drawn in
   full.
+
+  The Island page tells the island in order: a horizon-split hero,
+  "at a glance" (a statement that lights up word by word, numbers that
+  count up), a pinned map that flies from the whole delta down to Mousuni
+  and village by village out to the sandbar (same Natural Earth data as the
+  route map; village positions in `IslandMap.tsx` are approximate), the
+  village rail, a deck of stacking "a day here" cards, and a scroll-driven
+  word band leading to Stays and Getting Here.
 
   The route map (`src/components/route/RouteMap.tsx`) plays the trip like a
   navigation app on the **real delta**: coastline, estuary, islands and the
