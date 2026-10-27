@@ -90,13 +90,8 @@ export default function Hero() {
           </span>
         </div>
 
-        <h1 className="font-display t-mega text-bone">
-          <span className="line-mask">
-            <span className="block">Penguin</span>
-          </span>
-          <span className="line-mask">
-            <span className="block italic text-ember-300">Beach Camp</span>
-          </span>
+        <h1 className="font-display t-mega whitespace-nowrap text-bone">
+          Penguin <span className="italic text-ember-300">Beach Camp</span>
         </h1>
 
         <div className="mt-8 flex flex-col gap-10 border-t border-bone/12 pt-8 lg:flex-row lg:items-end lg:justify-between">

@@ -8,21 +8,22 @@
  *
  * ── THE IDEA ────────────────────────────────────────────────
  *
+ * A round badge: the sun going down into the bay, and a penguin standing on
+ * the shore in front of it.
+ *
  * The penguin IS the tent. A penguin standing upright is already an A-frame:
  * narrow at the head, wide at the base. So the body is one rounded triangle,
- * and the white belly is cut out as the tent's door. One shape says both
- * halves of the name — penguin, camp — and the rest says beach:
- *
- *    • an ember sun over its shoulder, low, the way it sits over the bay
- *    • a single wave underfoot
- *    • ember feet that double as tent pegs
+ * and the white belly is cut out as the tent's door — the sun shows through
+ * it. One shape says both halves of the name, penguin and camp; the sun and
+ * the sea around it say beach.
  *
  * ── THE RULES ───────────────────────────────────────────────
  *
  *    • Flat fills only, two tones: ink (currentColor) and ember.
- *    • Eyes and door are holes (even-odd), not white shapes, so the mark sits
- *      on any background — dark, light or photograph — without a halo.
- *    • Drawn on a 64-unit grid, centred on x = 32.
+ *    • No background-coloured shapes. Eyes and door are holes (even-odd),
+ *      and the penguin stands clear of the water instead of being outlined,
+ *      so the badge sits on dark, light or a photograph without a halo.
+ *    • Drawn on a 64-unit grid, centred on (32, 32).
  */
 
 export type Detail = "full" | "simple" | "micro";
@@ -32,9 +33,28 @@ export type Part = {
   tone: "ink" | "accent";
   /** Stroke width; when absent the part is filled. */
   stroke?: number;
+  transform?: string;
 };
 
 /* ── Pieces ──────────────────────────────────────────────────── */
+
+/** The badge ring. */
+const RING = "M2.4 32a29.6 29.6 0 1 0 59.2 0a29.6 29.6 0 1 0-59.2 0Z";
+
+/**
+ * Sun, drawn only above the waterline (y = 47.5) — a segment of a circle of
+ * radius 19 centred at (32, 44), so nothing needs clipping.
+ */
+const SUN = "M13.33 47.5A19 19 0 1 1 50.67 47.5Z";
+
+/**
+ * Sea: the part of the badge's inner circle (r 27) below a wavy waterline.
+ * The waterline meets the circle at x = 32 ± 22.1.
+ */
+const SEA =
+  "M9.9 47.5q5.53-2.6 11.05 0t11.05 0 11.05 0 11.05 0A27 27 0 0 1 9.9 47.5Z";
+
+/* The tent penguin, drawn on its own 64 grid and placed by PENGUIN_AT. */
 
 /** Rounded A-frame: head at the apex, canvas flaring to the ground. */
 const BODY =
@@ -46,18 +66,10 @@ const DOOR = "M32 26.5C36 33 39.6 43 42.6 53.5H21.4C24.4 43 28 33 32 26.5Z";
 const EYES =
   "M27.6 16.2a1.7 1.7 0 1 0 3.4 0a1.7 1.7 0 1 0-3.4 0Z M33 16.2a1.7 1.7 0 1 0 3.4 0a1.7 1.7 0 1 0-3.4 0Z";
 
-/** Flippers flare off the canvas like guy-lines pulled taut. */
-const FLIPPERS =
-  "M17.6 33.5C13 37 10 42.5 9.6 48.2C12.6 45.6 14.8 43.6 16.4 42.2Z M46.4 33.5C51 37 54 42.5 54.4 48.2C51.4 45.6 49.2 43.6 47.6 42.2Z";
-
 const BEAK = "M29.9 19.4H34.1L32 22.7Z";
 
-const SUN = "M41 14.5a6.5 6.5 0 1 0 13 0a6.5 6.5 0 1 0-13 0Z";
-
-const FEET =
-  "M17.5 53.5h5a1.5 1.5 0 0 1 0 3h-5a1.5 1.5 0 0 1 0-3Z M41.5 53.5h5a1.5 1.5 0 0 1 0 3h-5a1.5 1.5 0 0 1 0-3Z";
-
-const WAVE = "M4 60.5q7-3.6 14 0t14 0 14 0 14 0";
+/** Scaled to 0.56 and set so its feet sit just clear of the wave crests. */
+const PENGUIN_AT = "translate(32 31.4) scale(0.56) translate(-32 -30)";
 
 /* ── Tiers ───────────────────────────────────────────────────── */
 
@@ -65,33 +77,29 @@ const WAVE = "M4 60.5q7-3.6 14 0t14 0 14 0 14 0";
  * Which pieces survive at each size.
  *
  *   full    40px and up — everything
- *   simple  24–40px (nav, seal) — drops the wave, which turns to a smudge
- *   micro   under 24px (favicon) — body, door, beak and sun only; eyes and
- *           flippers fill in below ~20px and just muddy the silhouette
+ *   simple  24–40px (nav, seal) — everything; the badge has no fine detail
+ *           left to lose at this size
+ *   micro   under 24px (favicon) — drops the eyes and beak, which fill in
+ *           below ~20px
  */
 export function partsFor(detail: Detail): Part[] {
-  const sun: Part = { d: SUN, tone: "accent" };
-  const beak: Part = { d: BEAK, tone: "accent" };
+  const parts: Part[] = [
+    { d: RING, tone: "ink", stroke: 2.4 },
+    { d: SUN, tone: "accent" },
+    { d: SEA, tone: "ink" },
+  ];
 
   if (detail === "micro") {
-    return [sun, { d: `${BODY} ${DOOR}`, tone: "ink" }, beak];
+    parts.push({ d: `${BODY} ${DOOR}`, tone: "ink", transform: PENGUIN_AT });
+    return parts;
   }
 
-  const parts: Part[] = [
-    sun,
-    { d: `${BODY} ${DOOR} ${EYES} ${FLIPPERS}`, tone: "ink" },
-    beak,
-    { d: FEET, tone: "accent" },
-  ];
-  if (detail === "full") parts.push({ d: WAVE, tone: "ink", stroke: 2.4 });
+  parts.push(
+    { d: `${BODY} ${DOOR} ${EYES}`, tone: "ink", transform: PENGUIN_AT },
+    { d: BEAK, tone: "accent", transform: PENGUIN_AT }
+  );
   return parts;
 }
-
-/**
- * Vertical nudge per tier. Micro loses the feet and wave, so what is left
- * sits high on the grid; this re-centres it in the favicon tile.
- */
-export const TIER_SHIFT: Record<Detail, number> = { full: 0, simple: 0, micro: 2 };
 
 export const VIEWBOX = { w: 64, h: 64 };
 
@@ -135,15 +143,16 @@ export function markSvgString({
   const paths = partsFor(detail)
     .map((p) => {
       const color = p.tone === "accent" ? accent : ink;
+      const t = p.transform ? ` transform="${p.transform}"` : "";
       return p.stroke
-        ? `<path d="${p.d}" fill="none" stroke="${color}" stroke-width="${p.stroke}" stroke-linecap="round"/>`
-        : `<path d="${p.d}" fill="${color}" fill-rule="evenodd"/>`;
+        ? `<path d="${p.d}"${t} fill="none" stroke="${color}" stroke-width="${p.stroke}" stroke-linecap="round"/>`
+        : `<path d="${p.d}"${t} fill="${color}" fill-rule="evenodd"/>`;
     })
     .join("\n    ");
 
   return `<svg xmlns="http://www.w3.org/2000/svg"${dim} viewBox="0 0 ${w} ${h}">
   ${bg}
-  <g transform="translate(${pad} ${pad + TIER_SHIFT[detail]})">
+  <g transform="translate(${pad} ${pad})">
     ${paths}
   </g>
 </svg>`;

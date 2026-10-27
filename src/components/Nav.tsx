@@ -133,18 +133,10 @@ export default function Nav() {
           <a
             href="#top"
             aria-label={`${site.name} — home`}
-            className="group/logo flex items-center gap-3"
+            className="group/logo flex items-center"
           >
             <LogoMark detail="simple"
-              className="h-10 w-10 shrink-0 text-bone transition-colors duration-500 group-hover/logo:text-ember-300 md:h-11 md:w-11" />
-            <span className="flex flex-col">
-              <span className="font-display text-xl leading-none tracking-tight text-bone md:text-2xl">
-                {site.name}
-              </span>
-              <span className="font-bn mt-1 hidden text-[0.72rem] leading-none text-sand-dim transition-colors duration-500 group-hover/logo:text-ember-400 sm:block">
-                {site.nameBn}
-              </span>
-            </span>
+              className="h-11 w-11 shrink-0 text-bone transition-colors duration-500 group-hover/logo:text-ember-300 md:h-12 md:w-12" />
           </a>
 
           <nav className="hidden items-center gap-9 lg:flex">
