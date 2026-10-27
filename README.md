@@ -172,6 +172,9 @@ before editing:
   day's meals (only for stays that include them), the other stays opening
   out as you reach them, and the proprietor's number.
 
+  The 404 (`src/app/not-found.tsx`, also shown for a stay id that does not
+  exist) uses the same horizon hero, "Off the map", with every way back.
+
   The route map (`src/components/route/RouteMap.tsx`) plays the trip like a
   navigation app on the **real delta**: coastline, estuary, islands and the
   Hooghly from Natural Earth, with the railway drawn through its real
