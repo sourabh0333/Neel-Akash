@@ -110,8 +110,10 @@ before editing:
 - **Getting here** — a journey board, laid out the way transit planners
   present a trip: the headline numbers (total time counting up, legs, the
   ferry, the pickup); the whole trip as one bar split by leg in proportion
-  to its time; a route map beside the step-by-step list; and practical cards
-  for coming by road (`drivingRoute`), the tide, and where to find us. One
+  to its time; the route map across the full width (21:9 on desktop, 16:10
+  on tablets, 4:5 on phones); the steps, one column per leg; and practical
+  cards for coming by road (`drivingRoute`), the tide, where to find us and
+  arrival. One
   "active leg" ties it together: a marker loops along the map and that leg
   lights up in the map, the bar and the steps at once, with its step opening
   to show the detail. Pointing at a step or bar segment pauses the loop on

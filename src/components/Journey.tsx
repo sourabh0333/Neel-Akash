@@ -10,11 +10,12 @@ import RouteMap from "./route/RouteMap";
 /**
  * Getting here, as a journey board.
  *
- * Laid out the way transit planners present a trip, in four rows:
+ * Laid out the way transit planners present a trip, in five rows:
  *   1. the headline numbers (total time, legs, the ferry, the pickup);
  *   2. the whole trip as one bar, split by leg in proportion to its time;
- *   3. a route map beside the step-by-step list;
- *   4. the practical cards — by road, the tide, where to find us.
+ *   3. the route map, full width;
+ *   4. the steps, one column per leg;
+ *   5. the practical cards — by road, the tide, where to find us, arrival.
  *
  * One "active leg" ties the board together. The route map (./route/
  * RouteMap) plays the trip like a navigation app, and whichever leg it is
@@ -273,126 +274,105 @@ export default function Journey({
             </div>
           </div>
 
-          {/* ── 3. Map beside the steps ── */}
-          <div className="grid grid-cols-1 gap-4 md:gap-5 lg:grid-cols-12">
-            <figure className="board-in relative flex flex-col overflow-hidden rounded-2xl border border-bone/10 bg-ink p-4 md:p-6 lg:col-span-7">
-              <figcaption className="flex flex-wrap items-baseline justify-between gap-2 px-1">
-                <span className="text-[0.6rem] uppercase tracking-[0.28em] text-sand-dim">Route map</span>
-                <span className="text-[0.6rem] uppercase tracking-[0.24em] text-sand-dim">
-                  Kolkata to the bay
-                </span>
-              </figcaption>
+          {/* ── 3. The route map, full width ── */}
+          <figure className="board-in relative overflow-hidden rounded-2xl border border-bone/10 bg-ink p-3 md:p-5">
+            <figcaption className="flex flex-wrap items-baseline justify-between gap-2 px-1">
+              <span className="text-[0.6rem] uppercase tracking-[0.28em] text-sand-dim">Route map</span>
+              <span className="text-[0.6rem] uppercase tracking-[0.24em] text-sand-dim">
+                Kolkata to the bay
+              </span>
+            </figcaption>
 
-              <div className="my-auto py-3">
-                <RouteMap active={active} focus={focus} onLeg={select} />
-              </div>
+            <div className="py-3">
+              <RouteMap active={active} focus={focus} onLeg={select} />
+            </div>
 
-              {/* Legend: the four line styles */}
-              <div className="mt-3 flex flex-wrap gap-x-5 gap-y-2 border-t border-bone/10 px-1 pt-4">
-                {LEG_STYLE.map((st, i) => (
-                  <span
-                    key={st.label}
-                    className="flex items-center gap-2 text-[0.6rem] uppercase tracking-[0.2em] text-sand-dim"
-                  >
-                    <svg width="34" height="10" viewBox="0 0 34 10" aria-hidden="true">
-                      {st.ties && (
-                        <path
-                          d="M1 5h32"
-                          stroke="var(--color-ember-500)"
-                          strokeOpacity="0.6"
-                          strokeWidth="8"
-                          strokeDasharray="1.6 5"
-                        />
-                      )}
+            {/* Legend: the four line styles */}
+            <div className="mt-3 flex flex-wrap gap-x-5 gap-y-2 border-t border-bone/10 px-1 pt-4">
+              {LEG_STYLE.map((st, i) => (
+                <span
+                  key={st.label}
+                  className="flex items-center gap-2 text-[0.6rem] uppercase tracking-[0.2em] text-sand-dim"
+                >
+                  <svg width="34" height="10" viewBox="0 0 34 10" aria-hidden="true">
+                    {st.ties && (
                       <path
                         d="M1 5h32"
-                        stroke="var(--color-ember-400)"
-                        strokeWidth={st.width}
-                        strokeDasharray={st.dash}
-                        strokeLinecap="round"
+                        stroke="var(--color-ember-500)"
+                        strokeOpacity="0.6"
+                        strokeWidth="8"
+                        strokeDasharray="1.6 5"
                       />
-                    </svg>
-                    {st.label} · {journey[i].duration.replace("≈ ", "")}
-                  </span>
-                ))}
-              </div>
-            </figure>
+                    )}
+                    <path
+                      d="M1 5h32"
+                      stroke="var(--color-ember-400)"
+                      strokeWidth={st.width}
+                      strokeDasharray={st.dash}
+                      strokeLinecap="round"
+                    />
+                  </svg>
+                  {st.label} · {journey[i].duration.replace("≈ ", "")}
+                </span>
+              ))}
+            </div>
+          </figure>
 
-            <div className="board-in flex flex-col gap-2 lg:col-span-5">
-              <ol className="flex flex-col gap-2">
-                {journey.map((j, i) => {
-                  const on = i === active;
-                  return (
-                    <li key={j.step}>
-                      <button
-                        type="button"
-                        onPointerEnter={() => focusLeg(i)}
-                        onPointerLeave={releaseLeg}
-                        onFocus={() => focusLeg(i)}
-                        onBlur={releaseLeg}
-                        aria-expanded={on}
-                        className={`flex w-full gap-4 rounded-2xl border p-5 text-left transition-colors duration-500 md:p-6 ${
-                          on ? "border-ember-400/60 bg-ember-500/[0.07]" : "border-bone/10 bg-ink hover:border-bone/25"
+        {/* ── 4. The steps, one column per leg ── */}
+          <ol className="board-in grid grid-cols-1 gap-2 sm:grid-cols-2 sm:gap-4 lg:grid-cols-4 lg:gap-5">
+            {journey.map((j, i) => {
+              const on = i === active;
+              return (
+                <li key={j.step} className="h-full">
+                  <button
+                    type="button"
+                    onPointerEnter={() => focusLeg(i)}
+                    onPointerLeave={releaseLeg}
+                    onFocus={() => focusLeg(i)}
+                    onBlur={releaseLeg}
+                    aria-expanded={on}
+                    className={`flex h-full w-full gap-4 rounded-2xl border p-5 text-left transition-colors duration-500 md:p-6 ${
+                      on ? "border-ember-400/60 bg-ember-500/[0.07]" : "border-bone/10 bg-ink hover:border-bone/25"
+                    }`}
+                  >
+                    <span
+                      className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-full border transition-colors duration-500 ${
+                        on ? "border-ember-400 bg-ember-400 text-abyss" : "border-bone/20 text-sand-dim"
+                      }`}
+                    >
+                      <Icon mode={j.mode} className="h-5 w-5" />
+                    </span>
+                    <span className="min-w-0 flex-1">
+                      <span className="flex items-center justify-between gap-3 text-[0.6rem] uppercase tracking-[0.24em] tabular-nums">
+                        <span className={on ? "text-ember-400" : "text-sand-dim"}>
+                          {j.step} · {modeName(j.mode)}
+                        </span>
+                        <span className="text-sand-dim">{j.duration}</span>
+                      </span>
+                      <span className="mt-1.5 block font-display text-xl leading-snug text-bone md:text-2xl">
+                        {j.from} <span className="text-ember-400">&rarr;</span> {j.to}
+                      </span>
+                      {/* Stacked (phones), the active step opens and the others
+                          stay one line; in columns every detail shows, the
+                          active one at full strength. */}
+                      <span
+                        className={`grid transition-[grid-template-rows,opacity] duration-500 ease-[cubic-bezier(.16,1,.3,1)] sm:grid-rows-[1fr] ${
+                          on ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0 sm:opacity-60"
                         }`}
                       >
-                        <span
-                          className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-full border transition-colors duration-500 ${
-                            on ? "border-ember-400 bg-ember-400 text-abyss" : "border-bone/20 text-sand-dim"
-                          }`}
-                        >
-                          <Icon mode={j.mode} className="h-5 w-5" />
+                        <span className="overflow-hidden">
+                          <span className="block pt-2 text-sm leading-relaxed text-sand">{j.detail}</span>
                         </span>
-                        <span className="min-w-0 flex-1">
-                          <span className="flex items-center justify-between gap-3 text-[0.6rem] uppercase tracking-[0.24em] tabular-nums">
-                            <span className={on ? "text-ember-400" : "text-sand-dim"}>
-                              {j.step} · {modeName(j.mode)}
-                            </span>
-                            <span className="text-sand-dim">{j.duration}</span>
-                          </span>
-                          <span className="mt-1.5 block font-display text-xl leading-snug text-bone md:text-2xl">
-                            {j.from} <span className="text-ember-400">&rarr;</span> {j.to}
-                          </span>
-                          {/* The active step opens; the others stay one line */}
-                          <span
-                            className={`grid transition-[grid-template-rows,opacity] duration-500 ease-[cubic-bezier(.16,1,.3,1)] ${
-                              on ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
-                            }`}
-                          >
-                            <span className="overflow-hidden">
-                              <span className="block pt-2 text-sm leading-relaxed text-sand">{j.detail}</span>
-                            </span>
-                          </span>
-                        </span>
-                      </button>
-                    </li>
-                  );
-                })}
-              </ol>
+                      </span>
+                    </span>
+                  </button>
+                </li>
+              );
+            })}
+          </ol>
 
-              {/* Arrival: where the steps end, and what to do next */}
-              <div className="flex flex-1 flex-col justify-between gap-6 rounded-2xl border border-bone/10 bg-linear-to-br from-ember-500/[0.12] to-transparent p-6 md:p-7">
-                <div>
-                  <p className="text-[0.6rem] uppercase tracking-[0.28em] text-ember-500">Arrive</p>
-                  <p className="mt-3 font-display text-3xl leading-tight text-bone md:text-4xl">
-                    {journey[journey.length - 1].to}
-                  </p>
-                  <p className="mt-2 text-sm text-sand">
-                    &asymp; {fmt(totalMinutes)} on the move from {journey[0].from}.
-                  </p>
-                </div>
-                <a
-                  href="/contact"
-                  data-cursor="Book"
-                  className="inline-flex w-fit items-center gap-3 rounded-full bg-bone px-6 py-3 text-[0.7rem] font-semibold uppercase tracking-[0.18em] text-abyss transition-colors hover:bg-ember-300"
-                >
-                  Plan your stay <span aria-hidden="true">&rarr;</span>
-                </a>
-              </div>
-            </div>
-          </div>
-
-          {/* ── 4. The practical cards ── */}
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-3 md:gap-5">
+          {/* ── 5. The practical cards, ending on arrival ── */}
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-5 xl:grid-cols-4">
             <div className="board-in rounded-2xl border border-bone/10 bg-ink p-6 transition-transform duration-300 hover:-translate-y-1 md:p-7">
               <p className="flex items-center gap-2 text-[0.6rem] uppercase tracking-[0.28em] text-ember-500">
                 <Icon mode="Road" className="h-4 w-4" /> Coming by road
@@ -439,6 +419,27 @@ export default function Journey({
                 className="mt-5 inline-flex items-center gap-2 rounded-full bg-bone px-5 py-2.5 text-[0.7rem] font-semibold uppercase tracking-[0.16em] text-abyss transition-colors hover:bg-ember-300"
               >
                 Open in Google Maps ↗
+              </a>
+            </div>
+
+            <div className="board-in flex flex-col justify-between gap-6 rounded-2xl border border-bone/10 bg-linear-to-br from-ember-500/[0.12] to-transparent p-6 transition-transform duration-300 hover:-translate-y-1 md:p-7">
+              <div>
+                <p className="flex items-center gap-2 text-[0.6rem] uppercase tracking-[0.28em] text-ember-500">
+                <Icon mode="Arrival" className="h-4 w-4" /> Arrive
+              </p>
+                <p className="mt-5 font-display text-2xl leading-tight text-bone">
+                  {journey[journey.length - 1].to}
+                </p>
+                <p className="mt-2 text-sm text-sand">
+                  &asymp; {fmt(totalMinutes)} on the move from {journey[0].from}.
+                </p>
+              </div>
+              <a
+                href="/contact"
+                data-cursor="Book"
+                className="inline-flex w-fit items-center gap-3 rounded-full bg-bone px-6 py-3 text-[0.7rem] font-semibold uppercase tracking-[0.18em] text-abyss transition-colors hover:bg-ember-300"
+              >
+                Plan your stay <span aria-hidden="true">&rarr;</span>
               </a>
             </div>
           </div>

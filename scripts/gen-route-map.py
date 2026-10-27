@@ -95,8 +95,9 @@ def through(lonlats):
 
 def main(src):
     src = Path(src)
-    # Generous margin: the camera pulls back past the window for the overview.
-    m = 0.6
+    # Generous margin: the camera pulls back past the window for the overview,
+    # and a wide (21:9) map shows a lot of country either side of the route.
+    m = 1.3
     land = []
     for f in json.loads((src / "ne_10m_land.geojson").read_text())["features"]:
         for r in rings(f["geometry"]):
