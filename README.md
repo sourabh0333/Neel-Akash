@@ -225,9 +225,12 @@ means no server, no payment integration and no PII stored anywhere.
 - **Overlays actually stop the page.** Lenis scrolls from its own handlers, so
   `overflow: hidden` alone is not enough; `src/lib/scroll.ts` holds a counted
   lock that stops and restarts Lenis for the menu and the photo viewer.
-- **There is no opening sequence.** The hero is server-rendered in its final
-  state and visible on first paint; the only motion it carries is the
-  scroll-linked parallax as you leave it.
+- **No loading screen, one short opening.** There is no intro screen in front
+  of the site. The Home and Island heroes share one opening
+  (`src/components/ui/Horizon.tsx`): the picture splits open from the
+  horizon, the name rises letter by letter, and on the way out the frame
+  draws in to a card. Scrolling back up always returns the hero fully open,
+  and under reduced motion it is simply there, still.
 
 ## Deploying
 
