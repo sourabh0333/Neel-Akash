@@ -63,7 +63,7 @@ step.
 |---|---|---|
 | (logo) | `/` | every section, in full |
 | The Island | `/island` | its own sections (`src/components/island/`) plus the island rail |
-| Stays | `/stays`, plus `/stays/<id>` per stay | `stays[]` (add a stay, get a page) |
+| Stays | `/stays`, plus `/stays/<id>` per stay | `stays[]` (add a stay, get a page); `/stays` has its own sections in `src/components/stays/` |
 | Menu | `/menu` | `meals[]` |
 | Gallery | `/gallery` | `gallery[]` |
 | Days Here | `/days-here` | `experiences[]` |
@@ -127,6 +127,12 @@ before editing:
   route map; village positions in `IslandMap.tsx` are approximate), the
   village rail, a deck of stacking "a day here" cards, and a scroll-driven
   word band leading to Stays and Getting Here.
+
+  The Stays page opens on the same horizon hero, then gives each stay a
+  chapter of its own (the photograph opens out from a rounded window as it
+  arrives), draws the day's meals along a line as you scroll, sets the
+  three stays side by side with prices counting up, and closes on the
+  proprietor's number. All of it reads from `stays[]` and `meals[]`.
 
   The route map (`src/components/route/RouteMap.tsx`) plays the trip like a
   navigation app on the **real delta**: coastline, estuary, islands and the
