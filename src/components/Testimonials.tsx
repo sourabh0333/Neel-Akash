@@ -51,6 +51,7 @@ export default function Testimonials() {
 
       const split = SplitText.create(el, {
         type: "words,lines",
+        aria: "none",
         linesClass: "line-inner",
         mask: "lines",
       });

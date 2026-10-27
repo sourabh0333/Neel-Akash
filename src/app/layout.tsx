@@ -22,12 +22,16 @@ const inter = Inter({
   display: "swap",
 });
 
-/* For the Bengali wordmark — পেঙ্গুইন বিচ ক্যাম্প */
+/* For the Bengali wordmark — পেঙ্গুইন বিচ ক্যাম্প. Not preloaded: at 57 KB
+   it was the heaviest font on every page, yet it only sets a few small
+   labels, so it loads on use and the labels swap into it a moment later
+   instead of holding back first paint. */
 const bengali = Noto_Serif_Bengali({
   subsets: ["bengali"],
   weight: ["400"],
   variable: "--font-bengali",
   display: "swap",
+  preload: false,
 });
 
 const url = site.url;
