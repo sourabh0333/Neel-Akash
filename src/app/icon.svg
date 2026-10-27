@@ -1,8 +1,9 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 82 82">
   <rect width="82" height="82" fill="#05070d" rx="16"/>
-  <g transform="translate(9 11)">
-    <path d="M41 14.5a6.5 6.5 0 1 0 13 0a6.5 6.5 0 1 0-13 0Z" fill="#f39c4a" fill-rule="evenodd"/>
-    <path d="M32 6.5C35 6.5 37.2 8.6 38.5 12L52.5 48.5C53.6 51.4 51.9 53.5 49 53.5H15C12.1 53.5 10.4 51.4 11.5 48.5L25.5 12C26.8 8.6 29 6.5 32 6.5Z M32 26.5C36 33 39.6 43 42.6 53.5H21.4C24.4 43 28 33 32 26.5Z" fill="#f4efe6" fill-rule="evenodd"/>
-    <path d="M29.9 19.4H34.1L32 22.7Z" fill="#f39c4a" fill-rule="evenodd"/>
+  <g transform="translate(9 9)">
+    <path d="M2.4 32a29.6 29.6 0 1 0 59.2 0a29.6 29.6 0 1 0-59.2 0Z" fill="none" stroke="#f4efe6" stroke-width="2.4" stroke-linecap="round"/>
+    <path d="M13.33 47.5A19 19 0 1 1 50.67 47.5Z" fill="#f39c4a" fill-rule="evenodd"/>
+    <path d="M9.9 47.5q5.53-2.6 11.05 0t11.05 0 11.05 0 11.05 0A27 27 0 0 1 9.9 47.5Z" fill="#f4efe6" fill-rule="evenodd"/>
+    <path d="M32 6.5C35 6.5 37.2 8.6 38.5 12L52.5 48.5C53.6 51.4 51.9 53.5 49 53.5H15C12.1 53.5 10.4 51.4 11.5 48.5L25.5 12C26.8 8.6 29 6.5 32 6.5Z M32 26.5C36 33 39.6 43 42.6 53.5H21.4C24.4 43 28 33 32 26.5Z" transform="translate(32 31.4) scale(0.56) translate(-32 -30)" fill="#f4efe6" fill-rule="evenodd"/>
   </g>
 </svg>

@@ -1,16 +1,16 @@
 import { site } from "@/lib/site";
-import { VIEWBOX, TIER_SHIFT, partsFor, brandColors, type Detail } from "./geometry";
+import { VIEWBOX, partsFor, brandColors, type Detail } from "./geometry";
 
 /**
- * The Penguin Beach Camp mark: a penguin that is also an A-frame tent, with
- * the sun over its shoulder and a wave underfoot. See ./geometry.ts for the
- * reasoning and every number.
+ * The Penguin Beach Camp mark: a round badge with the sun going down into the
+ * bay and a penguin — which is also an A-frame tent — on the shore in front
+ * of it. See ./geometry.ts for the reasoning and every number.
  *
  * Tiers
  * -----
- *   <LogoMark />                  full — with the wave, 40px and up
- *   <LogoMark detail="simple" />  no wave, 24–40px
- *   <LogoMark detail="micro" />   silhouette, door, beak and sun, under 24px
+ *   <LogoMark />                  full, 40px and up
+ *   <LogoMark detail="simple" />  24–40px (currently identical to full)
+ *   <LogoMark detail="micro" />   no eyes or beak, under 24px
  *   <Logo variant="lockup" />     mark + wordmark, horizontal
  *   <Logo variant="stacked" />    mark over wordmark
  *   <LogoSeal />                  mark inside a ring of text — a stamp
@@ -27,23 +27,24 @@ function MarkShapes({
   accent?: string;
 }) {
   return (
-    <g transform={`translate(0 ${TIER_SHIFT[detail]})`}>
+    <>
       {partsFor(detail).map((p, i) => {
         const color = p.tone === "accent" ? accent : "currentColor";
         return p.stroke ? (
           <path
             key={i}
             d={p.d}
+            transform={p.transform}
             fill="none"
             stroke={color}
             strokeWidth={p.stroke}
             strokeLinecap="round"
           />
         ) : (
-          <path key={i} d={p.d} fill={color} fillRule="evenodd" />
+          <path key={i} d={p.d} transform={p.transform} fill={color} fillRule="evenodd" />
         );
       })}
-    </g>
+    </>
   );
 }
 
@@ -157,7 +158,8 @@ export function LogoSeal({ className = "" }: { className?: string }) {
 
       {/* 64×64 mark centred in the 140 seal: (140-64)/2 = 38 */}
       <g transform="translate(38 38)">
-        <MarkShapes detail="simple" />
+        {/* The seal is a faint stamp, so the sun is dimmed with the ink. */}
+        <MarkShapes detail="simple" accent="rgb(243 156 74 / 0.3)" />
       </g>
     </svg>
   );

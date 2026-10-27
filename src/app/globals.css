@@ -114,8 +114,9 @@ html.lenis body {
 }
 
 /* Fluid display scale — movie-title typography (trend: type as design element) */
+/* Sized so "Penguin Beach Camp" stays on one line at every width. */
 .t-mega {
-  font-size: clamp(3.4rem, 13vw, 13rem);
+  font-size: clamp(2.2rem, 11.2vw, 12rem);
   line-height: 0.86;
 }
 .t-huge {
