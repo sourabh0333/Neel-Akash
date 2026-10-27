@@ -2,15 +2,16 @@ import type { ReactNode } from "react";
 import Reveal from "./ui/Reveal";
 
 /**
- * The opening of every stand-alone page: a way back, an eyebrow, the title
- * and a short standfirst. The top padding clears the fixed nav.
+ * The opening of every page: an eyebrow, the title and a short standfirst,
+ * plus an optional way back for pages nested under another (a single stay
+ * under Stays). The top padding clears the fixed nav.
  */
 export default function PageHeader({
   eyebrow,
   title,
   accent,
   children,
-  back = { href: "/", label: "Home" },
+  back,
 }: {
   eyebrow: string;
   title: string;
@@ -22,14 +23,16 @@ export default function PageHeader({
   return (
     <header className="relative bg-abyss pb-14 pt-36 md:pb-20 md:pt-44">
       <div className="mx-auto max-w-[100rem] px-6 md:px-10">
-        <a
-          href={back.href}
-          className="link-draw inline-flex items-center gap-2 text-[0.66rem] uppercase tracking-[0.24em] text-sand-dim hover:text-bone"
-        >
-          <span aria-hidden="true">&larr;</span> {back.label}
-        </a>
+        {back && (
+          <a
+            href={back.href}
+            className="link-draw mb-10 inline-flex items-center gap-2 text-[0.66rem] uppercase tracking-[0.24em] text-sand-dim hover:text-bone"
+          >
+            <span aria-hidden="true">&larr;</span> {back.label}
+          </a>
+        )}
 
-        <div className="mt-10 grid gap-8 lg:grid-cols-12 lg:items-end">
+        <div className="grid gap-8 lg:grid-cols-12 lg:items-end">
           <div className="lg:col-span-8">
             <Reveal as="p" mode="fade" className="t-eyebrow text-ember-500">
               {eyebrow}

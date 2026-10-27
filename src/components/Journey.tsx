@@ -4,7 +4,6 @@ import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import { gsap, ScrollTrigger, prefersReducedMotion } from "@/lib/anim";
 import { journey, site } from "@/lib/site";
-import Reveal from "./ui/Reveal";
 
 /**
  * The route drawn as an actual route.
@@ -52,12 +51,7 @@ const icons: Record<string, React.ReactNode> = {
   ),
 };
 
-export default function Journey({
-  standalone = false,
-}: {
-  /** On the /getting-here page: no section heading, no link to itself. */
-  standalone?: boolean;
-}) {
+export default function Journey() {
   const root = useRef<HTMLElement>(null);
 
   useGSAP(
@@ -135,34 +129,9 @@ export default function Journey({
     <section
       ref={root}
       id="journey"
-      className={`relative bg-abyss ${standalone ? "pb-28 md:pb-36" : "py-28 md:py-36"}`}
+      className="relative bg-abyss pb-28 md:pb-36"
     >
       <div className="mx-auto max-w-[100rem] px-6 md:px-10">
-        {!standalone && (
-          <div className="mb-16 grid gap-8 lg:grid-cols-12">
-            <div className="lg:col-span-7">
-              <Reveal as="p" mode="fade" className="t-eyebrow text-ember-500">
-                Getting here
-              </Reveal>
-              <Reveal as="h2" className="font-display t-huge mt-5 text-bone">
-                A train, a van,
-                <br />
-                <span className="italic text-neel-300">and a boat</span>
-              </Reveal>
-            </div>
-            <Reveal
-              as="p"
-              mode="fade"
-              delay={0.12}
-              className="self-end text-sm leading-relaxed text-sand lg:col-span-5"
-            >
-              Roughly four and a half hours door to door from central Kolkata.
-              The last leg is a ferry, so the tide matters &mdash; call ahead and
-              we will tell you which train to take.
-            </Reveal>
-          </div>
-        )}
-
         <ol className="relative">
           {journey.map((j, i) => (
             <li
@@ -250,11 +219,6 @@ export default function Journey({
           </a>
           <span className="hidden h-4 w-px bg-bone/20 sm:block" />
           <p className="text-sm text-sand-dim">{site.location.full}</p>
-          {!standalone && (
-            <a href="/getting-here" className="link-draw text-sm text-ember-300 sm:ml-auto">
-              The full route &rarr;
-            </a>
-          )}
         </div>
       </div>
     </section>
