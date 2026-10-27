@@ -66,7 +66,7 @@ step.
 | Stays | `/stays`, plus `/stays/<id>` per stay | `stays[]` (add a stay, get a page); `/stays` has its own sections in `src/components/stays/` |
 | Menu | `/menu` | `meals[]`; the page's own sections are in `src/components/menu/` |
 | Gallery | `/gallery` | `photos[]` (every picture in `gallery`, `stays` and `experiences`); sections in `src/components/gallery/` |
-| Days Here | `/days-here` | `experiences[]` |
+| Days Here | `/days-here` | `experiences[]` and `meals[]`; sections in `src/components/days/` |
 | Getting Here | `/getting-here` | `journey[]` |
 | Contact | `/contact` | the booking sentence |
 
@@ -145,6 +145,14 @@ before editing:
   Stays / Days filters that re-flow it with GSAP Flip, and a full-screen
   viewer (arrow keys, swipe, Escape). Change a picture in `gallery`, `stays`
   or `experiences` and the wall follows.
+
+  The Days Here page opens on the same horizon hero, then the day as the
+  sun sees it: the section pins and scrolling carries the sun along its arc
+  from 05:00 to 20:00, with the sky running from dawn to night, a clock,
+  its light on the sea, stars at the end, and each moment in
+  `experiences[]` lighting up as the sun reaches it. Then each moment up
+  close (the Home cross-dissolve), and a suggested two days hour by hour,
+  sorted from the times in `meals[]` and `experiences[]`.
 
   The route map (`src/components/route/RouteMap.tsx`) plays the trip like a
   navigation app on the **real delta**: coastline, estuary, islands and the
