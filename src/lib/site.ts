@@ -172,18 +172,23 @@ export type Meal = {
   dishes: Dish[];
 };
 
-/** The day's running order. Meals are served, not ordered. */
+/**
+ * The stay's running order, transcribed from the camp's own menu card:
+ * arrival, lunch, evening snacks, dinner, then breakfast the next morning.
+ * Meals are served, not ordered. Each `bn` is the card's wording; items the
+ * card lists without a photo of their own are folded into the nearest dish.
+ */
 export const meals: Meal[] = [
   {
-    time: "08:30",
-    label: "Breakfast",
-    bn: "জলখাবার",
+    time: "Arrival",
+    label: "Welcome",
+    bn: "প্রথমে",
     dishes: [
       {
-        name: "Luchi & Cholar Dal",
-        bn: "লুচি ও ছোলার ডাল",
-        note: "Puffed white flour bread, split chickpea dal with coconut",
-        image: "/images/dish-luchi.jpg",
+        name: "Welcome Drink",
+        bn: "ওয়েলকাম ড্রিংক",
+        note: "Something cold the moment you arrive",
+        image: "/images/dish-daab.jpg",
       },
     ],
   },
@@ -193,34 +198,34 @@ export const meals: Meal[] = [
     bn: "দুপুরের খাবার",
     dishes: [
       {
-        name: "Aloo Posto",
-        bn: "আলু পোস্ত",
-        note: "Potato in a ground poppy-seed paste",
+        name: "Bhaat, Dal & Sabji",
+        bn: "ভাত, ডাল, সব্জী, আমের চাট, স্যালাড ও পাঁপড়",
+        note: "Rice, dal and the day's vegetables, with aamer chaat (mango chutney), salad and papad",
         image: "/images/dish-posto.jpg",
       },
       {
-        name: "Fish Kalia",
-        bn: "মাছের কালিয়া",
-        note: "Whatever came off the boat, in a rich onion-ginger gravy",
-        image: "/images/dish-kalia.jpg",
+        name: "Pomfret",
+        bn: "পমপ্লেট",
+        note: "Pomfret from the bay",
+        image: "/images/dish-paturi.jpg",
       },
       {
-        name: "Bhetki Paturi",
-        bn: "ভেটকি পাতুরি",
-        note: "Barramundi steamed in banana leaf with mustard",
-        image: "/images/dish-paturi.jpg",
+        name: "Chingri",
+        bn: "চিংড়ি",
+        note: "Prawns from the bay",
+        image: "/images/dish-malaikari.jpg",
       },
     ],
   },
   {
     time: "17:30",
-    label: "Evening tea",
+    label: "Evening snacks",
     bn: "বিকেলের চা",
     dishes: [
       {
-        name: "Cha & Telebhaja",
-        bn: "চা ও তেলেভাজা",
-        note: "Sweet milk tea and hot fritters, taken facing the water",
+        name: "Cha, Muri & Veg Pakora",
+        bn: "চা, মুড়ি ও ভেজ পকোড়া",
+        note: "Tea, puffed rice and hot vegetable fritters, taken facing the water",
         image: "/images/dish-telebhaja.jpg",
       },
     ],
@@ -231,28 +236,29 @@ export const meals: Meal[] = [
     bn: "রাতের খাবার",
     dishes: [
       {
-        name: "Chingri Malaikari",
-        bn: "চিংড়ি মালাইকারি",
-        note: "Prawns in coconut milk, the Sunday dish of every Bengali house",
-        image: "/images/dish-malaikari.jpg",
-      },
-      {
-        name: "Daab Chingri",
-        bn: "ডাব চিংড়ি",
-        note: "Prawns steamed inside a green coconut",
-        image: "/images/dish-daab.jpg",
-      },
-      {
-        name: "Kosha Mangsho",
-        bn: "কষা মাংস",
-        note: "Slow-fried mutton, dark and unhurried",
+        name: "Bhaat or Roti, Dal & Sabji",
+        bn: "ভাত/রুটি, ডাল ও সব্জী",
+        note: "Rice or roti, dal and the day's vegetables",
         image: "/images/dish-mangsho.jpg",
       },
       {
-        name: "Nolen Gurer Payesh",
-        bn: "নলেন গুড়ের পায়েস",
-        note: "Rice pudding with date-palm jaggery — winter only",
-        image: "/images/dish-payesh.jpg",
+        name: "Chicken",
+        bn: "চিকেন",
+        note: "Chicken, to go with the rice or roti",
+        image: "/images/dish-kalia.jpg",
+      },
+    ],
+  },
+  {
+    time: "08:30",
+    label: "Next morning",
+    bn: "পরের দিন সকালে",
+    dishes: [
+      {
+        name: "Luchi & Aloor Torkari",
+        bn: "চা, বিস্কুট, লুচি, আলুর তরকারী ও ডিম সেদ্ধ",
+        note: "Puffed fried bread and potato curry, with a boiled egg — and tea and biscuits to start",
+        image: "/images/dish-luchi.jpg",
       },
     ],
   },
