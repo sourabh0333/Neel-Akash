@@ -1,23 +1,28 @@
 import type { Metadata } from "next";
 import { site } from "@/lib/site";
-import PageHeader from "@/components/PageHeader";
-import Stays from "@/components/Stays";
+import StaysHero from "@/components/stays/StaysHero";
+import StaysShowcase from "@/components/stays/StaysShowcase";
+import StaysIncluded from "@/components/stays/StaysIncluded";
+import StaysCompare from "@/components/stays/StaysCompare";
+import StaysCta from "@/components/stays/StaysCta";
 
 export const metadata: Metadata = {
   title: "Stays",
   description: `Sea-facing tents, cottages and a group special at ${site.name}, ${site.location.island}. Prices per night with all meals.`,
 };
 
+/**
+ * The stays, told in order: the horizon, each stay in full, what a night
+ * includes, the three side by side, and how to book.
+ */
 export default function StaysPage() {
   return (
     <main>
-      <PageHeader eyebrow="Where you sleep" title="Twelve doors," accent="all facing water">
-        Tent and cottage tariffs are per person, per night, and include a
-        welcome drink, lunch, evening snacks, dinner and the next
-        morning&rsquo;s breakfast. The group special is one price for the
-        whole group.
-      </PageHeader>
-      <Stays standalone />
+      <StaysHero />
+      <StaysShowcase />
+      <StaysIncluded />
+      <StaysCompare />
+      <StaysCta />
     </main>
   );
 }
