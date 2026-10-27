@@ -373,6 +373,19 @@ export const gallery = [
   },
 ];
 
+/**
+ * Every photograph on the site in one list, for the /gallery page's wall:
+ * the island roll, then each stay and each part of the day. Swap a picture in
+ * `gallery`, `stays` or `experiences` and the wall follows.
+ */
+export type Photo = { src: string; alt: string; title: string; group: "Island" | "Stays" | "Days" };
+
+export const photos: Photo[] = [
+  ...gallery.map((g) => ({ src: g.src, alt: g.alt, title: g.place, group: "Island" as const })),
+  ...stays.map((s) => ({ src: s.image, alt: s.name, title: s.name, group: "Stays" as const })),
+  ...experiences.map((e) => ({ src: e.image, alt: e.title, title: e.title, group: "Days" as const })),
+];
+
 /* ── Voices ────────────────────────────────────────────────── */
 
 export type Testimonial = {

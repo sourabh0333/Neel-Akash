@@ -65,7 +65,7 @@ step.
 | The Island | `/island` | its own sections (`src/components/island/`) plus the island rail |
 | Stays | `/stays`, plus `/stays/<id>` per stay | `stays[]` (add a stay, get a page); `/stays` has its own sections in `src/components/stays/` |
 | Menu | `/menu` | `meals[]`; the page's own sections are in `src/components/menu/` |
-| Gallery | `/gallery` | `gallery[]` |
+| Gallery | `/gallery` | `photos[]` (every picture in `gallery`, `stays` and `experiences`); sections in `src/components/gallery/` |
 | Days Here | `/days-here` | `experiences[]` |
 | Getting Here | `/getting-here` | `journey[]` |
 | Contact | `/contact` | the booking sentence |
@@ -138,6 +138,13 @@ before editing:
   by word, carries every plate along a pinned sideways rail (a swipeable row
   on phones), then the day course by course (the Home kitchen section) and a
   close that opens from a slot. Everything reads from `meals[]`.
+
+  The Gallery page opens on the same horizon hero, then a field of frames
+  you scroll into (each grows at its own rate until the middle one fills the
+  screen), then every photograph on the site on one wall with All / Island /
+  Stays / Days filters that re-flow it with GSAP Flip, and a full-screen
+  viewer (arrow keys, swipe, Escape). Change a picture in `gallery`, `stays`
+  or `experiences` and the wall follows.
 
   The route map (`src/components/route/RouteMap.tsx`) plays the trip like a
   navigation app on the **real delta**: coastline, estuary, islands and the
