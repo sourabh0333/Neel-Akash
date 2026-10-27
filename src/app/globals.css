@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 /* ═══════════════════════════════════════════════════════════
-   NEEL AKASH — design tokens
+   PENGUIN BEACH CAMP — design tokens
    Cinematic dark: deep night-sea indigo, luminous sunset amber.
    ═══════════════════════════════════════════════════════════ */
 
@@ -12,7 +12,7 @@
   --color-ink-3: #0d1424;
   --color-abyss: #030509;
 
-  /* Blue — the "neel" of Neel Akash */
+  /* Blue — "neel" is Bengali for blue */
   --color-neel-900: #0a1730;
   --color-neel-700: #14315e;
   --color-neel-500: #2d63ad;

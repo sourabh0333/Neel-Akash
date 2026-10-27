@@ -1,16 +1,16 @@
 /**
  * ─────────────────────────────────────────────────────────────
- *  NEEL AKASH — single source of truth.
+ *  PENGUIN BEACH CAMP — single source of truth.
  *  Everything the owner may want to change lives in this file.
  * ─────────────────────────────────────────────────────────────
  */
 
 export const site = {
-  name: "Neel Akash",
-  nameBn: "নীল আকাশ",
+  name: "Penguin Beach Camp",
+  // The same name written in Bengali script (a transliteration, not a
+  // translation) — shown beside the English in the nav, intro and footer.
+  nameBn: "পেঙ্গুইন বিচ ক্যাম্প",
   tagline: "Where the blue sky ends and the sea begins",
-  // "Neel Akash" literally means "Blue Sky" in Bengali.
-  meaning: "Blue Sky",
   description:
     "A sea-facing beach retreat on Mousuni Island — tents, cottages and bonfire nights on the edge of the Bay of Bengal, three hours from Kolkata.",
 
@@ -288,7 +288,7 @@ export const journey = [
   {
     step: "04",
     mode: "Arrival",
-    title: "Ghat → Neel Akash",
+    title: "Ghat → Penguin Beach Camp",
     detail:
       "A toto through the paddy and the betel groves. We meet you at the ghat if you let us know you are coming.",
     duration: "≈ 15 min",

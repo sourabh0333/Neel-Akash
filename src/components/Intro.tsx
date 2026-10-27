@@ -60,9 +60,7 @@ export default function Intro() {
           <div className="lg:col-span-3">
             <p className="t-eyebrow text-ember-500">The place</p>
             <p className="font-bn mt-4 text-2xl text-sand-dim">{site.nameBn}</p>
-            <p className="mt-2 text-sm text-sand-dim">
-              {site.name} &mdash; &ldquo;{site.meaning}&rdquo;
-            </p>
+            <p className="mt-2 text-sm text-sand-dim">{site.name}</p>
           </div>
 
           <div className="lg:col-span-9">

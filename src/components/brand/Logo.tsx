@@ -8,8 +8,8 @@ import {
 } from "./geometry";
 
 /**
- * The Neel Akash mark: a Bengali matra with the island hanging beneath it in
- * kantha running stitch. See ./geometry.ts for the reasoning and every number.
+ * The Penguin Beach Camp mark: a Bengali matra with the island hanging
+ * beneath it in kantha running stitch. See ./geometry.ts for the reasoning and every number.
  *
  * Tiers
  * -----
@@ -177,11 +177,15 @@ export function LogoSeal({ className = "" }: { className?: string }) {
         opacity={0.35}
       />
 
+      {/* textLength = the arc's circumference (2π·55), so the ring always
+          closes exactly on itself however long the name is. */}
       <text
         className="font-sans"
         fill="currentColor"
         fontSize={7}
         letterSpacing={3.2}
+        textLength={345.6}
+        lengthAdjust="spacing"
         opacity={0.75}
       >
         <textPath href="#seal-arc" startOffset="0%">

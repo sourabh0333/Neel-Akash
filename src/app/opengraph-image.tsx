@@ -50,7 +50,7 @@ export default function OpengraphImage() {
           <div style={{ display: "flex", fontSize: 24, letterSpacing: 10, color: c.sandDim }}>
             {site.location.island.toUpperCase()} · {site.location.state.toUpperCase()}
           </div>
-          <div style={{ display: "flex", fontSize: 128, lineHeight: 1, marginTop: 20, color: c.bone }}>
+          <div style={{ display: "flex", fontSize: 100, lineHeight: 1, marginTop: 20, color: c.bone }}>
             {site.name}
           </div>
           <div style={{ display: "flex", fontSize: 34, marginTop: 24, color: c.sand }}>
