@@ -1,6 +1,10 @@
 import type { Metadata, Viewport } from "next";
 import { Instrument_Serif, Inter, Noto_Serif_Bengali } from "next/font/google";
 import { site } from "@/lib/site";
+import SmoothScroll from "@/components/SmoothScroll";
+import Cursor from "@/components/Cursor";
+import Nav from "@/components/Nav";
+import Footer from "@/components/Footer";
 import "./globals.css";
 
 /* Display serif for the cinematic title treatment. */
@@ -26,7 +30,7 @@ const bengali = Noto_Serif_Bengali({
   display: "swap",
 });
 
-const url = "https://penguinbeachcamp.example";
+const url = site.url;
 
 export const metadata: Metadata = {
   metadataBase: new URL(url),
@@ -110,7 +114,12 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
+        {/* The shell every page shares: scroll, cursor, nav and footer. */}
+        <SmoothScroll />
+        <Cursor />
+        <Nav />
         {children}
+        <Footer />
       </body>
     </html>
   );

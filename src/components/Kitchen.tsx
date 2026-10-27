@@ -252,6 +252,9 @@ export default function Kitchen() {
               >
                 Tell us when you book
               </a>
+              <a href="/menu" className="link-draw text-sm text-ember-300 sm:ml-auto">
+                See the full menu &rarr;
+              </a>
             </div>
           </div>
         </div>

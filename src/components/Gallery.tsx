@@ -23,7 +23,13 @@ import Reveal from "./ui/Reveal";
 
 const OPEN = 3.6; // flex-grow of the open panel; the others stay at 1
 
-export default function Gallery() {
+export default function Gallery({
+  layout = "shutters",
+}: {
+  /** "grid" (the /gallery page) shows the mosaic at every width. */
+  layout?: "shutters" | "grid";
+}) {
+  const grid = layout === "grid";
   const root = useRef<HTMLElement>(null);
   const panels = useRef<Array<HTMLButtonElement | null>>([]);
   const tiles = useRef<Array<HTMLButtonElement | null>>([]);
@@ -234,20 +240,31 @@ export default function Gallery() {
             Sea, sand,
             <span className="italic text-neel-300"> and very little else</span>
           </Reveal>
-          <Reveal
-            as="p"
-            mode="fade"
-            className="flex items-center gap-3 text-[0.64rem] uppercase tracking-[0.24em] text-sand-dim"
-          >
-            <span className="hidden h-px w-8 bg-ember-500 sm:block" />
-            {String(active + 1).padStart(2, "0")} &nbsp;/&nbsp;{" "}
-            {String(gallery.length).padStart(2, "0")}
-          </Reveal>
+          {grid ? (
+            <p className="text-[0.64rem] uppercase tracking-[0.24em] text-sand-dim">
+              {gallery.length} photographs &middot; click to enlarge
+            </p>
+          ) : (
+            <div className="flex items-center gap-6">
+              <Reveal
+                as="p"
+                mode="fade"
+                className="flex items-center gap-3 text-[0.64rem] uppercase tracking-[0.24em] text-sand-dim"
+              >
+                <span className="hidden h-px w-8 bg-ember-500 sm:block" />
+                {String(active + 1).padStart(2, "0")} &nbsp;/&nbsp;{" "}
+                {String(gallery.length).padStart(2, "0")}
+              </Reveal>
+              <a href="/gallery" className="link-draw text-sm text-ember-300">
+                All photos &rarr;
+              </a>
+            </div>
+          )}
         </div>
 
         {/* ── Shutters (md and up) ── */}
         <div
-          className="panel-row hidden h-[clamp(24rem,58vh,34rem)] gap-2 md:flex"
+          className={`panel-row hidden h-[clamp(24rem,58vh,34rem)] gap-2 ${grid ? "" : "md:flex"}`}
           onPointerLeave={() => setActive(0)}
         >
           {gallery.map((g, i) => (
@@ -302,7 +319,11 @@ export default function Gallery() {
         </div>
 
         {/* ── Editorial mosaic (below md) ── */}
-        <div className="mosaic grid grid-cols-2 gap-3 md:hidden">
+        <div
+          className={`mosaic grid grid-cols-2 gap-3 ${
+            grid ? "md:grid-cols-3 md:gap-4" : "md:hidden"
+          }`}
+        >
           {gallery.map((g, i) => (
             <button
               key={g.src}
@@ -313,13 +334,21 @@ export default function Gallery() {
               aria-label={`Enlarge: ${g.alt}`}
               className={`mosaic-tile relative overflow-hidden rounded-sm bg-abyss ${
                 i === 0 || i === 5 ? "col-span-2 aspect-16/10" : "aspect-3/4"
+              } ${
+                // Three columns: the first photo fills a 2×2 block, the next
+                // two stack beside it, and the last three make one row.
+                grid
+                  ? i === 0
+                    ? "md:row-span-2 md:aspect-auto"
+                    : "md:col-span-1 md:aspect-4/5"
+                  : ""
               }`}
             >
               <Image
                 src={g.src}
                 alt={g.alt}
                 fill
-                sizes="(max-width: 768px) 50vw, 25vw"
+                sizes={grid ? "(max-width: 768px) 50vw, 33vw" : "(max-width: 768px) 50vw, 25vw"}
                 className="object-cover"
               />
               <span className="absolute inset-0 bg-linear-to-t from-abyss/85 to-transparent" />

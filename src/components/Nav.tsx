@@ -135,7 +135,7 @@ export default function Nav() {
       >
         <div className="mx-auto flex max-w-[100rem] items-center justify-between px-6 py-5 md:px-10">
           <a
-            href="#top"
+            href="/"
             aria-label={`${site.name} — home`}
             className="group/logo flex items-center gap-3.5"
           >

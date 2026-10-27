@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useGSAP } from "@gsap/react";
 import { gsap, prefersReducedMotion, isTouchOrSmall } from "@/lib/anim";
 import { stays } from "@/lib/site";
+import PriceTag from "./ui/PriceTag";
 import Reveal from "./ui/Reveal";
 import Magnetic from "./ui/Magnetic";
 import { site } from "@/lib/site";
@@ -86,7 +87,7 @@ export default function Stays() {
             <article
               onPointerEnter={() => setActive(i)}
               onPointerLeave={() => setActive(null)}
-              className="group grid grid-cols-1 items-center gap-6 py-9 md:grid-cols-12 md:gap-8 md:py-11"
+              className="group relative grid grid-cols-1 items-center gap-6 py-9 md:grid-cols-12 md:gap-8 md:py-11"
             >
               {/* Mobile / touch image */}
               <div className="relative aspect-16/10 w-full overflow-hidden rounded-sm md:hidden">
@@ -105,37 +106,25 @@ export default function Stays() {
               </p>
 
               <h3 className="col-span-12 font-display text-[clamp(1.9rem,4vw,3.2rem)] leading-none text-bone transition-all duration-600 ease-[cubic-bezier(.16,1,.3,1)] md:col-span-4 md:group-hover:translate-x-3 md:group-hover:text-ember-300">
-                {s.name}
+                {/* The link covers the whole row, so any part of it opens the stay. */}
+                <a
+                  href={`/stays/${s.id}`}
+                  data-cursor="View"
+                  className="after:absolute after:inset-0 after:content-['']"
+                >
+                  {s.name}
+                </a>
               </h3>
 
               <p className="col-span-12 max-w-[42ch] text-sm leading-relaxed text-sand md:col-span-3">
                 {s.blurb}
               </p>
 
-              <div className="col-span-12 md:col-span-2 md:text-right">
-                {s.originalPrice && (
-                  <div className="mb-1.5 flex items-center gap-2.5 md:justify-end">
-                    <span className="rounded-full bg-ember-500/15 px-2.5 py-1 text-[0.6rem] font-semibold uppercase tracking-[0.14em] text-ember-300">
-                      &#8377;{(s.originalPrice - s.price).toLocaleString("en-IN")} off
-                    </span>
-                    <s className="font-display text-lg text-sand-dim decoration-ember-400/70">
-                      <span className="sr-only">Regular price </span>
-                      &#8377;{s.originalPrice.toLocaleString("en-IN")}
-                    </s>
-                  </div>
-                )}
-                <p className="font-display text-2xl text-bone md:text-3xl">
-                  &#8377;{s.price.toLocaleString("en-IN")}
-                </p>
-                <p className="mt-1 text-[0.64rem] uppercase tracking-[0.14em] text-sand-dim">
-                  {s.priceNote}
-                </p>
-                <p className="mt-1 text-[0.64rem] uppercase tracking-[0.14em] text-sand-dim">
-                  {s.capacity}
-                </p>
+              <div className="col-span-12 md:col-span-2">
+                <PriceTag stay={s} align="end" />
               </div>
 
-              <ul className="col-span-12 flex flex-wrap gap-x-5 gap-y-2 md:col-span-9 md:col-start-4">
+              <ul className="col-span-12 flex flex-wrap items-center gap-x-5 gap-y-2 md:col-span-9 md:col-start-4">
                 {s.features.map((f) => (
                   <li
                     key={f}
@@ -145,6 +134,9 @@ export default function Stays() {
                     {f}
                   </li>
                 ))}
+                <li className="text-[0.7rem] tracking-wide text-ember-300">
+                  View the stay &rarr;
+                </li>
               </ul>
             </article>
             <div className="rule" />
