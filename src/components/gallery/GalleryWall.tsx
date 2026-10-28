@@ -8,7 +8,7 @@ import { photos, type Photo } from "@/lib/site";
 import { lockScroll, unlockScroll } from "@/lib/scroll";
 import Reveal from "../ui/Reveal";
 
-const FILTERS = ["All", "Island", "Stays", "Days"] as const;
+const FILTERS = ["All", "Island", "Camp", "Stays", "Days"] as const;
 type Filter = (typeof FILTERS)[number];
 
 /** A rhythm of shapes so the wall reads as a contact sheet, not a grid. */

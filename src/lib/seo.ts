@@ -82,7 +82,7 @@ export const routes: Route[] = [
       "src/components/Testimonials.tsx",
       DATA,
     ],
-    images: ["/images/xp-bonfire.jpg"],
+    images: ["/images/camp-bonfire.jpg"],
   },
 ];
 

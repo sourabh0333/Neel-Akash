@@ -101,6 +101,7 @@ export default function Stays() {
                   fill
                   sizes="100vw"
                   className="object-cover"
+                  style={{ objectPosition: s.focus }}
                 />
                 <div className="absolute inset-0 bg-abyss/25" />
               </div>
@@ -181,7 +182,7 @@ export default function Stays() {
             fill
             sizes="14rem"
             className="object-cover transition-opacity duration-500"
-            style={{ opacity: active === i ? 1 : 0 }}
+            style={{ opacity: active === i ? 1 : 0, objectPosition: s.focus }}
           />
         ))}
       </div>

@@ -68,6 +68,8 @@ export type Stay = {
   capacity: string;
   features: string[];
   image: string;
+  /** Where the photograph's subject sits (CSS object-position), for wide crops. */
+  focus?: string;
 };
 
 export const stays: Stay[] = [
@@ -83,7 +85,8 @@ export const stays: Stay[] = [
     capacity: "2 – 3 guests",
     features: ["Direct beach access", "Attached washroom", "Power & fan", "Mosquito nets"],
     image:
-      "/images/stay-tent.jpg",
+      "/images/camp-tent.jpg",
+    focus: "50% 55%",
   },
   {
     id: "cottage",
@@ -97,7 +100,8 @@ export const stays: Stay[] = [
     capacity: "2 – 4 guests",
     features: ["Private porch", "Attached washroom", "Ceiling fan", "Sea view"],
     image:
-      "/images/stay-bamboo.jpg",
+      "/images/camp-room.jpg",
+    focus: "50% 75%",
   },
   {
     id: "group-special",
@@ -162,7 +166,7 @@ export const experiences: Experience[] = [
     copy:
       "Driftwood, a guitar if someone brought one, fish off the coals, and a sky doing what it cannot do over Kolkata.",
     image:
-      "/images/xp-bonfire.jpg",
+      "/images/camp-bonfire.jpg",
   },
 ];
 
@@ -204,7 +208,7 @@ export const meals: Meal[] = [
         name: "Welcome Drink",
         bn: "ওয়েলকাম ড্রিংক",
         note: "Something cold the moment you arrive",
-        image: "/images/dish-daab.jpg",
+        image: "/images/camp-welcome-daab.jpg",
       },
     ],
   },
@@ -371,10 +375,10 @@ export const gallery = [
     ratio: 0.78,
   },
   {
-    src: "/images/g-6.jpg",
-    alt: "Night sky above the camp",
+    src: "/images/camp-heart-bench.jpg",
+    alt: "The lit bamboo heart bench in the camp garden at night",
     place: "The camp",
-    ratio: 1.6,
+    ratio: 1.33,
   },
 ];
 
@@ -383,10 +387,33 @@ export const gallery = [
  * the island roll, then each stay and each part of the day. Swap a picture in
  * `gallery`, `stays` or `experiences` and the wall follows.
  */
-export type Photo = { src: string; alt: string; title: string; group: "Island" | "Stays" | "Days" };
+export type Photo = { src: string; alt: string; title: string; group: "Island" | "Camp" | "Stays" | "Days" };
+
+/** The camp itself after dark, beyond the frames already used elsewhere. */
+const camp: Photo[] = [
+  {
+    src: "/images/camp-night-path.jpg",
+    alt: "A sandy path between lit bamboo fences, leading up the steps under the casuarinas",
+    title: "The path in",
+    group: "Camp",
+  },
+  {
+    src: "/images/camp-heart-palms.jpg",
+    alt: "The glowing heart bench behind the palms in the camp garden",
+    title: "The garden",
+    group: "Camp",
+  },
+  {
+    src: "/images/camp-welcome-daab.jpg",
+    alt: "A green coconut with a straw, held up in front of the lit heart bench",
+    title: "Welcome drink",
+    group: "Camp",
+  },
+];
 
 export const photos: Photo[] = [
   ...gallery.map((g) => ({ src: g.src, alt: g.alt, title: g.place, group: "Island" as const })),
+  ...camp,
   ...stays.map((s) => ({ src: s.image, alt: s.name, title: s.name, group: "Stays" as const })),
   ...experiences.map((e) => ({ src: e.image, alt: e.title, title: e.title, group: "Days" as const })),
 ];
