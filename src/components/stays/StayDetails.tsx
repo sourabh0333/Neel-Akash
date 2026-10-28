@@ -124,7 +124,7 @@ export default function StayDetails({ stay }: { stay: Stay }) {
           <aside className="lg:col-span-4 lg:col-start-9">
             <div className="sd-card sticky top-28 overflow-hidden rounded-3xl border border-bone/12 bg-ink-2">
               <div className="relative h-40 overflow-hidden">
-                <Image src={stay.image} alt="" fill sizes="(max-width: 1024px) 100vw, 33vw" className="object-cover" />
+                <Image src={stay.image} alt="" fill sizes="(max-width: 1024px) 100vw, 33vw" className="object-cover" style={{ objectPosition: stay.focus }} />
                 <div className="absolute inset-0 bg-linear-to-t from-ink-2 to-transparent" />
               </div>
               <div className="p-8">
@@ -178,6 +178,7 @@ export default function StayDetails({ stay }: { stay: Stay }) {
                     fill
                     sizes="(max-width: 768px) 100vw, 50vw"
                     className="object-cover transition-[filter] duration-700 group-hover:brightness-110"
+                    style={{ objectPosition: o.focus }}
                   />
                 </div>
                 <div className="absolute inset-0 bg-linear-to-t from-abyss/90 via-abyss/20 to-transparent" />

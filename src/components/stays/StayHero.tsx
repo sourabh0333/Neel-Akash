@@ -25,7 +25,7 @@ export default function StayHero({ stay }: { stay: Stay }) {
       <div className="hz-frame absolute inset-0 overflow-hidden will-change-[clip-path]">
         <div className="hz-open absolute inset-0 overflow-hidden">
           <div className="hz-photo absolute inset-0">
-            <Image src={stay.image} alt={stay.name} fill priority sizes="100vw" className="object-cover" />
+            <Image src={stay.image} alt={stay.name} fill priority sizes="100vw" className="object-cover" style={{ objectPosition: stay.focus }} />
           </div>
           <div className="absolute inset-0 bg-linear-to-b from-abyss/60 via-abyss/10 to-abyss/90" />
           <div className="absolute inset-0 bg-linear-to-r from-abyss/55 via-transparent to-transparent" />

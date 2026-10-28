@@ -103,6 +103,7 @@ export default function StaysShowcase() {
                       fill
                       sizes="(max-width: 1024px) 100vw, 58vw"
                       className="object-cover transition-[filter] duration-700 group-hover:brightness-110"
+                      style={{ objectPosition: s.focus }}
                     />
                   </div>
                   <div className="absolute inset-0 bg-linear-to-t from-abyss/70 via-transparent to-abyss/20" />

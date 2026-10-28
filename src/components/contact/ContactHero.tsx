@@ -20,12 +20,12 @@ export default function ContactHero() {
         <div className="hz-open absolute inset-0 overflow-hidden">
           <div className="hz-photo absolute inset-0">
             <Image
-              src="/images/xp-bonfire.jpg"
-              alt="Bonfire on the beach at night"
+              src="/images/camp-bonfire.jpg"
+              alt="The bonfire burning in the camp garden at night"
               fill
               priority
               sizes="100vw"
-              className="object-cover"
+              className="object-cover md:object-[50%_72%]"
             />
           </div>
           <div className="absolute inset-0 bg-linear-to-b from-abyss/60 via-abyss/10 to-abyss/90" />

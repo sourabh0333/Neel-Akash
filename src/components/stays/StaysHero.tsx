@@ -22,12 +22,13 @@ export default function StaysHero() {
         <div className="hz-open absolute inset-0 overflow-hidden">
           <div className="hz-photo absolute inset-0">
             <Image
-              src="/images/stay-tent.jpg"
-              alt="A sea-facing tent pitched on the sand"
+              src="/images/camp-tent.jpg"
+              alt="A dome tent made up with bedding under the canopy at Penguin Beach Camp"
               fill
               priority
               sizes="100vw"
               className="object-cover"
+              style={{ objectPosition: stays[0].focus }}
             />
           </div>
           <div className="absolute inset-0 bg-linear-to-b from-abyss/60 via-abyss/10 to-abyss/90" />
