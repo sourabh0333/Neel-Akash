@@ -2,12 +2,13 @@
 
 import { useRef } from "react";
 import Image from "next/image";
-import { journey, site } from "@/lib/site";
+import { ghat, journey, site } from "@/lib/site";
 import { useHorizon, TideLine, ScrollCue, dms } from "../ui/Horizon";
 import HeroTitle from "../ui/HeroTitle";
 
 const total = journey.reduce((n, j) => n + j.minutes, 0);
 const doorToDoor = `≈ ${Math.floor(total / 60)}h ${String(total % 60).padStart(2, "0")}m`;
+const parking = ghat.facilities.find((f) => f.id === "parking")!;
 
 /** Getting Here opens the way the other pages do — on the horizon. */
 export default function GettingHero() {
@@ -80,6 +81,30 @@ export default function GettingHero() {
               </div>
             ))}
           </dl>
+
+          {/* Up front for drivers: parking and the counter at the ghat */}
+          <div className="hz-fade flex flex-wrap gap-2 lg:col-span-5 lg:col-start-8">
+            <a
+              href="#arrive"
+              className="inline-flex items-center gap-2.5 rounded-full border border-bone/15 bg-abyss/60 py-1.5 pl-1.5 pr-4 text-[0.68rem] uppercase tracking-[0.14em] text-bone backdrop-blur-md transition-colors hover:border-ember-400"
+            >
+              <span aria-hidden="true" className="grid h-7 w-7 place-items-center rounded-full bg-neel-500 font-display text-sm normal-case">
+                P
+              </span>
+              Parking {parking.price} {parking.priceNote}
+            </a>
+            <a
+              href="#arrive"
+              className="inline-flex items-center gap-2.5 rounded-full border border-bone/15 bg-abyss/60 py-1.5 pl-1.5 pr-4 text-[0.68rem] uppercase tracking-[0.14em] text-bone backdrop-blur-md transition-colors hover:border-ember-400"
+            >
+              <span aria-hidden="true" className="grid h-7 w-7 place-items-center rounded-full bg-ember-400 text-abyss">
+                <svg viewBox="0 0 24 24" className="h-3.5 w-3.5" fill="currentColor">
+                  <path d="M12 4 3 19h18L12 4Zm0 7 3.6 6H8.4L12 11Z" />
+                </svg>
+              </span>
+              Booking counter at the ghat
+            </a>
+          </div>
         </div>
       </div>
 

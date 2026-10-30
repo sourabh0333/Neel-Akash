@@ -5,6 +5,7 @@ import SmoothScroll from "@/components/SmoothScroll";
 import Cursor from "@/components/Cursor";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
+import ArriveChip from "@/components/ArriveChip";
 import "./globals.css";
 
 /* Display serif for the cinematic title treatment. */
@@ -119,7 +120,9 @@ const jsonLd = {
     "Bonfire",
     "All meals included",
     "Boat rides",
-  ].map((n) => ({ "@type": "LocationFeatureSpecification", name: n })),
+    "Car parking at Hujjaiter Kheya Ghat (₹100 per night)",
+    "Booking counter at Hujjaiter Kheya Ghat",
+  ].map((n) => ({ "@type": "LocationFeatureSpecification", name: n, value: true })),
 };
 
 export default function RootLayout({
@@ -150,6 +153,7 @@ export default function RootLayout({
         <Nav />
         {children}
         <Footer />
+        <ArriveChip />
       </body>
     </html>
   );

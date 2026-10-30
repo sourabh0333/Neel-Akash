@@ -10,6 +10,7 @@ import Gallery from "@/components/Gallery";
 import Journey from "@/components/Journey";
 import Testimonials from "@/components/Testimonials";
 import Contact from "@/components/Contact";
+import ArriveGhat from "@/components/ArriveGhat";
 
 export const metadata: Metadata = pageMeta({
   path: "/",
@@ -28,6 +29,8 @@ export default function Home() {
       {/* Act II — the place */}
       <Island />
       <Stays />
+      {/* Parking and the booking counter, where people are deciding to come */}
+      <ArriveGhat />
       <Experiences />
       <Kitchen />
 

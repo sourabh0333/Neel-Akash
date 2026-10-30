@@ -9,6 +9,7 @@ import ContactHero from "@/components/contact/ContactHero";
 import ContactWays from "@/components/contact/ContactWays";
 import ContactFind from "@/components/contact/ContactFind";
 import ContactFaq from "@/components/contact/ContactFaq";
+import ArriveGhat from "@/components/ArriveGhat";
 
 export const metadata: Metadata = pageMeta({
   path: "/contact",
@@ -53,6 +54,7 @@ export default function ContactPage() {
       <Contact standalone />
 
       <ContactFind />
+      <ArriveGhat />
       <Testimonials />
       <ContactFaq />
     </main>
