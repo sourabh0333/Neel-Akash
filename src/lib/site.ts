@@ -14,6 +14,8 @@ export const site = {
    */
   url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://penguinbeachcamp.example",
   name: "Penguin Beach Camp",
+  /** The camp's name on Google Maps, so search ties the two together. */
+  googleName: "Neel Akash Tourist Camp",
   // The same name written in Bengali script (a transliteration, not a
   // translation) — shown beside the English in the nav, intro and footer.
   nameBn: "পেঙ্গুইন বিচ ক্যাম্প",
@@ -45,6 +47,7 @@ export const site = {
     // The camp's own pin on Google Maps, so "Open in Google Maps" and its
     // directions land on the camp itself rather than somewhere on the island.
     mapsQuery: "Neel+Akash+Tourist+Camp+Mousuni+Island",
+    mapsUrl: "https://www.google.com/maps/search/?api=1&query=Neel+Akash+Tourist+Camp+Mousuni+Island",
   },
 
   stats: [
