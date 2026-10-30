@@ -10,13 +10,15 @@ import RouteMap from "./route/RouteMap";
 /**
  * Getting here, as a journey board.
  *
- * Laid out the way transit planners present a trip, in six rows:
+ * Laid out the way transit planners present a trip, in five rows:
  *   1. the headline numbers (total time, legs, the ferry, the pickup);
  *   2. the whole trip as one bar, split by leg in proportion to its time;
  *   3. the route map, full width;
  *   4. the steps, one column per leg;
- *   5. what is at the ghat — parking and the camp's booking counter;
- *   6. the practical cards — by road, the tide, where to find us, arrival.
+ *   5. the practical cards — by road, the tide, where to find us, arrival.
+ *
+ * Parking and the booking counter at the ghat have their own section
+ * (../ArriveGhat) on every page that shows this board.
  *
  * One "active leg" ties the board together. The route map (./route/
  * RouteMap) plays the trip like a navigation app, and whichever leg it is
@@ -34,6 +36,7 @@ const LEG_STYLE = [
 ];
 
 const totalMinutes = journey.reduce((n, j) => n + j.minutes, 0);
+const parking = ghat.facilities.find((f) => f.id === "parking")!;
 const fmt = (min: number) => {
   const m = Math.round(min);
   return `${Math.floor(m / 60)}h ${String(m % 60).padStart(2, "0")}m`;
@@ -372,48 +375,7 @@ export default function Journey({
             })}
           </ol>
 
-          {/* ── 5. At the ghat ── */}
-          <section
-            aria-labelledby="at-the-ghat"
-            className="board-in grid gap-px overflow-hidden rounded-2xl border border-bone/10 bg-bone/10 lg:grid-cols-12"
-          >
-            <div className="bg-ink p-6 md:p-8 lg:col-span-4">
-              <p className="flex items-center gap-2 text-[0.6rem] uppercase tracking-[0.28em] text-ember-500">
-                <Icon mode="River" className="h-4 w-4" /> At the ghat · {ghat.landmark}
-              </p>
-              <h3 id="at-the-ghat" className="mt-5 font-display text-3xl leading-tight text-bone md:text-4xl">
-                {ghat.full}
-              </h3>
-              <p className="mt-3 text-sm leading-relaxed text-sand-dim">
-                Also written {ghat.aka}. Off the Bakkhali road at {ghat.landmark}, on the bank of
-                the Chinai &mdash; where the boats leave for Mousuni.
-              </p>
-            </div>
-            {ghat.facilities.map((f) => (
-              <div key={f.id} className="flex gap-5 bg-abyss p-6 md:p-8 lg:col-span-4">
-                <span
-                  aria-hidden="true"
-                  className={`grid h-11 w-11 shrink-0 place-items-center rounded-xl font-display text-xl ${
-                    f.id === "parking" ? "bg-neel-500 text-bone" : "bg-ember-400 text-abyss"
-                  }`}
-                >
-                  {f.id === "parking" ? (
-                    "P"
-                  ) : (
-                    <svg viewBox="0 0 24 24" className="h-5 w-5" fill="currentColor" aria-hidden="true">
-                      <path d="M12 4 3 19h18L12 4Zm0 7 3.6 6H8.4L12 11Z" />
-                    </svg>
-                  )}
-                </span>
-                <div>
-                  <h4 className="font-display text-xl text-bone md:text-2xl">{f.title}</h4>
-                  <p className="mt-2 text-sm leading-relaxed text-sand">{f.text}</p>
-                </div>
-              </div>
-            ))}
-          </section>
-
-          {/* ── 6. The practical cards, ending on arrival ── */}
+          {/* ── 5. The practical cards, ending on arrival ── */}
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-5 xl:grid-cols-4">
             <div className="board-in rounded-2xl border border-bone/10 bg-ink p-6 transition-transform duration-300 hover:-translate-y-1 md:p-7">
               <p className="flex items-center gap-2 text-[0.6rem] uppercase tracking-[0.28em] text-ember-500">
@@ -428,7 +390,10 @@ export default function Journey({
                 ))}
               </ol>
               <p className="mt-4 text-sm leading-relaxed text-sand-dim">
-                Park at the ghat, then take the boat across like everyone else.
+                <a href="#arrive" className="link-draw text-ember-300">
+                  Park at the ghat
+                </a>{" "}
+                ({parking.price} {parking.priceNote}), then take the boat across like everyone else.
               </p>
             </div>
 

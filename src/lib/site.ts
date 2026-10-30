@@ -310,16 +310,36 @@ export const ghat = {
   full: "Hujjaiter Kheya Ghat",
   aka: "Hujuter or Hujjuti Ghat",
   landmark: "7 Mile",
+  /**
+   * What is waiting there, shown wherever the site talks about arriving.
+   * Photos are placeholders until the owner sends pictures of the parking
+   * and the counter; replace the files and keep the names.
+   */
   facilities: [
     {
       id: "parking",
-      title: "Car parking, just before the ghat",
-      text: "Cars and bikes stay on this side of the Chinai. Leave yours at the Indira Gandhi Car Parking Centre, on the road a short walk before the ghat.",
+      title: "Car parking",
+      place: "Indira Gandhi Car Parking Centre",
+      where: "On the road, a short walk before the ghat",
+      price: "₹100",
+      priceNote: "per night",
+      text: "Cars and bikes stay on this side of the Chinai. Leave yours at the Indira Gandhi Car Parking Centre, on the road a short walk before the ghat, and walk down to the boat.",
+      image: "/images/arrive-parking.jpg",
+      alt: "A motorbike parked for the night",
+      mapsUrl:
+        "https://www.google.com/maps/search/?api=1&query=Indira+Gandhi+Car+Parking+Centar+Hujjaiter+Kheya+Ghat",
     },
     {
       id: "booking",
       title: "Our booking counter",
+      place: "Penguin Beach Camp counter",
+      where: "At Hujjaiter Kheya Ghat",
+      price: undefined,
+      priceNote: undefined,
       text: "Penguin Beach Camp has its own counter at the ghat. Turn up without a booking and we will sort out a tent or cottage there and then.",
+      image: "/images/arrive-booking.jpg",
+      alt: "The camp garden at night, lit up beyond the tables",
+      mapsUrl: "https://www.google.com/maps/search/?api=1&query=Hujjaiter+Kheya+Ghat",
     },
   ],
 };

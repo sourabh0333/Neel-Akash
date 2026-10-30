@@ -8,6 +8,7 @@ import Reveal from "@/components/ui/Reveal";
 import Magnetic from "@/components/ui/Magnetic";
 import GettingHero from "@/components/getting/GettingHero";
 import GettingTickets from "@/components/getting/GettingTickets";
+import ArriveGhat from "@/components/ArriveGhat";
 
 export const metadata: Metadata = pageMeta({
   path: "/getting-here",
@@ -18,13 +19,16 @@ export const metadata: Metadata = pageMeta({
 
 /**
  * The page guests forward to each other before a trip, told in order: the
- * horizon, a ticket per leg, the live journey board, and who to call.
+ * horizon, parking and our counter at the ghat, a ticket per leg, the live
+ * journey board, and who to call.
  */
 export default function GettingHerePage() {
   return (
     <main>
       <JsonLd data={breadcrumbs([{ name: "Getting Here", path: "/getting-here" }])} />
       <GettingHero />
+      {/* First thing after the opening: drivers need it before anything else */}
+      <ArriveGhat />
       <GettingTickets />
 
       <div className="bg-abyss pt-28 md:pt-40">

@@ -43,6 +43,8 @@ const GHAT_PIN = STATIONS.findIndex((s) => s.name === ghat.name);
 const LANDING_PIN = GHAT_PIN + 1;
 /** Where the stops along the road (then the parking) begin in the counter-scaled list. */
 const STOPS_AT = LABELS.length + TOWNS.length + STATIONS.length;
+const parking = ghat.facilities.find((f) => f.id === "parking")!;
+const parkingPrice = `${parking.price}/night`;
 
 const totalMinutes = journey.reduce((n, j) => n + j.minutes, 0);
 const fmt = (min: number) => {
@@ -335,7 +337,8 @@ export default function RouteMap({ active, focus, onLeg }: Props) {
         .rm-pin[data-state="ahead"] .rm-name { opacity: .6; }
         .rm-pin .rm-name { transition: opacity .35s; }
         .rm-pin[data-far="true"] .rm-name { opacity: 0; }
-        @media (prefers-reduced-motion: reduce) { .rm-flow, .rm-wake, .rm-pin .rm-ring { animation: none; } }
+        .rm-beacon { transform-box: fill-box; transform-origin: center; animation: rm-ping 2.2s ease-out infinite; }
+        @media (prefers-reduced-motion: reduce) { .rm-flow, .rm-wake, .rm-pin .rm-ring, .rm-beacon { animation: none; } }
       `}</style>
 
       <svg
@@ -536,12 +539,13 @@ export default function RouteMap({ active, focus, onLeg }: Props) {
           transform={`translate(${PARKING.x} ${PARKING.y})`}
           style={{ opacity: 0 }}
         >
-          <rect x="-7" y="-7" width="14" height="14" rx="3" fill="#2d63ad" stroke="#071226" strokeWidth="1" />
-          <text y="4" textAnchor="middle" fontSize="10" fontWeight="700" fill="#fff">
+          <rect className="rm-beacon" x="-10" y="-10" width="20" height="20" rx="5" fill="none" stroke="#6fa3e0" strokeWidth="1.5" />
+          <rect x="-10" y="-10" width="20" height="20" rx="5" fill="#2d63ad" stroke="#071226" strokeWidth="1" />
+          <text y="5" textAnchor="middle" fontSize="14" fontWeight="700" fill="#fff">
             P
           </text>
-          <text y="-12" textAnchor="middle" fontSize="11" className="fill-sand" paintOrder="stroke" stroke="#071226" strokeWidth="3">
-            Car parking
+          <text y="-16" textAnchor="middle" fontSize="12" className="fill-bone" paintOrder="stroke" stroke="#071226" strokeWidth="3">
+            Car parking · {parkingPrice}
           </text>
         </g>
 
@@ -594,10 +598,11 @@ export default function RouteMap({ active, focus, onLeg }: Props) {
                 <g className="rm-name">
                   {/* The camp's booking counter */}
                   <g transform="translate(11 27)">
-                    <rect width="15" height="15" rx="3" fill="var(--color-ember-400)" stroke="#071226" strokeWidth="1" />
-                    <path d="M3.5 12L7.5 3.5L11.5 12Z M7.5 8.5V12" fill="#071226" stroke="#071226" strokeWidth="0.8" strokeLinejoin="round" />
-                    <text x="21" y="11.5" fontSize="11" className="fill-sand" paintOrder="stroke" stroke="#071226" strokeWidth="3">
-                      Camp booking
+                    <rect className="rm-beacon" width="19" height="19" rx="5" fill="none" stroke="var(--color-ember-300)" strokeWidth="1.5" />
+                    <rect width="19" height="19" rx="5" fill="var(--color-ember-400)" stroke="#071226" strokeWidth="1" />
+                    <path d="M4.5 15L9.5 4.5L14.5 15Z M9.5 10.5V15" fill="#071226" stroke="#071226" strokeWidth="0.8" strokeLinejoin="round" />
+                    <text x="25" y="14" fontSize="12" className="fill-bone" paintOrder="stroke" stroke="#071226" strokeWidth="3">
+                      Camp booking counter
                     </text>
                   </g>
                 </g>
