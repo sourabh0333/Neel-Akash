@@ -35,28 +35,28 @@ const STOPS: {
     cam: [262, 1088, 190, 190],
   },
   {
-    key: "bagdanga",
-    title: "Bagdanga",
-    kicker: "01 · The landing",
-    text: "Boats come over from Hujjuti Ghat with the tide, and the whole village knows before you do.",
-    cam: [305, 1082, 115, 88],
-    pin: { x: 362.2, y: 1126.4 },
-  },
-  {
     key: "kusumtala",
     title: "Kusumtala",
-    kicker: "02 · Where we are",
-    text: "Paddy, betel groves and brick paths. The island's quiet middle, and the camp.",
-    cam: [298, 1138, 115, 92],
-    pin: { x: 357, y: 1180 },
+    kicker: "01 · Where we are",
+    text: "Paddy, betel groves and brick paths, straight across from the ghat to the island's west shore — and the camp.",
+    cam: [290, 1112, 115, 92],
+    pin: { x: 347, y: 1158 },
   },
   {
     key: "baliara",
     title: "Baliara",
-    kicker: "03 · The seaward edge",
+    kicker: "02 · The seaward edge",
     text: "Open beach, casuarina, and the wind that never quite stops.",
-    cam: [292, 1178, 115, 92],
-    pin: { x: 349, y: 1224 },
+    cam: [285, 1140, 115, 92],
+    pin: { x: 342, y: 1186 },
+  },
+  {
+    key: "bagdanga",
+    title: "Bagdanga",
+    kicker: "03 · On the Chinai",
+    text: "The river side of the island, where the country boats come and go with the tide.",
+    cam: [298, 1162, 115, 92],
+    pin: { x: 356, y: 1207 },
   },
   {
     key: "chor",
@@ -70,7 +70,7 @@ const STOPS: {
 
 const CAMP = STATIONS.find((s) => s.name === "Penguin Beach Camp")!;
 /** Where the island's name sits: over its middle, west of the Chinai. */
-const ISLAND_LABEL = { x: 312, y: 1160 };
+const ISLAND_LABEL = { x: 336, y: 1128 };
 
 /**
  * The island, found from the air. The section pins and scrolling flies the

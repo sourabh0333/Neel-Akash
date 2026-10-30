@@ -14,8 +14,10 @@ At 1:10m Natural Earth joins Mousuni, the Bakkhali island and the Namkhana
 mainland into one shape, so the two channels that matter are cut by hand:
 the Hatania-Doania, east–west under Namkhana (crossed by the Namkhana
 Bridge), and the Chinai, north–south between the Bakkhali island and
-Mousuni (crossed by boat from Hujjuti Ghat). Station and town positions
-are approximate; the map says so on screen.
+Mousuni (crossed by boat from Hujjaiter Kheya Ghat). The road, the ghat,
+the parking and the camp follow Google Maps' route from Namkhana, which
+crosses level with Kusumtala and runs straight west to the camp on
+Mousuni's west shore. Positions are approximate; the map says so on screen.
 """
 import json
 import math
@@ -135,13 +137,15 @@ def main(src):
     stations = [
         ("Sealdah", 88.3700, 22.5675),
         ("Namkhana", 88.2316, 21.7700),
-        ("Hujjuti Ghat", 88.2218, 21.7080),
-        ("Bagdanga, Mousuni", 88.2122, 21.7060),
-        ("Penguin Beach Camp", 88.2000, 21.6430),
+        ("Hujjaiter Ghat", 88.2205, 21.6690),
+        ("Mousuni Island", 88.2112, 21.6680),
+        ("Penguin Beach Camp", 88.1880, 21.6667),
     ]
     towns = [("Baruipur", 88.4330, 22.3560), ("Lakshmikantapur", 88.3200, 22.1000), ("Kakdwip", 88.1900, 21.8700)]
     # Along the road leg; named only once the camera is close.
-    stops = [("Namkhana Bridge", 88.2330, 21.7575), ("7 Mile", 88.2380, 21.7120)]
+    stops = [("Namkhana Bridge", 88.2330, 21.7575), ("7 Mile", 88.2390, 21.6752)]
+    # The Indira Gandhi Car Parking Centre, on the road just before the ghat.
+    parking = (88.2214, 21.6728)
 
     st = {n: (lon, lat) for n, lon, lat in stations}
     legs = [
@@ -149,9 +153,11 @@ def main(src):
         through([st["Sealdah"], (88.4330, 22.3560), (88.3200, 22.1000), (88.1900, 21.8700), st["Namkhana"]]),
         # Over the Namkhana Bridge, south on the Bakkhali road to 7 Mile
         # Bazar, then right (west) to the ghat.
-        through([st["Namkhana"], (88.2330, 21.7575), (88.2360, 21.7350), (88.2380, 21.7120), (88.2300, 21.7090), st["Hujjuti Ghat"]]),
-        through([st["Hujjuti Ghat"], (88.2170, 21.7068), st["Bagdanga, Mousuni"]]),
-        through([st["Bagdanga, Mousuni"], (88.2075, 21.6850), (88.2035, 21.6630), st["Penguin Beach Camp"]]),
+        through([st["Namkhana"], (88.2330, 21.7575), (88.2370, 21.7350), (88.2393, 21.7000), (88.2394, 21.6800),
+                 (88.2390, 21.6752), (88.2360, 21.6744), (88.2300, 21.6744), (88.2235, 21.6744), parking, st["Hujjaiter Ghat"]]),
+        # Across the Chinai, then a toto due west through Kusumtala.
+        through([st["Hujjaiter Ghat"], (88.2160, 21.6683), st["Mousuni Island"]]),
+        through([st["Mousuni Island"], (88.2000, 21.6676), st["Penguin Beach Camp"]]),
     ]
 
     labels = [
@@ -159,7 +165,7 @@ def main(src):
         ("Hooghly", 88.18, 22.38, "water"),
         ("Sagar Island", 88.06, 21.70, "land"),
         ("Bay of Bengal", 88.35, 21.45, "sea"),
-        ("Chinai", 88.2225, 21.672, "water-sm"),
+        ("Chinai", 88.2235, 21.638, "water-sm"),
         ("Hatania-Doania", 88.262, 21.7625, "water-sm"),
     ]
 
@@ -181,6 +187,7 @@ def main(src):
         f"export const STATIONS = {js([dict(name=n, **pt(lon, lat)) for n, lon, lat in stations])};\n\n"
         f"export const TOWNS = {js([dict(name=n, **pt(lon, lat)) for n, lon, lat in towns])};\n\n"
         f"export const STOPS = {js([dict(name=n, **pt(lon, lat)) for n, lon, lat in stops])};\n\n"
+        f"export const PARKING = {js(pt(*parking))};\n\n"
         f"export const LEGS: string[] = {js(legs)};\n\n"
         f"export const LABELS = {js([dict(text=t, kind=k, **pt(lon, lat)) for t, lon, lat, k in labels])};\n"
     )

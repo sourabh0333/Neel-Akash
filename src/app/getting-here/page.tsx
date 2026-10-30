@@ -13,7 +13,7 @@ export const metadata: Metadata = pageMeta({
   path: "/getting-here",
   title: "How to Reach Mousuni Island from Kolkata: Train & Ferry",
   description:
-    "Sealdah to Namkhana by local train, a toto to Hujjuti Ghat at 7 Mile (parking and our booking counter), a boat across the Chinai and a toto to the camp.",
+    "Sealdah to Namkhana by local train, a toto to Hujjaiter Kheya Ghat at 7 Mile (car parking, our booking counter), a boat across the Chinai and a toto to the camp.",
 });
 
 /**

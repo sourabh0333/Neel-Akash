@@ -37,11 +37,14 @@ export const site = {
     state: "West Bengal",
     pin: "743357",
     country: "India",
-    // Approximate island centroid — refine once the exact plot is surveyed.
+    // Approximate: Kusumtala, on the island's west shore — refine once the
+    // exact plot is surveyed.
     lat: 21.6667,
     lng: 88.2,
     full: "Kusumtala, Mousuni Island, Namkhana, South 24 Parganas, West Bengal 743357",
-    mapsQuery: "Mousuni+Island+Kusumtala+Namkhana+West+Bengal+743357",
+    // The camp's own pin on Google Maps, so "Open in Google Maps" and its
+    // directions land on the camp itself rather than somewhere on the island.
+    mapsQuery: "Neel+Akash+Tourist+Camp+Mousuni+Island",
   },
 
   stats: [
@@ -287,22 +290,23 @@ export const meals: Meal[] = [
 /* ── Getting here ──────────────────────────────────────────── */
 
 /** For guests coming by road instead of the train. */
-export const drivingRoute = ["Diamond Harbour", "Kakdwip", "Namkhana Bridge", "7 Mile", "Hujjuti Ghat"];
+export const drivingRoute = ["Diamond Harbour", "Kakdwip", "Namkhana Bridge", "7 Mile", "Hujjaiter Ghat"];
 
 /**
- * The ghat everyone crosses from, on the Bakkhali road side of the Chinai.
- * Locally it goes by several spellings — Hujjuti, Hujuter, Huzzaitar —
- * so the alternatives are named once on the page for anyone searching.
+ * The ghat everyone crosses from, on the Bakkhali road side of the Chinai —
+ * "Hujjaiter Kheya Ghat" on Google Maps. Locally it is also written Hujuter
+ * or Hujjuti, so those are named once on the page for anyone searching.
  */
 export const ghat = {
-  name: "Hujjuti Ghat",
-  aka: "Hujuter Kheya Ghat",
+  name: "Hujjaiter Ghat",
+  full: "Hujjaiter Kheya Ghat",
+  aka: "Hujuter or Hujjuti Ghat",
   landmark: "7 Mile",
   facilities: [
     {
       id: "parking",
-      title: "Parking at the ghat",
-      text: "Cars and bikes stay on this side of the Chinai. Park at the ghat and walk down to the boat.",
+      title: "Car parking, just before the ghat",
+      text: "Cars and bikes stay on this side of the Chinai. Leave yours at the Indira Gandhi Car Parking Centre, on the road a short walk before the ghat.",
     },
     {
       id: "booking",
@@ -331,34 +335,34 @@ export const journey = [
   {
     step: "02",
     mode: "Road",
-    title: "Namkhana → Hujjuti Ghat",
+    title: "Namkhana → Hujjaiter Ghat",
     from: "Namkhana",
-    to: "Hujjuti Ghat",
+    to: "Hujjaiter Ghat",
     minutes: 35,
     detail:
-      "A toto or auto from the station over the Namkhana Bridge, down the Bakkhali road to 7 Mile, then right to Hujjuti (Hujuter) Kheya Ghat. Parking and our booking counter are at the ghat.",
+      "A toto or auto from the station over the Namkhana Bridge, down the Bakkhali road to 7 Mile, then right to Hujjaiter Kheya Ghat. Car parking is just before the ghat; our booking counter is at the ghat.",
     duration: "≈ 35 min",
   },
   {
     step: "03",
     mode: "River",
     title: "Cross the Chinai",
-    from: "Hujjuti Ghat",
-    to: "Bagdanga, Mousuni",
+    from: "Hujjaiter Ghat",
+    to: "Mousuni Island",
     minutes: 15,
     detail:
-      "A country boat across the Chinai to Bagdanga on Mousuni. Boats run with the tide, so tell us your train and we will time it for you.",
+      "A country boat across the Chinai to Mousuni, landing by Kusumtala. Boats run with the tide, so tell us your train and we will time it for you.",
     duration: "≈ 15 min",
   },
   {
     step: "04",
     mode: "Arrival",
-    title: "Bagdanga → Penguin Beach Camp",
-    from: "Bagdanga, Mousuni",
+    title: "Kusumtala → Penguin Beach Camp",
+    from: "Mousuni Island",
     to: "Penguin Beach Camp",
     minutes: 15,
     detail:
-      "A toto through the paddy and the betel groves. We meet you at the ghat if you let us know you are coming.",
+      "A toto due west through Kusumtala, past the paddy and the betel groves, to the camp on the island's west shore. We meet you at the ghat if you let us know you are coming.",
     duration: "≈ 15 min",
   },
 ];

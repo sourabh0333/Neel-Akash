@@ -382,10 +382,10 @@ export default function Journey({
                 <Icon mode="River" className="h-4 w-4" /> At the ghat · {ghat.landmark}
               </p>
               <h3 id="at-the-ghat" className="mt-5 font-display text-3xl leading-tight text-bone md:text-4xl">
-                {ghat.name}
+                {ghat.full}
               </h3>
               <p className="mt-3 text-sm leading-relaxed text-sand-dim">
-                Also called {ghat.aka}. Off the Bakkhali road at {ghat.landmark}, on the bank of
+                Also written {ghat.aka}. Off the Bakkhali road at {ghat.landmark}, on the bank of
                 the Chinai &mdash; where the boats leave for Mousuni.
               </p>
             </div>
