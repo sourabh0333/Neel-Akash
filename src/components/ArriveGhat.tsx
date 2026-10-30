@@ -12,9 +12,8 @@ import Reveal from "./ui/Reveal";
  * own booking counter at Hujjaiter Kheya Ghat, each with a photograph, what
  * it costs and a Directions button straight to it on Google Maps.
  *
- * It sits near the top of Getting Here (the anchor #arrive, which the
- * header's parking and booking chips link to), after the stays on Home,
- * and on Contact.
+ * It sits right after the opening of Getting Here (the anchor #arrive),
+ * after the stays on Home, and on Contact.
  */
 export default function ArriveGhat({ className = "" }: { className?: string }) {
   const root = useRef<HTMLElement>(null);
