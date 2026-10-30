@@ -2,13 +2,12 @@
 
 import { useRef } from "react";
 import Image from "next/image";
-import { ghat, journey, site } from "@/lib/site";
+import { journey, site } from "@/lib/site";
 import { useHorizon, TideLine, ScrollCue, dms } from "../ui/Horizon";
 import HeroTitle from "../ui/HeroTitle";
 
 const total = journey.reduce((n, j) => n + j.minutes, 0);
 const doorToDoor = `≈ ${Math.floor(total / 60)}h ${String(total % 60).padStart(2, "0")}m`;
-const parking = ghat.facilities.find((f) => f.id === "parking")!;
 
 /** Getting Here opens the way the other pages do — on the horizon. */
 export default function GettingHero() {
@@ -18,7 +17,7 @@ export default function GettingHero() {
   return (
     <section
       ref={root}
-      className="relative h-[100svh] min-h-[40rem] w-full overflow-hidden bg-abyss"
+      className="relative flex min-h-[max(100svh,40rem)] w-full flex-col overflow-hidden bg-abyss"
     >
       <div className="hz-frame absolute inset-0 overflow-hidden will-change-[clip-path]">
         <div className="hz-open absolute inset-0 overflow-hidden">
@@ -39,7 +38,7 @@ export default function GettingHero() {
         </div>
       </div>
 
-      <div className="hz-copy relative z-10 mx-auto flex h-full max-w-[100rem] flex-col justify-end px-6 pb-14 md:px-10 md:pb-20 lg:pb-28">
+      <div className="hz-copy relative z-10 mx-auto flex w-full max-w-[100rem] flex-1 flex-col justify-end px-6 pb-14 pt-28 md:px-10 md:pb-20 lg:pb-28">
         <div className="hz-fade t-eyebrow mb-6 flex items-center justify-between gap-4 text-sand">
           <span className="flex items-center gap-4">
             <span className="h-px w-10 bg-ember-500" />
@@ -81,30 +80,6 @@ export default function GettingHero() {
               </div>
             ))}
           </dl>
-
-          {/* Up front for drivers: parking and the counter at the ghat */}
-          <div className="hz-fade flex flex-wrap gap-2 lg:col-span-5 lg:col-start-8">
-            <a
-              href="#arrive"
-              className="inline-flex items-center gap-2.5 rounded-full border border-bone/15 bg-abyss/60 py-1.5 pl-1.5 pr-4 text-[0.68rem] uppercase tracking-[0.14em] text-bone backdrop-blur-md transition-colors hover:border-ember-400"
-            >
-              <span aria-hidden="true" className="grid h-7 w-7 place-items-center rounded-full bg-neel-500 font-display text-sm normal-case">
-                P
-              </span>
-              Parking {parking.price} {parking.priceNote}
-            </a>
-            <a
-              href="#arrive"
-              className="inline-flex items-center gap-2.5 rounded-full border border-bone/15 bg-abyss/60 py-1.5 pl-1.5 pr-4 text-[0.68rem] uppercase tracking-[0.14em] text-bone backdrop-blur-md transition-colors hover:border-ember-400"
-            >
-              <span aria-hidden="true" className="grid h-7 w-7 place-items-center rounded-full bg-ember-400 text-abyss">
-                <svg viewBox="0 0 24 24" className="h-3.5 w-3.5" fill="currentColor">
-                  <path d="M12 4 3 19h18L12 4Zm0 7 3.6 6H8.4L12 11Z" />
-                </svg>
-              </span>
-              Booking counter at the ghat
-            </a>
-          </div>
         </div>
       </div>
 

@@ -5,7 +5,6 @@ import SmoothScroll from "@/components/SmoothScroll";
 import Cursor from "@/components/Cursor";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
-import ArriveChip from "@/components/ArriveChip";
 import "./globals.css";
 
 /* Display serif for the cinematic title treatment. */
@@ -153,7 +152,6 @@ export default function RootLayout({
         <Nav />
         {children}
         <Footer />
-        <ArriveChip />
       </body>
     </html>
   );
