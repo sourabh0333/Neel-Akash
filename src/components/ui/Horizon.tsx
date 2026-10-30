@@ -16,6 +16,10 @@ import { gsap, prefersReducedMotion } from "@/lib/anim";
  *   .hz-fade   everything else that floats in
  *   .hz-copy   the type block that lifts away on the way out
  *
+ * The hero is at least a screen tall and grows when its type needs more
+ * (a short laptop window): .hz-copy keeps clear of the nav (pt-28) and the
+ * section grows around it, rather than the title sliding up under the nav.
+ *
  * The opening and the scroll-out sit on different elements (.hz-open and
  * .hz-frame) on purpose. A scrubbed tween takes its "from" from wherever the
  * element is when the tween is created — which, on the same element, would be

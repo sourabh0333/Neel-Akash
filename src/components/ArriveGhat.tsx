@@ -13,7 +13,8 @@ import Reveal from "./ui/Reveal";
  * it costs and a Directions button straight to it on Google Maps.
  *
  * It sits near the top of Getting Here (the anchor #arrive, which the
- * floating reminder links to), after the stays on Home, and on Contact.
+ * header's parking and booking chips link to), after the stays on Home,
+ * and on Contact.
  */
 export default function ArriveGhat({ className = "" }: { className?: string }) {
   const root = useRef<HTMLElement>(null);
