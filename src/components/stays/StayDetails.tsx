@@ -110,9 +110,9 @@ export default function StayDetails({ stay }: { stay: Stay }) {
             <div className="mt-14 border-t border-bone/10 pt-10">
               <h3 className="font-display text-3xl text-bone">Getting here</h3>
               <p className="mt-3 max-w-[52ch] text-sm leading-relaxed text-sand">
-                The Namkhana Local from Sealdah, a toto to Hujjuti Ghat at 7 Mile,
-                a short boat across the Chinai and a toto to the camp. There is
-                parking at the ghat for anyone driving. Tell us your train and we
+                The Namkhana Local from Sealdah, a toto to Hujjaiter Kheya Ghat at
+                7 Mile, a short boat across the Chinai and a toto to the camp.
+                There is car parking just before the ghat for anyone driving. Tell us your train and we
                 will time the boat.
               </p>
               <a href="/getting-here" className="link-draw mt-4 inline-block text-sm text-ember-300">

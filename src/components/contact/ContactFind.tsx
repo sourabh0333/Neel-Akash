@@ -4,7 +4,7 @@ import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import { gsap, prefersReducedMotion } from "@/lib/anim";
 import { ghat, site } from "@/lib/site";
-import { CHINAI, HATANIA, LAND, LEGS, STATIONS } from "../route/geo";
+import { CHINAI, HATANIA, LAND, LEGS, PARKING, STATIONS } from "../route/geo";
 
 const CAMP = STATIONS.find((s) => s.name === "Penguin Beach Camp")!;
 const GHAT = STATIONS.find((s) => s.name === ghat.name)!;
@@ -13,8 +13,8 @@ const LANDING = STATIONS[STATIONS.indexOf(GHAT) + 1];
 
 /**
  * Where we are, drawn from the same Natural Earth data as the route map: the
- * island, the boat across the Chinai from Hujjuti Ghat (where the parking
- * and our booking counter are) and the last stretch by toto, with the
+ * island, the car parking and the boat across the Chinai from Hujjaiter
+ * Ghat (where our booking counter is), and the toto west to the shore, with the
  * camp pulsing at the end. The map settles in from a wider view as it arrives.
  */
 export default function ContactFind() {
@@ -23,8 +23,8 @@ export default function ContactFind() {
   useGSAP(
     () => {
       const svg = root.current!.querySelector<SVGSVGElement>(".cf-map")!;
-      const far = { x: 190, y: 1000, w: 360, h: 270 };
-      const near = { x: 280, y: 1106, w: 150, h: 112 };
+      const far = { x: 190, y: 1020, w: 340, h: 255 };
+      const near = { x: 272, y: 1114, w: 132, h: 99 };
       const set = (b: typeof far) => svg.setAttribute("viewBox", `${b.x} ${b.y} ${b.w} ${b.h}`);
       if (prefersReducedMotion()) {
         set(near);
@@ -83,7 +83,7 @@ export default function ContactFind() {
         <figure className="relative overflow-hidden rounded-3xl border border-bone/10 bg-[#050c1a] lg:col-span-7">
           <svg
             className="cf-map aspect-4/3 w-full"
-            viewBox="280 1106 150 112"
+            viewBox="272 1114 132 99"
             preserveAspectRatio="xMidYMid slice"
             role="img"
             aria-label={`Map: ${site.name} on ${site.location.island}, across the Chinai from ${ghat.name}`}
@@ -114,25 +114,26 @@ export default function ContactFind() {
                   vectorEffect="non-scaling-stroke"
                 />
               ))}
-              {/* The ghat is named to the right, the landing across from it to the left. */}
-              {[GHAT, LANDING].map((s, i) => (
-                <g key={s.name}>
-                  <circle cx={s.x} cy={s.y} r="1.6" fill="#f4efe6" />
-                  <text
-                    x={i === 0 ? s.x + 3 : s.x - 3}
-                    y={s.y - 2.5}
-                    textAnchor={i === 0 ? "start" : "end"}
-                    fontSize="4.4"
-                    fill="#d8cdbb"
-                    className="font-sans"
-                  >
-                    {s.name}
-                  </text>
-                </g>
-              ))}
-              <text x={GHAT.x + 3} y={GHAT.y + 4.5} fontSize="3.4" fill="#8d8577" className="font-sans">
-                Parking · camp booking
+              {/* The landing, just across the river: a dot. */}
+              <circle cx={LANDING.x} cy={LANDING.y} r="1.3" fill="#f4efe6" />
+              {/* The ghat, named below the road that comes in above it. */}
+              <circle cx={GHAT.x} cy={GHAT.y} r="1.6" fill="#f4efe6" />
+              <text x={GHAT.x} y={GHAT.y + 6} textAnchor="middle" fontSize="4.2" fill="#d8cdbb" className="font-sans">
+                {ghat.name}
               </text>
+              <text x={GHAT.x} y={GHAT.y + 10.2} textAnchor="middle" fontSize="3.2" fill="#8d8577" className="font-sans">
+                Our booking counter
+              </text>
+              {/* The car parking, on the road just before the ghat. */}
+              <g transform={`translate(${PARKING.x} ${PARKING.y})`}>
+                <rect x="-2" y="-2" width="4" height="4" rx="0.8" fill="#2d63ad" />
+                <text y="1.2" textAnchor="middle" fontSize="3" fontWeight="700" fill="#fff" className="font-sans">
+                  P
+                </text>
+                <text x="3.5" y="-2.4" fontSize="3.2" fill="#8d8577" className="font-sans">
+                  Car parking
+                </text>
+              </g>
             </g>
 
             <g transform={`translate(${CAMP.x} ${CAMP.y})`}>
@@ -141,7 +142,8 @@ export default function ContactFind() {
                 <animate attributeName="opacity" values="0.9;0" dur="2s" repeatCount="indefinite" />
               </circle>
               <circle r="3" fill="#ffc27a" />
-              <text x="6" y="2" fontSize="6.5" fill="#f4efe6" className="font-display">
+              {/* On the west shore: named out over the water. */}
+              <text x="-6" y="2" textAnchor="end" fontSize="6.5" fill="#f4efe6" className="font-display">
                 {site.name}
               </text>
             </g>

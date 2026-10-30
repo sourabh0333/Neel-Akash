@@ -20,7 +20,7 @@ const PANELS = [
   {
     n: "03",
     title: "Bagdanga",
-    text: "The landing. Ferries come in with the tide and the whole village knows before you do.",
+    text: "The river side. Country boats come and go with the tide, and the whole village knows before you do.",
   },
   {
     n: "04",
