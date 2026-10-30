@@ -2,7 +2,7 @@
 
 import { useRef, useState } from "react";
 import { useGSAP } from "@gsap/react";
-import { gsap, prefersReducedMotion } from "@/lib/anim";
+import { gsap, ScrollTrigger, prefersReducedMotion } from "@/lib/anim";
 import { journey } from "@/lib/site";
 import { Icon } from "../Journey";
 
@@ -72,6 +72,12 @@ export default function GettingTickets() {
         tl.to(stamps[i], { scale: 1, opacity: 1, rotate: -12, duration: 0.35, ease: "back.out(2.5)" }, at + 0.6);
       });
       tl.to({}, { duration: 0.6 });
+
+      // The pin adds several screens of spacing above everything below it,
+      // but it only exists after this re-render — later than the triggers
+      // further down (the route map's among them), which were measured
+      // without it. Re-measure them all now it is in place.
+      ScrollTrigger.refresh();
     },
     { scope: root, dependencies: [deck] }
   );

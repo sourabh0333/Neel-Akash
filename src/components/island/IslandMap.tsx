@@ -3,7 +3,7 @@
 import { useRef, useState } from "react";
 import { useGSAP } from "@gsap/react";
 import { gsap, ScrollTrigger, prefersReducedMotion } from "@/lib/anim";
-import { CHINAI, LAND, LEGS, RIVERS, STATIONS } from "../route/geo";
+import { CHINAI, HATANIA, LAND, LEGS, RIVERS, STATIONS } from "../route/geo";
 
 type Box = [x: number, y: number, w: number, h: number];
 
@@ -32,44 +32,45 @@ const STOPS: {
     title: "Mousuni",
     kicker: "Between two rivers",
     text: "The Muri Ganga on one side, the Chinai on the other, and the Bay of Bengal along the whole southern edge.",
-    cam: [300, 1092, 190, 215],
+    cam: [262, 1088, 190, 190],
   },
   {
     key: "bagdanga",
     title: "Bagdanga",
     kicker: "01 · The landing",
-    text: "Ferries come in with the tide and the whole village knows before you do.",
-    cam: [322, 1100, 115, 88],
-    pin: { x: 378, y: 1141 },
+    text: "Boats come over from Hujjuti Ghat with the tide, and the whole village knows before you do.",
+    cam: [305, 1082, 115, 88],
+    pin: { x: 362.2, y: 1126.4 },
   },
   {
     key: "kusumtala",
     title: "Kusumtala",
     kicker: "02 · Where we are",
     text: "Paddy, betel groves and brick paths. The island's quiet middle, and the camp.",
-    cam: [300, 1148, 115, 92],
-    pin: { x: 360, y: 1186 },
+    cam: [298, 1138, 115, 92],
+    pin: { x: 357, y: 1180 },
   },
   {
     key: "baliara",
     title: "Baliara",
     kicker: "03 · The seaward edge",
     text: "Open beach, casuarina, and the wind that never quite stops.",
-    cam: [362, 1226, 115, 92],
-    pin: { x: 420, y: 1278 },
+    cam: [292, 1178, 115, 92],
+    pin: { x: 349, y: 1224 },
   },
   {
     key: "chor",
     title: "Kakramarir Chor",
     kicker: "04 · An hour out by boat",
     text: "A sandbar out in the bay, populated entirely by birds.",
-    cam: [402, 1262, 150, 118],
-    pin: { x: 476, y: 1326 },
+    cam: [262, 1210, 150, 118],
+    pin: { x: 336, y: 1270 },
   },
 ];
 
 const CAMP = STATIONS.find((s) => s.name === "Penguin Beach Camp")!;
-const LANDING = STATIONS.find((s) => s.name === "Mousuni Island")!;
+/** Where the island's name sits: over its middle, west of the Chinai. */
+const ISLAND_LABEL = { x: 312, y: 1160 };
 
 /**
  * The island, found from the air. The section pins and scrolling flies the
@@ -197,7 +198,9 @@ export default function IslandMap() {
               vectorEffect="non-scaling-stroke"
             />
           ))}
-          <path d={CHINAI} fill="#050c1a" />
+          {[HATANIA, CHINAI].map((d) => (
+            <path key={d} d={d} fill="#050c1a" />
+          ))}
           {RIVERS.map((d, i) => (
             <path
               key={i}
@@ -212,7 +215,7 @@ export default function IslandMap() {
         </g>
 
         {/* Sandbar, drawn by hand — too small for Natural Earth. */}
-        <ellipse cx="476" cy="1327" rx="9" ry="2.6" fill="#d8cdbb" opacity="0.28" transform="rotate(-18 476 1327)" />
+        <ellipse cx="336" cy="1271" rx="9" ry="2.6" fill="#d8cdbb" opacity="0.28" transform="rotate(-18 336 1271)" />
 
         {LEGS.map((d, i) => (
           <path
@@ -238,7 +241,7 @@ export default function IslandMap() {
           </text>
         </g>
 
-        <g data-pin data-x={LANDING.x - 22} data-y={LANDING.y - 70} className="transition-opacity duration-500"
+        <g data-pin data-x={ISLAND_LABEL.x} data-y={ISLAND_LABEL.y} className="transition-opacity duration-500"
           style={{ opacity: active <= 1 ? 1 : 0 }}>
           <text fontSize="13" fill="#d8cdbb" className="font-display" letterSpacing="1">
             Mousuni Island

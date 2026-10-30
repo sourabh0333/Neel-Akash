@@ -286,13 +286,36 @@ export const meals: Meal[] = [
 
 /* ── Getting here ──────────────────────────────────────────── */
 
+/** For guests coming by road instead of the train. */
+export const drivingRoute = ["Diamond Harbour", "Kakdwip", "Namkhana Bridge", "7 Mile", "Hujjuti Ghat"];
+
+/**
+ * The ghat everyone crosses from, on the Bakkhali road side of the Chinai.
+ * Locally it goes by several spellings — Hujjuti, Hujuter, Huzzaitar —
+ * so the alternatives are named once on the page for anyone searching.
+ */
+export const ghat = {
+  name: "Hujjuti Ghat",
+  aka: "Hujuter Kheya Ghat",
+  landmark: "7 Mile",
+  facilities: [
+    {
+      id: "parking",
+      title: "Parking at the ghat",
+      text: "Cars and bikes stay on this side of the Chinai. Park at the ghat and walk down to the boat.",
+    },
+    {
+      id: "booking",
+      title: "Our booking counter",
+      text: "Penguin Beach Camp has its own counter at the ghat. Turn up without a booking and we will sort out a tent or cottage there and then.",
+    },
+  ],
+};
+
 /**
  * The route, leg by leg. `from`/`to` name the stations on the route map and
  * the tickets; `minutes` drives the trip clock (approximate, like `duration`).
  */
-/** For guests coming by road instead of the train. */
-export const drivingRoute = ["Amtala", "Diamond Harbour", "Kakdwip", "Bagdanga Ghat"];
-
 export const journey = [
   {
     step: "01",
@@ -308,30 +331,30 @@ export const journey = [
   {
     step: "02",
     mode: "Road",
-    title: "Namkhana → Bagdanga Ghat",
+    title: "Namkhana → Hujjuti Ghat",
     from: "Namkhana",
-    to: "Bagdanga Ghat",
-    minutes: 40,
+    to: "Hujjuti Ghat",
+    minutes: 35,
     detail:
-      "A Tata Magic or auto from outside the station to the ferry ghat.",
-    duration: "≈ 40 min",
+      "A toto or auto from the station over the Namkhana Bridge, down the Bakkhali road to 7 Mile, then right to Hujjuti (Hujuter) Kheya Ghat. Parking and our booking counter are at the ghat.",
+    duration: "≈ 35 min",
   },
   {
     step: "03",
     mode: "River",
     title: "Cross the Chinai",
-    from: "Bagdanga Ghat",
-    to: "Mousuni Island",
-    minutes: 10,
+    from: "Hujjuti Ghat",
+    to: "Bagdanga, Mousuni",
+    minutes: 15,
     detail:
-      "A short ferry to the island. Boats run with the tide, so tell us your train and we will time it for you.",
-    duration: "≈ 10 min",
+      "A country boat across the Chinai to Bagdanga on Mousuni. Boats run with the tide, so tell us your train and we will time it for you.",
+    duration: "≈ 15 min",
   },
   {
     step: "04",
     mode: "Arrival",
-    title: "Ghat → Penguin Beach Camp",
-    from: "Mousuni Island",
+    title: "Bagdanga → Penguin Beach Camp",
+    from: "Bagdanga, Mousuni",
     to: "Penguin Beach Camp",
     minutes: 15,
     detail:

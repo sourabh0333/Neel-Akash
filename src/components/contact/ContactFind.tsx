@@ -3,16 +3,18 @@
 import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import { gsap, prefersReducedMotion } from "@/lib/anim";
-import { site } from "@/lib/site";
-import { CHINAI, LAND, LEGS, STATIONS } from "../route/geo";
+import { ghat, site } from "@/lib/site";
+import { CHINAI, HATANIA, LAND, LEGS, STATIONS } from "../route/geo";
 
 const CAMP = STATIONS.find((s) => s.name === "Penguin Beach Camp")!;
-const LANDING = STATIONS.find((s) => s.name === "Mousuni Island")!;
-const GHAT = STATIONS.find((s) => s.name === "Bagdanga Ghat")!;
+const GHAT = STATIONS.find((s) => s.name === ghat.name)!;
+/** The landing, just across the Chinai from the ghat. */
+const LANDING = STATIONS[STATIONS.indexOf(GHAT) + 1];
 
 /**
  * Where we are, drawn from the same Natural Earth data as the route map: the
- * island, the ferry across the Chinai and the last stretch by toto, with the
+ * island, the boat across the Chinai from Hujjuti Ghat (where the parking
+ * and our booking counter are) and the last stretch by toto, with the
  * camp pulsing at the end. The map settles in from a wider view as it arrives.
  */
 export default function ContactFind() {
@@ -21,8 +23,8 @@ export default function ContactFind() {
   useGSAP(
     () => {
       const svg = root.current!.querySelector<SVGSVGElement>(".cf-map")!;
-      const far = { x: 220, y: 980, w: 360, h: 420 };
-      const near = { x: 300, y: 1085, w: 190, h: 220 };
+      const far = { x: 190, y: 1000, w: 360, h: 270 };
+      const near = { x: 280, y: 1106, w: 150, h: 112 };
       const set = (b: typeof far) => svg.setAttribute("viewBox", `${b.x} ${b.y} ${b.w} ${b.h}`);
       if (prefersReducedMotion()) {
         set(near);
@@ -81,10 +83,10 @@ export default function ContactFind() {
         <figure className="relative overflow-hidden rounded-3xl border border-bone/10 bg-[#050c1a] lg:col-span-7">
           <svg
             className="cf-map aspect-4/3 w-full"
-            viewBox="300 1085 190 220"
+            viewBox="280 1106 150 112"
             preserveAspectRatio="xMidYMid slice"
             role="img"
-            aria-label={`Map: ${site.name} on ${site.location.island}, across the Chinai from Bagdanga Ghat`}
+            aria-label={`Map: ${site.name} on ${site.location.island}, across the Chinai from ${ghat.name}`}
           >
             <defs>
               <pattern id="cf-dots" width="6" height="6" patternUnits="userSpaceOnUse">
@@ -95,7 +97,9 @@ export default function ContactFind() {
             {LAND.map((d, i) => (
               <path key={i} d={d} fill="#15294a" stroke="#6fa3e0" strokeOpacity="0.7" strokeWidth="1" vectorEffect="non-scaling-stroke" />
             ))}
-            <path d={CHINAI} fill="#050c1a" />
+            {[HATANIA, CHINAI].map((d) => (
+              <path key={d} d={d} fill="#050c1a" />
+            ))}
 
             <g className="cf-route">
               {LEGS.slice(2).map((d, i) => (
@@ -110,14 +114,25 @@ export default function ContactFind() {
                   vectorEffect="non-scaling-stroke"
                 />
               ))}
-              {[GHAT, LANDING].map((s) => (
+              {/* The ghat is named to the right, the landing across from it to the left. */}
+              {[GHAT, LANDING].map((s, i) => (
                 <g key={s.name}>
-                  <circle cx={s.x} cy={s.y} r="2.2" fill="#f4efe6" />
-                  <text x={s.x + 4} y={s.y + 1.5} fontSize="5.5" fill="#d8cdbb" className="font-sans">
+                  <circle cx={s.x} cy={s.y} r="1.6" fill="#f4efe6" />
+                  <text
+                    x={i === 0 ? s.x + 3 : s.x - 3}
+                    y={s.y - 2.5}
+                    textAnchor={i === 0 ? "start" : "end"}
+                    fontSize="4.4"
+                    fill="#d8cdbb"
+                    className="font-sans"
+                  >
                     {s.name}
                   </text>
                 </g>
               ))}
+              <text x={GHAT.x + 3} y={GHAT.y + 4.5} fontSize="3.4" fill="#8d8577" className="font-sans">
+                Parking · camp booking
+              </text>
             </g>
 
             <g transform={`translate(${CAMP.x} ${CAMP.y})`}>

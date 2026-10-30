@@ -10,8 +10,11 @@ github.com/nvkelso/natural-earth-vector/tree/master/geojson), clips them to
 the delta between Kolkata and the Bay of Bengal, smooths the coastlines, and
 writes src/components/route/geo.ts.
 
-At 1:10m Natural Earth joins Mousuni to the mainland, so the Chinai is cut
-across the southern tip by hand (CHINAI below). Station and town positions
+At 1:10m Natural Earth joins Mousuni, the Bakkhali island and the Namkhana
+mainland into one shape, so the two channels that matter are cut by hand:
+the Hatania-Doania, east–west under Namkhana (crossed by the Namkhana
+Bridge), and the Chinai, north–south between the Bakkhali island and
+Mousuni (crossed by boat from Hujjuti Ghat). Station and town positions
 are approximate; the map says so on screen.
 """
 import json
@@ -112,28 +115,43 @@ def main(src):
             if len(run) > 2:
                 rivers.append(smooth(run, closed=False))
 
-    # The Chinai, cut by hand across the tip: a band from the estuary
-    # channel on the west to the creek on the east, about 21.71°N.
-    top = [(88.178, 21.718), (88.205, 21.716), (88.235, 21.713), (88.262, 21.709), (88.290, 21.706)]
-    bottom = [(88.290, 21.698), (88.262, 21.701), (88.235, 21.704), (88.205, 21.707), (88.178, 21.708)]
-    chinai = smooth([project(*p) for p in top + bottom], closed=True)
+    def band(centre, half, across):
+        """A channel of half-width `half` (degrees) along a centreline."""
+        if across == "lon":  # runs north–south: offset east and west
+            a = [(x + half, y) for x, y in centre]
+            b = [(x - half, y) for x, y in reversed(centre)]
+        else:  # runs east–west: offset north and south
+            a = [(x, y + half) for x, y in centre]
+            b = [(x, y - half) for x, y in reversed(centre)]
+        return smooth([project(*p) for p in a + b], closed=True)
+
+    # The Hatania-Doania, from the Muri Ganga east to the Saptamukhi, with
+    # Namkhana on its north bank.
+    hatania = band([(88.180, 21.7585), (88.215, 21.7580), (88.233, 21.7575), (88.255, 21.7565), (88.295, 21.7550)], 0.0032, "lat")
+    # The Chinai, from the Hatania-Doania south to the bay: Mousuni to the
+    # west, the Bakkhali island (and 7 Mile) to the east.
+    chinai = band([(88.2125, 21.7570), (88.2140, 21.7300), (88.2170, 21.7080), (88.2165, 21.6800), (88.2150, 21.6500), (88.2165, 21.6200), (88.2185, 21.5980)], 0.0036, "lon")
 
     stations = [
         ("Sealdah", 88.3700, 22.5675),
         ("Namkhana", 88.2316, 21.7700),
-        ("Bagdanga Ghat", 88.2230, 21.7235),
-        ("Mousuni Island", 88.2280, 21.6935),
-        ("Penguin Beach Camp", 88.2050, 21.6430),
+        ("Hujjuti Ghat", 88.2218, 21.7080),
+        ("Bagdanga, Mousuni", 88.2122, 21.7060),
+        ("Penguin Beach Camp", 88.2000, 21.6430),
     ]
     towns = [("Baruipur", 88.4330, 22.3560), ("Lakshmikantapur", 88.3200, 22.1000), ("Kakdwip", 88.1900, 21.8700)]
+    # Along the road leg; named only once the camera is close.
+    stops = [("Namkhana Bridge", 88.2330, 21.7575), ("7 Mile", 88.2380, 21.7120)]
 
     st = {n: (lon, lat) for n, lon, lat in stations}
     legs = [
         # The Namkhana line, through its real stations.
         through([st["Sealdah"], (88.4330, 22.3560), (88.3200, 22.1000), (88.1900, 21.8700), st["Namkhana"]]),
-        through([st["Namkhana"], (88.2300, 21.7500), st["Bagdanga Ghat"]]),
-        through([st["Bagdanga Ghat"], (88.2270, 21.7070), st["Mousuni Island"]]),
-        through([st["Mousuni Island"], (88.2190, 21.6700), (88.2120, 21.6550), st["Penguin Beach Camp"]]),
+        # Over the Namkhana Bridge, south on the Bakkhali road to 7 Mile
+        # Bazar, then right (west) to the ghat.
+        through([st["Namkhana"], (88.2330, 21.7575), (88.2360, 21.7350), (88.2380, 21.7120), (88.2300, 21.7090), st["Hujjuti Ghat"]]),
+        through([st["Hujjuti Ghat"], (88.2170, 21.7068), st["Bagdanga, Mousuni"]]),
+        through([st["Bagdanga, Mousuni"], (88.2075, 21.6850), (88.2035, 21.6630), st["Penguin Beach Camp"]]),
     ]
 
     labels = [
@@ -141,7 +159,8 @@ def main(src):
         ("Hooghly", 88.18, 22.38, "water"),
         ("Sagar Island", 88.06, 21.70, "land"),
         ("Bay of Bengal", 88.35, 21.45, "sea"),
-        ("Chinai", 88.27, 21.712, "water-sm"),
+        ("Chinai", 88.2225, 21.672, "water-sm"),
+        ("Hatania-Doania", 88.262, 21.7625, "water-sm"),
     ]
 
     def pt(lon, lat):
@@ -158,8 +177,10 @@ def main(src):
         f"export const LAND: string[] = {js(land)};\n\n"
         f"export const RIVERS: string[] = {js(rivers)};\n\n"
         f"export const CHINAI = {js(chinai)};\n\n"
+        f"export const HATANIA = {js(hatania)};\n\n"
         f"export const STATIONS = {js([dict(name=n, **pt(lon, lat)) for n, lon, lat in stations])};\n\n"
         f"export const TOWNS = {js([dict(name=n, **pt(lon, lat)) for n, lon, lat in towns])};\n\n"
+        f"export const STOPS = {js([dict(name=n, **pt(lon, lat)) for n, lon, lat in stops])};\n\n"
         f"export const LEGS: string[] = {js(legs)};\n\n"
         f"export const LABELS = {js([dict(text=t, kind=k, **pt(lon, lat)) for t, lon, lat, k in labels])};\n"
     )

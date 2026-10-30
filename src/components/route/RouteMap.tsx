@@ -2,8 +2,8 @@
 
 import { useEffect, useId, useRef, useState } from "react";
 import { gsap, ScrollTrigger, prefersReducedMotion } from "@/lib/anim";
-import { journey } from "@/lib/site";
-import { CHINAI, LABELS, LAND, LEGS, RIVERS, STATIONS, TOWNS, VIEW } from "./geo";
+import { ghat, journey } from "@/lib/site";
+import { CHINAI, HATANIA, LABELS, LAND, LEGS, RIVERS, STATIONS, STOPS, TOWNS, VIEW } from "./geo";
 
 /**
  * The route as a navigation app would show it, on the real delta.
@@ -13,7 +13,8 @@ import { CHINAI, LABELS, LAND, LEGS, RIVERS, STATIONS, TOWNS, VIEW } from "./geo
  * ride, close in for the ferry, framing a whole leg when a step is pointed
  * at, and out to the full route at the start and the finish. The vehicle is
  * drawn from above and turns with the route: carriages for the train, a van,
- * a boat trailing its wake, a toto.
+ * a boat trailing its wake, a toto. At Hujjuti Ghat the pin carries what is
+ * there — parking, and the camp's own booking counter.
  *
  * Lines keep their width at any zoom (non-scaling strokes), and labels, pins
  * and vehicles are counter-scaled by the camera, so text stays readable
@@ -31,6 +32,12 @@ const BASE_ASPECT = 11 / 16;
 /** Seconds the traveller spends on each leg. */
 const LEG_SECONDS = [7, 3.2, 3, 3.2];
 const TRAIN_CARS = 3;
+/** The departure ghat's pin, which carries the parking and booking badges. */
+const GHAT_PIN = STATIONS.findIndex((s) => s.name === ghat.name);
+/** The landing sits just across the river from the ghat: its name goes left. */
+const LANDING_PIN = GHAT_PIN + 1;
+/** Where the stops along the road begin in the counter-scaled list. */
+const STOPS_AT = LABELS.length + TOWNS.length + STATIONS.length;
 
 const totalMinutes = journey.reduce((n, j) => n + j.minutes, 0);
 const fmt = (min: number) => {
@@ -158,8 +165,11 @@ export default function RouteMap({ active, focus, onLeg }: Props) {
     scaled.current.forEach((g, i) => {
       if (!g) return;
       g.setAttribute("transform", `translate(${g.dataset.x} ${g.dataset.y}) scale(${u})`);
-      // Small water names (the Chinai) only once zoomed in, like the ghats.
-      if (i < LABELS.length && LABELS[i].kind === "water-sm") g.style.opacity = c.w > 380 ? "0" : "1";
+      // Small water names and the stops along the road only once zoomed in,
+      // like the ghats.
+      if ((i < LABELS.length && LABELS[i].kind === "water-sm") || i >= STOPS_AT) {
+        g.style.opacity = c.w > 380 ? "0" : "1";
+      }
     });
     pins.current.forEach((p, i) => {
       if (!p) return;
@@ -250,6 +260,9 @@ export default function RouteMap({ active, focus, onLeg }: Props) {
       trigger: wrap.current,
       start: "top bottom",
       end: "bottom top",
+      // Measure after the pinned sections above (the tickets on this page),
+      // which are created later and push the map down by their spacing.
+      refreshPriority: -1,
       onToggle: (self) => run(self.isActive),
     });
     run(watch.isActive);
@@ -374,9 +387,12 @@ export default function RouteMap({ active, focus, onLeg }: Props) {
           </g>
         ))}
 
-        {/* The Chinai, cut across the island tip and shown only over land */}
+        {/* The Hatania-Doania and the Chinai, cut through the land by hand
+            (Natural Earth joins the islands) and shown only over land */}
         <g clipPath={`url(#${uid}-land)`}>
-          <path d={CHINAI} fill="#0b1d3a" stroke="#6fa3e0" strokeOpacity="0.45" strokeWidth="1" vectorEffect="non-scaling-stroke" />
+          {[HATANIA, CHINAI].map((d) => (
+            <path key={d} d={d} fill="#0b1d3a" stroke="#6fa3e0" strokeOpacity="0.45" strokeWidth="1" vectorEffect="non-scaling-stroke" />
+          ))}
         </g>
 
         {/* Rivers, with a slow current */}
@@ -476,6 +492,35 @@ export default function RouteMap({ active, focus, onLeg }: Props) {
           </g>
         ))}
 
+        {/* Stops along the road: the bridge and the turn at 7 Mile */}
+        {STOPS.map((t, i) => (
+          <g
+            key={t.name}
+            ref={(g) => {
+              scaled.current[STOPS_AT + i] = g;
+            }}
+            data-x={t.x}
+            data-y={t.y}
+            transform={`translate(${t.x} ${t.y})`}
+            style={{ opacity: 0 }}
+          >
+            <rect x="-2.5" y="-2.5" width="5" height="5" rx="1" fill="#f4efe6" fillOpacity="0.75" />
+            {/* The turn at 7 Mile sits just east of the ghat, whose name runs
+                towards it, so it is named on its far side. */}
+            <text
+              x={i === STOPS.length - 1 ? 8 : -8}
+              y="4"
+              textAnchor={i === STOPS.length - 1 ? "start" : "end"}
+              className="fill-sand text-[11px]"
+              paintOrder="stroke"
+              stroke="#071226"
+              strokeWidth="3"
+            >
+              {t.name}
+            </text>
+          </g>
+        ))}
+
         {/* Stations: pins that light as the traveller reaches them */}
         {STATIONS.map((p, i) => {
           const end = i === STATIONS.length - 1;
@@ -506,8 +551,9 @@ export default function RouteMap({ active, focus, onLeg }: Props) {
               )}
               <text
                 className="rm-name fill-bone font-display"
-                x={end ? 14 : 11}
+                x={end ? 14 : i === LANDING_PIN ? -11 : 11}
                 y={end ? -10 : 5}
+                textAnchor={i === LANDING_PIN ? "end" : undefined}
                 fontSize={end ? 17 : 14}
                 paintOrder="stroke"
                 stroke="#071226"
@@ -516,6 +562,28 @@ export default function RouteMap({ active, focus, onLeg }: Props) {
               >
                 {p.name}
               </text>
+              {i === GHAT_PIN && (
+                <g className="rm-name">
+                  {/* Parking */}
+                  <g transform="translate(11 14)">
+                    <rect width="15" height="15" rx="3" fill="#2d63ad" stroke="#071226" strokeWidth="1" />
+                    <text x="7.5" y="11.5" textAnchor="middle" fontSize="11" fontWeight="700" fill="#fff">
+                      P
+                    </text>
+                    <text x="21" y="11.5" fontSize="11" className="fill-sand" paintOrder="stroke" stroke="#071226" strokeWidth="3">
+                      Parking
+                    </text>
+                  </g>
+                  {/* The camp's booking counter */}
+                  <g transform="translate(11 33)">
+                    <rect width="15" height="15" rx="3" fill="var(--color-ember-400)" stroke="#071226" strokeWidth="1" />
+                    <path d="M3.5 12L7.5 3.5L11.5 12Z M7.5 8.5V12" fill="#071226" stroke="#071226" strokeWidth="0.8" strokeLinejoin="round" />
+                    <text x="21" y="11.5" fontSize="11" className="fill-sand" paintOrder="stroke" stroke="#071226" strokeWidth="3">
+                      Camp booking
+                    </text>
+                  </g>
+                </g>
+              )}
             </g>
           );
         })}
