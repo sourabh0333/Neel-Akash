@@ -14,7 +14,11 @@ export const site = {
    */
   url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://penguinbeachcamp.example",
   name: "Penguin Beach Camp",
-  /** The camp's name on Google Maps, so search ties the two together. */
+  /**
+   * The camp's former name, which its Google Maps listing still carries.
+   * Named in the structured data so search ties the old listing to the
+   * camp as it is now; drop it once the listing is renamed.
+   */
   googleName: "Neel Akash Tourist Camp",
   // The same name written in Bengali script (a transliteration, not a
   // translation) — shown beside the English in the nav, intro and footer.
@@ -44,8 +48,9 @@ export const site = {
     lat: 21.6667,
     lng: 88.2,
     full: "Kusumtala, Mousuni Island, Namkhana, South 24 Parganas, West Bengal 743357",
-    // The camp's own pin on Google Maps, so "Open in Google Maps" and its
-    // directions land on the camp itself rather than somewhere on the island.
+    // The camp's own pin on Google Maps (still under its former name), so
+    // "Open in Google Maps" and its directions land on the camp itself.
+    // Update the query if the listing is renamed to Penguin Beach Camp.
     mapsQuery: "Neel+Akash+Tourist+Camp+Mousuni+Island",
     mapsUrl: "https://www.google.com/maps/search/?api=1&query=Neel+Akash+Tourist+Camp+Mousuni+Island",
   },

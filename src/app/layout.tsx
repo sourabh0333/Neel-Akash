@@ -80,7 +80,7 @@ const jsonLd = {
   // A beach camp: Campground says what it is, Resort how people search for it.
   "@type": ["Resort", "Campground"],
   name: site.name,
-  // Listed on Google Maps under its other name: the same place.
+  // Its former name, still on its Google Maps listing: the same place.
   alternateName: site.googleName,
   url,
   image: `${url}/opengraph-image`,
