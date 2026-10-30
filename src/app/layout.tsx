@@ -80,6 +80,8 @@ const jsonLd = {
   // A beach camp: Campground says what it is, Resort how people search for it.
   "@type": ["Resort", "Campground"],
   name: site.name,
+  // Its former name, still on its Google Maps listing: the same place.
+  alternateName: site.googleName,
   url,
   image: `${url}/opengraph-image`,
   description: site.description,
@@ -96,6 +98,7 @@ const jsonLd = {
     latitude: site.location.lat,
     longitude: site.location.lng,
   },
+  hasMap: site.location.mapsUrl,
   telephone: site.owner.phoneRaw,
   priceRange: "₹₹",
   // The stays and their real prices, each pointing at its own page.
