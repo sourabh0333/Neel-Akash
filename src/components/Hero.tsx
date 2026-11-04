@@ -30,27 +30,25 @@ export default function Hero() {
             <div className="absolute inset-0 bg-linear-to-b from-neel-900 via-ink to-abyss" />
             <HeroCanvas />
 
-            {/* Layer 2 — a graded photograph, blended into the field.
-                `overlay` keeps the field's own light and dark while lending
-                the frame real photographic texture; `isolate` keeps the blend
-                to this layer, or the photo greys out into the field. */}
-            <div className="absolute inset-0 isolate">
-              <Image
-                src="/images/hero.jpg"
-                alt="A long beach and the sea, seen from above"
-                fill
-                priority
-                sizes="100vw"
-                className="object-cover opacity-60 mix-blend-overlay"
-              />
-            </div>
+            {/* Layer 2 — the camp itself, lit up at night. `lighten` keeps
+                every lit part of the photograph and lets the field show
+                through where the photo is darker — its black night sky — so
+                the animated sky moves above the real camp. */}
+            <Image
+              src="/images/camp-hero.jpg"
+              alt="Penguin Beach Camp at night: cottages, umbrella tables and the lit heart bench inside bamboo fences"
+              fill
+              priority
+              sizes="100vw"
+              className="object-cover object-[36%_78%] mix-blend-lighten md:object-[50%_80%]"
+            />
           </div>
 
           {/* Grade: hold the sky, sink the foot of the frame so type stays legible */}
           <div className="absolute inset-0 bg-linear-to-b from-abyss/45 via-abyss/5 to-abyss" />
           <div className="absolute inset-0 bg-linear-to-r from-abyss/55 via-transparent to-transparent" />
-          {/* The beach photo is bright; the type block needs its own shade. */}
-          <div className="absolute inset-x-0 bottom-0 h-[80%] bg-linear-to-t from-abyss via-abyss/75 md:h-[62%] to-transparent" />
+          {/* Shade under the type only, so the lit camp stays bright above it. */}
+          <div className="absolute inset-x-0 bottom-0 h-[62%] bg-linear-to-t from-abyss via-abyss/55 to-transparent md:h-[48%]" />
           <TideLine />
         </div>
       </div>
