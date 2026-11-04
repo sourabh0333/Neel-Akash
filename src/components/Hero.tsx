@@ -39,6 +39,7 @@ export default function Hero() {
               alt="Penguin Beach Camp at night: cottages, umbrella tables and the lit heart bench inside bamboo fences"
               fill
               priority
+              quality={90}
               sizes="100vw"
               className="object-cover object-[36%_78%] mix-blend-lighten md:object-[50%_80%]"
             />
