@@ -30,7 +30,7 @@ export const routes: Route[] = [
   {
     path: "/",
     sources: ["src/app/page.tsx", "src/components", DATA],
-    images: ["/images/hero.jpg", ...galleryImages, ...stayImages, ...dayImages, ...dishImages],
+    images: ["/images/camp-hero.jpg", ...galleryImages, ...stayImages, ...dayImages, ...dishImages],
   },
   {
     path: "/island",
