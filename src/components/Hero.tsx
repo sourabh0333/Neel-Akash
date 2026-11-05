@@ -1,6 +1,8 @@
 "use client";
 
 import { useRef } from "react";
+import { useGSAP } from "@gsap/react";
+import { ScrollTrigger } from "@/lib/anim";
 import Image from "next/image";
 import { site } from "@/lib/site";
 import HeroCanvas from "./HeroCanvas";
@@ -16,6 +18,24 @@ import HeroTitle from "./ui/HeroTitle";
 export default function Hero() {
   const root = useRef<HTMLElement>(null);
   useHorizon(root);
+
+  // No film grain over the photograph; it returns once the hero has gone.
+  useGSAP(
+    () => {
+      const st = ScrollTrigger.create({
+        trigger: root.current,
+        start: "top top",
+        end: "bottom top",
+        onToggle: (self) => document.body.classList.toggle("grain-off", self.isActive),
+      });
+      document.body.classList.toggle("grain-off", st.isActive || window.scrollY < 10);
+      return () => {
+        st.kill();
+        document.body.classList.remove("grain-off");
+      };
+    },
+    { scope: root }
+  );
 
   return (
     <section
