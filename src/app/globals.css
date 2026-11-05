@@ -168,6 +168,12 @@ html.lenis body {
   opacity: 0.055;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23n)'/%3E%3C/svg%3E");
   animation: grain-shift 0.7s steps(1) infinite;
+  transition: opacity 0.6s;
+}
+/* Held back while the Home hero is on screen: the photograph is the
+   texture there, and grain over it reads as low quality. */
+.grain.grain-off::after {
+  opacity: 0;
 }
 
 @keyframes grain-shift {
