@@ -147,7 +147,12 @@ export const stays: Stay[] = [
     capacity: "Whole group",
     features: ["One price for the whole group", "Book directly by phone or WhatsApp"],
     image:
-      "/images/camp-gazebo.jpg",
+      "/images/room-group.jpg",
+    focus: "50% 60%",
+    photos: [
+      { src: "/images/room-group.jpg", alt: "A room made up for a group: a large bed with four pillows, a towel and a folded blanket, wall fan and AC" },
+      { src: "/images/camp-gazebo.jpg", alt: "The thatched hut with its bamboo seating, strung with lights" },
+    ],
   },
 ];
 
