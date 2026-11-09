@@ -22,12 +22,12 @@ export default function StaysHero() {
         <div className="hz-open absolute inset-0 overflow-hidden">
           <div className="hz-photo absolute inset-0">
             <Image
-              src="/images/camp-overview.jpg"
-              alt="Penguin Beach Camp at night: the lit cottage row, the thatched hut and the garden"
+              src="/images/cottage-veranda-lights.jpg"
+              alt="The cottage veranda at night: coloured wall lights, fairy lights on the bamboo posts and a room door open"
               fill
               priority
               sizes="100vw"
-              className="object-cover object-[50%_62%]"
+              className="object-cover object-[55%_40%]"
               quality={90}
             />
           </div>
