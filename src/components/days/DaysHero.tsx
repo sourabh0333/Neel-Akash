@@ -23,12 +23,13 @@ export default function DaysHero() {
         <div className="hz-open absolute inset-0 overflow-hidden">
           <div className="hz-photo absolute inset-0">
             <Image
-              src={first.image}
-              alt={first.title}
+              src="/images/camp-bonfire-night.jpg"
+              alt="The camp bonfire blazing at night, the bamboo fence and blue lights behind it"
               fill
               priority
+              quality={90}
               sizes="100vw"
-              className="object-cover"
+              className="object-cover object-[52%_35%]"
             />
           </div>
           <div className="absolute inset-0 bg-linear-to-b from-abyss/60 via-abyss/10 to-abyss/90" />
