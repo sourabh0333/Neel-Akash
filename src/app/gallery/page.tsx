@@ -27,7 +27,7 @@ export default function GalleryPage() {
       <GalleryWall />
 
       <section className="relative overflow-hidden border-t border-bone/10 bg-ink">
-        <Image src="/images/g-6.jpg" alt="" fill sizes="100vw" className="object-cover opacity-30" />
+        <Image src="/images/camp-stairs.jpg" alt="" fill sizes="100vw" className="object-cover object-[50%_40%] opacity-30" />
         <div className="absolute inset-0 bg-linear-to-t from-ink via-ink/60 to-ink/30" />
         <div className="relative mx-auto flex max-w-[100rem] flex-col gap-10 px-6 py-28 md:px-10 md:py-40 lg:flex-row lg:items-end lg:justify-between">
           <div>

@@ -150,7 +150,7 @@ export default function ArriveGhat({ className = "" }: { className?: string }) {
     <section
       ref={root}
       id="arrive"
-      aria-labelledby="arrive-title"
+      aria-label="Car parking and our booking counter at the ghat"
       className={`relative scroll-mt-24 overflow-hidden border-y border-bone/10 bg-ink py-24 md:py-32 ${className}`}
     >
       <style>{`
@@ -191,9 +191,7 @@ export default function ArriveGhat({ className = "" }: { className?: string }) {
               The last stop on land · {ghat.full}
             </Reveal>
             <Reveal as="h2" className="font-display t-huge mt-5 text-bone">
-              <span id="arrive-title">
-                Park at the ghat, <span className="italic text-ember-300">book at our counter</span>
-              </span>
+              Park at the ghat, <span className="italic text-ember-300">book at our counter</span>
             </Reveal>
           </div>
           <Reveal
