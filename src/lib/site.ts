@@ -81,6 +81,8 @@ export type Stay = {
   image: string;
   /** Where the photograph's subject sits (CSS object-position), for wide crops. */
   focus?: string;
+  /** More photographs of the stay, shown on its own page and in the gallery. */
+  photos?: { src: string; alt: string; tall?: boolean }[];
 };
 
 export const stays: Stay[] = [
@@ -102,17 +104,29 @@ export const stays: Stay[] = [
   {
     id: "cottage",
     name: "Cottage",
-    kicker: "02 — Raised above the sand",
+    kicker: "02 — A proper room",
     blurb:
-      "Woven bamboo, a private porch, and a floor lifted clear of the high tide. The quiet upgrade for anyone who wants a door that latches.",
+      "Bright painted walls, a double bed made up with fresh sheets and a blanket, a fan, and a bathroom of your own through the inner door. The quiet upgrade for anyone who wants a door that latches.",
     price: 1200,
     priceNote: "per person / night",
     mealsIncluded: true,
     capacity: "2 – 4 guests",
-    features: ["Private porch", "Attached washroom", "Ceiling fan", "Sea view"],
+    features: ["Attached bathroom", "Double bed", "Wall fan", "Veranda outside"],
     image:
-      "/images/camp-room.jpg",
-    focus: "50% 75%",
+      "/images/room-tiedye-wide.jpg",
+    focus: "50% 55%",
+    photos: [
+      { src: "/images/room-tiedye-wide.jpg", alt: "A cottage room: double bed with an orange tie-dye cover, wall fan, AC and the bathroom door" },
+      { src: "/images/room-mandala-wide.jpg", alt: "Another cottage room, with a mandala bedspread, pink and green walls and its own bathroom" },
+      { src: "/images/room-tiedye-bed.jpg", alt: "The double bed made up with a folded blanket under a wall fan", tall: true },
+      { src: "/images/room-patchwork-wide.jpg", alt: "A cottage room with a patchwork bedspread, pillows and a folded blanket" },
+      { src: "/images/room-tiedye-door.jpg", alt: "Looking in from the door: the bed, the tiled floor and the bathroom beyond" },
+      { src: "/images/room-patchwork-door.jpg", alt: "The patchwork room from the doorway, with the bathroom straight ahead", tall: true },
+      { src: "/images/room-mandala-bed.jpg", alt: "The mandala room's bed beneath the wall fan and the AC", tall: true },
+      { src: "/images/room-patchwork-fan.jpg", alt: "The patchwork room's bed and wall fan against pink, green and yellow walls", tall: true },
+      { src: "/images/room-bathroom.jpg", alt: "An attached bathroom: western toilet, shower and tap", tall: true },
+      { src: "/images/cottage-veranda.jpg", alt: "The cottage veranda at night, strung with coloured lights", tall: true },
+    ],
   },
   {
     id: "group-special",
@@ -494,6 +508,12 @@ export const photos: Photo[] = [
   ...gallery.map((g) => ({ src: g.src, alt: g.alt, title: g.place, group: "Island" as const })),
   ...camp,
   ...stays.map((s) => ({ src: s.image, alt: s.name, title: s.name, group: "Stays" as const })),
+  // Each stay's own photo set, less the one already shown above.
+  ...stays.flatMap((s) =>
+    (s.photos ?? [])
+      .filter((p) => p.src !== s.image)
+      .map((p) => ({ src: p.src, alt: p.alt, title: s.name, group: "Stays" as const }))
+  ),
   ...experiences.map((e) => ({ src: e.image, alt: e.title, title: e.title, group: "Days" as const })),
 ];
 

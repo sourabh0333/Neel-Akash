@@ -5,6 +5,7 @@ import { breadcrumbs, pageMeta } from "@/lib/meta";
 import JsonLd from "@/components/JsonLd";
 import StayHero from "@/components/stays/StayHero";
 import StayDetails from "@/components/stays/StayDetails";
+import StayPhotos from "@/components/stays/StayPhotos";
 import StaysIncluded from "@/components/stays/StaysIncluded";
 import StaysCta from "@/components/stays/StaysCta";
 
@@ -52,9 +53,10 @@ export async function generateMetadata({
 }
 
 /**
- * One stay, told in order: the horizon over its own photograph, what you
- * get beside the booking card, the day's meals (when they come with it), the
- * other stays, and the proprietor's number.
+ * One stay, told in order: the horizon over its own photograph, its
+ * photographs when it has a set, what you get beside the booking card, the
+ * other stays, the day's meals (when they come with it), and the
+ * proprietor's number.
  */
 export default async function StayPage({ params }: { params: Promise<Params> }) {
   const { slug } = await params;
@@ -70,6 +72,7 @@ export default async function StayPage({ params }: { params: Promise<Params> }) 
         ])}
       />
       <StayHero stay={stay} />
+      <StayPhotos stay={stay} />
       <StayDetails stay={stay} />
       {stay.mealsIncluded && <StaysIncluded />}
       <div className="bg-abyss pt-24 md:pt-32">
