@@ -7,8 +7,8 @@ import { gsap, prefersReducedMotion } from "@/lib/anim";
 
 const MOMENTS = [
   {
-    src: "/images/g-2.jpg",
-    alt: "Empty shoreline at low tide",
+    src: "/images/beach-boats-nets.jpg",
+    alt: "The wide beach at low tide: boats drawn up on the sand, fish drying on blue nets, the sea beyond",
     title: "Low tide",
     time: "Twice a day",
     text: "The bay pulls back and leaves the beach wide, wet and mirrored. You can walk out further than seems sensible.",

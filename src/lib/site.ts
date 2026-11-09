@@ -183,7 +183,7 @@ export const experiences: Experience[] = [
     copy:
       "When the water pulls back it leaves kilometres of hard, mirrored sand. Red crabs scatter. The horizon does not.",
     image:
-      "/images/xp-lowtide.jpg",
+      "/images/beach-boats-nets.jpg",
   },
   {
     index: "III",
