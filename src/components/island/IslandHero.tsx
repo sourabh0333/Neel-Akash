@@ -24,12 +24,13 @@ export default function IslandHero() {
         <div className="hz-open absolute inset-0 overflow-hidden">
           <div className="hz-photo absolute inset-0">
             <Image
-              src="/images/g-1.jpg"
-              alt="Waves breaking at dusk on Mousuni's open beach"
+              src="/images/island-sunset-beach.jpg"
+              alt="Sunset over the Bay of Bengal from Mousuni's beach: fishing boats on the water, people at the tide line"
               fill
               priority
+              quality={90}
               sizes="100vw"
-              className="object-cover"
+              className="object-cover object-[50%_45%]"
             />
           </div>
           <div className="absolute inset-0 bg-linear-to-b from-abyss/60 via-abyss/10 to-abyss/90" />

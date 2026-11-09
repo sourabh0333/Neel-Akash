@@ -35,7 +35,7 @@ export const routes: Route[] = [
   {
     path: "/island",
     sources: ["src/app/island", "src/components/island", "src/components/Island.tsx", DATA],
-    images: ["/images/g-1.jpg", ...galleryImages],
+    images: ["/images/island-sunset-beach.jpg", ...galleryImages],
   },
   {
     path: "/stays",
