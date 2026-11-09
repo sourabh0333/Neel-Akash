@@ -32,7 +32,7 @@ export default function StaysCta() {
     <section ref={root} className="relative bg-abyss px-4 pb-24 md:px-6 md:pb-32">
       <div className="sx-frame relative overflow-hidden rounded-3xl">
         <div className="sx-img absolute inset-0">
-          <Image src="/images/stay-family.jpg" alt="" fill sizes="100vw" className="object-cover" />
+          <Image src="/images/camp-gazebo.jpg" alt="" fill sizes="100vw" className="object-cover" />
         </div>
         <div className="absolute inset-0 bg-abyss/65" />
 

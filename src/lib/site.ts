@@ -128,7 +128,7 @@ export const stays: Stay[] = [
     capacity: "Whole group",
     features: ["One price for the whole group", "Book directly by phone or WhatsApp"],
     image:
-      "/images/stay-family.jpg",
+      "/images/camp-gazebo.jpg",
   },
 ];
 
@@ -446,6 +446,30 @@ export type Photo = { src: string; alt: string; title: string; group: "Island" |
 
 /** The camp itself after dark, beyond the frames already used elsewhere. */
 const camp: Photo[] = [
+  {
+    src: "/images/camp-overview.jpg",
+    alt: "The camp at night from above: the lit cottage row, the thatched hut and the garden inside bamboo fences",
+    title: "The camp at night",
+    group: "Camp",
+  },
+  {
+    src: "/images/camp-heart-bench-close.jpg",
+    alt: "The bamboo heart bench outlined in gold light, with the lit bamboo stairs behind it",
+    title: "The heart bench",
+    group: "Camp",
+  },
+  {
+    src: "/images/camp-stairs.jpg",
+    alt: "Bamboo steps edged in purple light, climbing up under the striped canopy",
+    title: "The bamboo stairs",
+    group: "Camp",
+  },
+  {
+    src: "/images/camp-heart-garden.jpg",
+    alt: "The heart bench lit yellow behind a young palm in the camp garden",
+    title: "Behind the palm",
+    group: "Camp",
+  },
   {
     src: "/images/camp-night-path.jpg",
     alt: "A sandy path between lit bamboo fences, leading up the steps under the casuarinas",

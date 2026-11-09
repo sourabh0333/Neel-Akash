@@ -20,12 +20,13 @@ export default function GalleryHero() {
         <div className="hz-open absolute inset-0 overflow-hidden">
           <div className="hz-photo absolute inset-0">
             <Image
-              src="/images/g-4.jpg"
-              alt="Sunset over the Bay of Bengal"
+              src="/images/camp-heart-bench-close.jpg"
+              alt="The bamboo heart bench outlined in gold light, with the lit bamboo stairs behind it"
               fill
               priority
               sizes="100vw"
-              className="object-cover"
+              quality={90}
+              className="object-cover object-[50%_45%]"
             />
           </div>
           <div className="absolute inset-0 bg-linear-to-b from-abyss/60 via-abyss/10 to-abyss/90" />
