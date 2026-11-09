@@ -98,8 +98,13 @@ export const stays: Stay[] = [
     capacity: "2 – 3 guests",
     features: ["Direct beach access", "Attached washroom", "Power & fan", "Mosquito nets"],
     image:
-      "/images/camp-tent.jpg",
-    focus: "50% 55%",
+      "/images/tent-sunset-view.jpg",
+    // The sunset sits in the upper half; keep it in a wide crop.
+    focus: "45% 12%",
+    photos: [
+      { src: "/images/tent-sunset-view.jpg", alt: "The view from inside the tent at sunset: bedding in front, the sky over the bamboo railing" },
+      { src: "/images/camp-tent.jpg", alt: "A dome tent made up with bedding under the canopy", tall: true },
+    ],
   },
   {
     id: "cottage",
