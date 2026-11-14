@@ -7,6 +7,7 @@ import { site, stays } from "@/lib/site";
 import Reveal from "./ui/Reveal";
 import Magnetic from "./ui/Magnetic";
 import { TokenInput, TokenSelect, TokenDate, Word } from "./ui/Token";
+import MorePhones from "@/components/ui/MorePhones";
 
 /**
  * No booking engine, on purpose: at this size reservations happen on WhatsApp
@@ -241,6 +242,7 @@ export default function Contact({
               >
                 Call instead
               </a>
+              <MorePhones className="justify-center" />
             </div>
 
             <p id="send-note" className="mt-5 text-[0.7rem] leading-relaxed text-sand-dim">
@@ -335,6 +337,7 @@ export default function Contact({
               >
                 {site.owner.phone}
               </a>
+              <MorePhones label="" className="mt-2" />
             </div>
             <div>
               <p className="text-[0.58rem] uppercase tracking-[0.24em] text-sand-dim">

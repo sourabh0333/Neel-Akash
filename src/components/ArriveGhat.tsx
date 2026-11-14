@@ -7,6 +7,7 @@ import { gsap, prefersReducedMotion } from "@/lib/anim";
 import { ghat, journey, site, stays } from "@/lib/site";
 import Reveal from "./ui/Reveal";
 import Magnetic from "./ui/Magnetic";
+import MorePhones from "@/components/ui/MorePhones";
 
 const parking = ghat.facilities.find((f) => f.id === "parking")!;
 const booking = ghat.facilities.find((f) => f.id === "booking")!;
@@ -381,6 +382,7 @@ export default function ArriveGhat({ className = "" }: { className?: string }) {
                           Call {site.owner.phone}
                         </a>
                       )}
+                      {!isParking && <MorePhones className="basis-full" />}
                     </div>
                   </div>
                 </div>

@@ -7,6 +7,7 @@ import { site, navLinks } from "@/lib/site";
 import { lockScroll, unlockScroll } from "@/lib/scroll";
 import Magnetic from "./ui/Magnetic";
 import PenguinMark from "./brand/PenguinMark";
+import MorePhones from "@/components/ui/MorePhones";
 
 /** "Penguin Beach Camp" → lead "Penguin", rest "Beach Camp". */
 const [lead, ...restWords] = site.name.split(" ");
@@ -271,6 +272,7 @@ export default function Nav() {
                 >
                   {site.owner.phone}
                 </a>
+                <MorePhones label="" className="mt-2" />
               </div>
               <div>
                 <p className="t-eyebrow mb-2 text-sand-dim">Find us</p>
