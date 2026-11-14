@@ -23,12 +23,13 @@ export default function GettingHero() {
         <div className="hz-open absolute inset-0 overflow-hidden">
           <div className="hz-photo absolute inset-0">
             <Image
-              src="/images/g-3.jpg"
-              alt="Fishing boat drawn up on the sand"
+              src="/images/camp-dusk.jpg"
+              alt="Penguin Beach Camp at dusk among the casuarinas, its fences lit blue and gold"
               fill
               priority
+              quality={90}
               sizes="100vw"
-              className="object-cover"
+              className="object-cover object-[50%_60%]"
             />
           </div>
           <div className="absolute inset-0 bg-linear-to-b from-abyss/60 via-abyss/10 to-abyss/90" />

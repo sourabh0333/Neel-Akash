@@ -184,7 +184,7 @@ export const experiences: Experience[] = [
     copy:
       "The river side wakes first. Fishing boats push off in the half-light while the island is still the colour of ash and rose.",
     image:
-      "/images/xp-sunrise.jpg",
+      "/images/island-sunset-beach.jpg",
   },
   {
     index: "II",
@@ -193,7 +193,7 @@ export const experiences: Experience[] = [
     copy:
       "When the water pulls back it leaves kilometres of hard, mirrored sand. Red crabs scatter. The horizon does not.",
     image:
-      "/images/beach-boats-nets.jpg",
+      "/images/beach-wide-day.jpg",
   },
   {
     index: "III",
@@ -202,7 +202,7 @@ export const experiences: Experience[] = [
     copy:
       "A country boat, an hour of brown water, and a sandbar full of migratory birds that have not learned to be afraid of people.",
     image:
-      "/images/xp-boat.jpg",
+      "/images/beach-boats-nets.jpg",
   },
   {
     index: "IV",
@@ -431,43 +431,50 @@ export const journey = [
 
 /* ── Gallery ───────────────────────────────────────────────── */
 
-/** `ratio` is width ÷ height — it sets each frame's width in the strip. */
-export const gallery = [
+/**
+ * The photo strip (Home) and the first frames of the gallery wall.
+ * `ratio` is width ÷ height — it sets each frame's width in the strip.
+ * `group` files a frame on the gallery wall (default "Island").
+ */
+export const gallery: { src: string; alt: string; place: string; ratio: number; group?: "Island" | "Camp" }[] = [
   {
-    src: "/images/g-1.jpg",
-    alt: "Waves breaking at dusk on the open beach",
+    src: "/images/beach-wide-day.jpg",
+    alt: "The open beach at low tide: wet sand, the surf, and the sea wall stretching away",
     place: "Baliara",
-    ratio: 1.5,
+    ratio: 1.45,
   },
   {
-    src: "/images/g-2.jpg",
-    alt: "Empty shoreline at low tide",
-    place: "Low tide",
-    ratio: 0.75,
+    src: "/images/beach-boats-nets.jpg",
+    alt: "Country boats drawn up on the sand, fish drying on blue nets",
+    place: "The boats",
+    ratio: 0.8,
   },
   {
-    src: "/images/g-3.jpg",
-    alt: "Fishing boat drawn up on the sand",
-    place: "Bagdanga",
-    ratio: 1.0,
-  },
-  {
-    src: "/images/g-4.jpg",
-    alt: "Sunset over the Bay of Bengal",
+    src: "/images/island-sunset-beach.jpg",
+    alt: "Sunset over the Bay of Bengal, fishing boats out on the water",
     place: "Bay of Bengal",
-    ratio: 1.42,
+    ratio: 1.2,
   },
   {
-    src: "/images/g-5.jpg",
-    alt: "Birds over the sandbar",
-    place: "Kakramarir Chor",
-    ratio: 0.78,
+    src: "/images/camp-garden-night.jpg",
+    alt: "The camp garden at night: umbrella tables, the thatched hut and the lit heart bench",
+    place: "The garden",
+    ratio: 1.42,
+    group: "Camp",
+  },
+  {
+    src: "/images/camp-dusk.jpg",
+    alt: "The camp at dusk among the casuarinas, its fences outlined in blue and gold light",
+    place: "At dusk",
+    ratio: 0.85,
+    group: "Camp",
   },
   {
     src: "/images/camp-heart-bench.jpg",
     alt: "The lit bamboo heart bench in the camp garden at night",
     place: "The camp",
     ratio: 1.33,
+    group: "Camp",
   },
 ];
 
@@ -480,6 +487,24 @@ export type Photo = { src: string; alt: string; title: string; group: "Island" |
 
 /** The camp itself after dark, beyond the frames already used elsewhere. */
 const camp: Photo[] = [
+  {
+    src: "/images/camp-garden-table.jpg",
+    alt: "An umbrella table on the lawn at night, the heart bench glowing beyond",
+    title: "Tables on the lawn",
+    group: "Camp",
+  },
+  {
+    src: "/images/camp-night-walk.jpg",
+    alt: "The path past the cottage veranda to the thatched hut, fences strung with lights",
+    title: "The walk to the hut",
+    group: "Camp",
+  },
+  {
+    src: "/images/camp-canopy-stairs.jpg",
+    alt: "Lit bamboo stairs climbing to the striped canopy",
+    title: "Up to the canopy",
+    group: "Camp",
+  },
   {
     src: "/images/camp-overview.jpg",
     alt: "The camp at night from above: the lit cottage row, the thatched hut and the garden inside bamboo fences",
@@ -525,7 +550,7 @@ const camp: Photo[] = [
 ];
 
 export const photos: Photo[] = [
-  ...gallery.map((g) => ({ src: g.src, alt: g.alt, title: g.place, group: "Island" as const })),
+  ...gallery.map((g) => ({ src: g.src, alt: g.alt, title: g.place, group: g.group ?? ("Island" as const) })),
   ...camp,
   ...stays.map((s) => ({ src: s.image, alt: s.name, title: s.name, group: "Stays" as const })),
   // Each stay's own photo set, less the one already shown above.

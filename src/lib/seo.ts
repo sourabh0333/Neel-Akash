@@ -71,7 +71,7 @@ export const routes: Route[] = [
       "src/components/route",
       DATA,
     ],
-    images: ["/images/g-3.jpg", "/images/g-2.jpg"],
+    images: ["/images/camp-dusk.jpg", "/images/beach-wide-day.jpg"],
   },
   {
     path: "/contact",
