@@ -8,6 +8,7 @@ import { site, stays, type Stay } from "@/lib/site";
 import PriceTag from "../ui/PriceTag";
 import Reveal from "../ui/Reveal";
 import Magnetic from "../ui/Magnetic";
+import MorePhones from "@/components/ui/MorePhones";
 
 /**
  * A stay in detail: what you get as numbered tiles that rise in turn,
@@ -146,6 +147,7 @@ export default function StayDetails({ stay }: { stay: Stay }) {
                   >
                     Call {site.owner.phone}
                   </a>
+                  <MorePhones className="justify-center" />
                 </div>
                 <p className="mt-6 text-xs leading-relaxed text-sand-dim">
                   Booking is a WhatsApp message to {site.owner.name} — no payment

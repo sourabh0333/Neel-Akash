@@ -100,6 +100,12 @@ const jsonLd = {
   },
   hasMap: site.location.mapsUrl,
   telephone: site.owner.phoneRaw,
+  contactPoint: site.owner.phones.map((p) => ({
+    "@type": "ContactPoint",
+    telephone: p.raw,
+    contactType: "reservations",
+    areaServed: "IN",
+  })),
   priceRange: "₹₹",
   // The stays and their real prices, each pointing at its own page.
   makesOffer: stays.map((s) => ({

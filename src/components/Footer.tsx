@@ -84,12 +84,15 @@ export default function Footer() {
 
           <div>
             <p className="t-eyebrow mb-4 text-sand-dim">Reservations</p>
-            <a
-              href={`tel:${site.owner.phoneRaw}`}
-              className="link-draw block text-sm text-sand hover:text-bone"
-            >
-              {site.owner.phone}
-            </a>
+            {site.owner.phones.map((p, i) => (
+              <a
+                key={p.raw}
+                href={`tel:${p.raw}`}
+                className={`link-draw block text-sm text-sand tabular-nums hover:text-bone ${i ? "mt-2.5" : ""}`}
+              >
+                {p.display}
+              </a>
+            ))}
             <a
               href={`https://wa.me/${site.owner.whatsapp}`}
               target="_blank"

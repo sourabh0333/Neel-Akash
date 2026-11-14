@@ -6,6 +6,7 @@ import { useGSAP } from "@gsap/react";
 import { gsap, prefersReducedMotion } from "@/lib/anim";
 import { site } from "@/lib/site";
 import Magnetic from "../ui/Magnetic";
+import MorePhones from "@/components/ui/MorePhones";
 
 /**
  * The close: a photograph that opens from a slot as you arrive, with the
@@ -45,6 +46,7 @@ export default function StaysCta() {
           >
             {site.owner.phone}
           </a>
+          <MorePhones label="Or call" className="mt-5 text-base md:text-lg" />
           <p className="mt-6 max-w-[48ch] text-sand">
             Ask {site.owner.name} for dates and the boat. Off-season and
             larger-group rates are negotiable &mdash; nothing is paid online.

@@ -6,6 +6,7 @@ import { useGSAP } from "@gsap/react";
 import { gsap, prefersReducedMotion } from "@/lib/anim";
 import { site } from "@/lib/site";
 import Magnetic from "../ui/Magnetic";
+import MorePhones from "@/components/ui/MorePhones";
 
 /**
  * The close: evening tea, opening out from a slot as you arrive, and the
@@ -65,6 +66,7 @@ export default function MenuCta() {
                 Call {site.owner.phone}
               </a>
             </Magnetic>
+            <MorePhones className="basis-full" />
           </div>
         </div>
       </div>

@@ -9,6 +9,7 @@ import Magnetic from "@/components/ui/Magnetic";
 import GettingHero from "@/components/getting/GettingHero";
 import GettingTickets from "@/components/getting/GettingTickets";
 import ArriveGhat from "@/components/ArriveGhat";
+import MorePhones from "@/components/ui/MorePhones";
 
 export const metadata: Metadata = pageMeta({
   path: "/getting-here",
@@ -88,6 +89,7 @@ export default function GettingHerePage() {
                 WhatsApp <span aria-hidden="true">↗</span>
               </a>
             </Magnetic>
+            <MorePhones className="basis-full" />
           </div>
         </div>
       </section>

@@ -6,6 +6,7 @@ import { useGSAP } from "@gsap/react";
 import { gsap, prefersReducedMotion } from "@/lib/anim";
 import { navLinks, pages, site } from "@/lib/site";
 import Magnetic from "./ui/Magnetic";
+import MorePhones from "@/components/ui/MorePhones";
 
 /** One line for each page in the menu, so the way back reads as a choice. */
 const ABOUT: Record<string, string> = {
@@ -223,6 +224,7 @@ export default function NotFound() {
             >
               Call {site.owner.phone}
             </a>
+            <MorePhones className="basis-full justify-center" />
           </div>
         </div>
 

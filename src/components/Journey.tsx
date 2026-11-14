@@ -6,6 +6,7 @@ import { gsap, prefersReducedMotion } from "@/lib/anim";
 import { drivingRoute, ghat, journey, site } from "@/lib/site";
 import Reveal from "./ui/Reveal";
 import RouteMap from "./route/RouteMap";
+import MorePhones from "@/components/ui/MorePhones";
 
 /**
  * Getting here, as a journey board.
@@ -411,6 +412,7 @@ export default function Journey({
               >
                 Call {site.owner.phone}
               </a>
+              <MorePhones className="mt-4 text-xs" />
             </div>
 
             <div className="board-in rounded-2xl border border-bone/10 bg-ink p-6 transition-transform duration-300 hover:-translate-y-1 md:p-7">
