@@ -93,14 +93,19 @@ export default function Footer() {
                 {p.display}
               </a>
             ))}
-            <a
-              href={`https://wa.me/${site.owner.whatsapp}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="link-draw mt-2.5 block text-sm text-sand hover:text-bone"
-            >
-              WhatsApp
-            </a>
+            {site.owner.phones
+              .filter((p) => p.whatsapp)
+              .map((p) => (
+                <a
+                  key={p.whatsapp}
+                  href={`https://wa.me/${p.whatsapp}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="link-draw mt-2.5 block text-sm text-sand tabular-nums hover:text-bone"
+                >
+                  WhatsApp {p.display.replace("+91 ", "")}
+                </a>
+              ))}
             <p className="mt-5 text-sm leading-relaxed text-sand-dim">
               {site.location.island}
               <br />

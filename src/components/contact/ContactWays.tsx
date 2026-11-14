@@ -23,7 +23,7 @@ const WAYS = [
     title: site.owner.phone,
     text: `Or ${site.owner.phones
       .slice(1)
-      .map((p) => p.display)
+      .map((p) => (p.whatsapp ? `${p.display} (also WhatsApp)` : p.display))
       .join(" / ")}. Speak to ${site.owner.name} for dates, the boat and anything else.`,
     href: `tel:${site.owner.phoneRaw}`,
     cta: "Call now",

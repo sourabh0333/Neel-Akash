@@ -36,12 +36,13 @@ export const site = {
     /**
      * Every number guests can call, the main one first. The others are
      * shown beside the main number wherever the site offers a call.
+     * `whatsapp` (digits only) marks a number that is also on WhatsApp.
      */
     phones: [
-      { display: "+91 98325 15735", raw: "+919832515735" },
-      { display: "+91 92391 81660", raw: "+919239181660" },
+      { display: "+91 98325 15735", raw: "+919832515735", whatsapp: "919832515735" },
+      { display: "+91 92391 81660", raw: "+919239181660", whatsapp: "919239181660" },
       { display: "+91 80016 96332", raw: "+918001696332" },
-    ],
+    ] as { display: string; raw: string; whatsapp?: string }[],
   },
 
   location: {
