@@ -7,29 +7,29 @@ import { gsap, prefersReducedMotion } from "@/lib/anim";
 
 const MOMENTS = [
   {
-    src: "/images/beach-boats-nets.jpg",
-    alt: "The wide beach at low tide: boats drawn up on the sand, fish drying on blue nets, the sea beyond",
+    src: "/images/beach-wide-day.jpg",
+    alt: "The open beach at low tide: wet, mirrored sand and the surf far out",
     title: "Low tide",
     time: "Twice a day",
     text: "The bay pulls back and leaves the beach wide, wet and mirrored. You can walk out further than seems sensible.",
   },
   {
-    src: "/images/g-3.jpg",
-    alt: "Fishing boat drawn up on the sand",
+    src: "/images/beach-boats-nets.jpg",
+    alt: "Country boats drawn up on the sand, fish drying on blue nets",
     title: "The boats",
     time: "First light",
     text: "The river side wakes first. Fishing boats push off in the half-light while the island is still the colour of ash and rose.",
   },
   {
-    src: "/images/g-4.jpg",
-    alt: "Sunset over the Bay of Bengal",
+    src: "/images/island-sunset-beach.jpg",
+    alt: "Sunset over the Bay of Bengal, fishing boats out on the water",
     title: "The sun going down",
     time: "Evening",
     text: "No buildings in the way, just the bay. Most evenings everyone on the beach simply stops and watches.",
   },
   {
-    src: "/images/g-6.jpg",
-    alt: "Night sky above the camp",
+    src: "/images/camp-garden-night.jpg",
+    alt: "The camp garden at night under a dark sky, lit fences and the heart bench",
     title: "The dark",
     time: "After the bonfire",
     text: "No town glow for miles. Once the fire has burned down, the stars come out properly.",

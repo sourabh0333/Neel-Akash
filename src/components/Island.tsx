@@ -4,27 +4,30 @@ import { useRef } from "react";
 import Image from "next/image";
 import { useGSAP } from "@gsap/react";
 import { gsap, ScrollTrigger, prefersReducedMotion } from "@/lib/anim";
-import { gallery } from "@/lib/site";
 
 const PANELS = [
   {
     n: "01",
     title: "Baliara",
+    image: "/images/beach-wide-day.jpg",
     text: "The seaward edge. Open beach, casuarina, and the wind that never quite stops.",
   },
   {
     n: "02",
     title: "Kusumtala",
+    image: "/images/camp-dusk.jpg",
     text: "Paddy, betel groves and brick paths. The island's quiet middle, where we are.",
   },
   {
     n: "03",
     title: "Bagdanga",
+    image: "/images/beach-boats-nets.jpg",
     text: "The river side. Country boats come and go with the tide, and the whole village knows before you do.",
   },
   {
     n: "04",
     title: "Kakramarir Chor",
+    image: "/images/island-sunset-beach.jpg",
     text: "A sandbar an hour out by boat, populated entirely by birds.",
   },
 ];
@@ -132,7 +135,7 @@ export default function Island() {
             <div className="absolute inset-0 overflow-hidden">
               <div className="island-img relative h-full w-[118%]">
                 <Image
-                  src={gallery[Number(p.n) - 1]?.src ?? gallery[0].src}
+                  src={p.image}
                   alt={p.title}
                   fill
                   sizes="(max-width: 900px) 78vw, 38vw"
